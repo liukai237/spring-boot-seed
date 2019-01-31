@@ -1,0 +1,55 @@
+server:
+  port: 8888
+  tomcat:
+    uri-encoding: UTF-8
+  compression:
+    enabled: true
+
+spring:
+  application:
+    name: spring-seed
+  profiles.active: dev
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  jackson:
+    default-property-inclusion: non_null
+
+mapper:
+  mappers: com.yodinfo.seed.dao.BaseMapper
+  not-empty: true
+  identity: postgresql
+
+logging:
+  level:
+    root: WARN
+    org.springframework.web: DEBUG
+    com.yodinfo.seed.dao: DEBUG
+
+jasypt:
+  encryptor:
+    password: Bda7bXaExAA
+    property:
+      prefix: "Yod@["
+      suffix: "]"
+
+---
+spring:
+  profiles: dev
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      jdbc-url: jdbc:postgresql://47.99.143.50:5432/kai
+      driver-class-name: org.postgresql.Driver
+      username: postgres
+      password: Yod@[LufBN5drtvdSfQFUDy5v8ANvGQ4sPN6z]
+
+logging:
+  level:
+    root: INFO
+
+---
+spring:
+  profiles: prod
