@@ -1,8 +1,10 @@
 package com.yodinfo.seed.config;
 
 import com.github.pagehelper.PageInterceptor;
+import com.yodinfo.seed.util.AutoEnumTypeHandler;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,12 +30,21 @@ public class DbConfig {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(hikariDataSource);
 
+        // 分页插件
         PageInterceptor pageInterceptor = new PageInterceptor();
         Properties properties = new Properties();
         properties.setProperty("helperDialect", "postgresql");
         pageInterceptor.setProperties(properties);
         bean.setPlugins(new PageInterceptor[]{pageInterceptor});
-        return bean.getObject();
+
+        SqlSessionFactory factory = bean.getObject();
+        if (factory != null) { // 注册自定义枚举转换器
+            org.apache.ibatis.session.Configuration config = factory.getConfiguration();
+            TypeHandlerRegistry typeHandlerRegistry = config.getTypeHandlerRegistry();
+            typeHandlerRegistry.setDefaultEnumTypeHandler(AutoEnumTypeHandler.class);
+        }
+
+        return factory;
     }
 
     @Bean(name = "primaryTransactionManager")

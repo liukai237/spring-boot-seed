@@ -1,5 +1,7 @@
 package com.yodinfo.seed.domain;
 
+import com.yodinfo.seed.constant.Gender;
+import com.yodinfo.seed.constant.Province;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,13 +21,13 @@ public class User implements Serializable {
     @Id
     private Long userId;
     private String username;
-    private Integer gender;
+    private Gender gender;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
     private String password;
     private String avatar;
     private String phone;
-    private Integer province;
+    private Province province;
     //private String email;
     //private String address;
     //private String salt;

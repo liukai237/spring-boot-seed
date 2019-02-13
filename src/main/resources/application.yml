@@ -21,6 +21,7 @@ mapper:
   mappers: com.yodinfo.seed.dao.BaseMapper
   not-empty: true
   identity: postgresql
+  use-simple-type: false
 
 logging:
   level:

@@ -11,8 +11,6 @@ import java.util.List;
 public interface UserConverter {
 
     @Mappings({
-            @Mapping(target = "gender", expression = "java(com.yodinfo.seed.constant.Gender.getByCode(user.getGender()))"),
-            @Mapping(target = "province", expression = "java(com.yodinfo.seed.constant.Province.getByCode(user.getProvince()))"),
             @Mapping(target = "nickname", source = "username"),
             @Mapping(target = "regTime", source = "createTime")
     })
@@ -23,8 +21,6 @@ public interface UserConverter {
 
     @Mappings({
             @Mapping(target = "username", source = "nickname"),
-            @Mapping(target = "gender", source = "info.gender.code"),
-            @Mapping(target = "province", source = "info.province.code")
     })
     User toEntity(BasicUserInfo info);
 

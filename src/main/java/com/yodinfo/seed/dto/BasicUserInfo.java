@@ -1,9 +1,7 @@
 package com.yodinfo.seed.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.yodinfo.seed.constant.Gender;
 import com.yodinfo.seed.constant.Province;

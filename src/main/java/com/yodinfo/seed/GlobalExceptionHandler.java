@@ -18,20 +18,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public Resp<String> processBusinessException(BusinessException e) {
+    public Resp<?> processBusinessException(BusinessException e) {
         LOGGER.error("[SERVER ERROR]", e);
-        return new Resp<>(500, "A server error has occurred.", e.getRootCause().getMessage());
+        return new Resp<>(500, e.getRootCause().getMessage(), null);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public Resp<String> processMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public Resp<?> processMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String errorMsg = e.getBindingResult().getFieldErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .findFirst()
                 .orElse(e.getMessage());
-        return new Resp<>(400, "Bad Request!", errorMsg);
+        return new Resp<>(400, errorMsg, null);
     }
 
 //    @ExceptionHandler(ShiroException.class)

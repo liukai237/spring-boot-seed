@@ -1,5 +1,6 @@
 package com.yodinfo.seed.constant;
 
+import com.yodinfo.seed.BaseCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -7,7 +8,7 @@ import java.util.Objects;
 
 @Getter
 @AllArgsConstructor
-public enum Province {
+public enum Province implements BaseCodeEnum {
     BJ(110000, "北京", "北京市"),
     TJ(120000, "天津", "天津市"),
     HE(130000, "河北", "河北省"),
@@ -48,13 +49,9 @@ public enum Province {
     private String fullName;
     private String shorter;
 
-    public static Province getByCode(Integer code) {
-        for (Province province : Province.values()) {
-            if (Objects.equals(province.code, code)) {
-                return province;
-            }
-        }
 
-        return null;
+    @Override
+    public Integer getCode() {
+        return code;
     }
 }
