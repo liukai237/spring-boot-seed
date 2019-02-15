@@ -1,17 +1,20 @@
 package com.yodinfo.seed.web;
 
 import com.yodinfo.seed.bo.Resp;
+import com.yodinfo.seed.config.RespCode;
 import com.yodinfo.seed.constant.UserOrderBy;
 import com.yodinfo.seed.dto.BasicUserInfo;
 import com.yodinfo.seed.dto.UserRegInfo;
 import com.yodinfo.seed.service.UserService;
 import io.swagger.annotations.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
 @Api(value = "用户管理")
@@ -39,30 +42,42 @@ public class UserController extends BaseController {
     @PostMapping(value = "/reg", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody UserRegInfo regInfo) {
-        return ok(userService.add(regInfo));
+        return userService.add(regInfo) ? ok() : fail();
     }
 
     @ApiOperation(value = "用户信息变更", notes = "修改用户信息")
     @PostMapping(value = "/modify", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Resp<?> doChange(@ApiParam(value = "用户信息", required = true) @Valid @RequestBody BasicUserInfo basicInfo) {
-        return ok(userService.modify(basicInfo));
+        return userService.modify(basicInfo) ? ok() : fail();
     }
 
     @ApiOperation(value = "用户删除", notes = "删除用户")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long", paramType = "query")
+            @ApiImplicitParam(name = "uid", value = "用户ID，多个以逗号分隔", required = true, dataType = "String", paramType = "query")
     })
     @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Resp<?> doRemove(@RequestParam Long id) {
-        return ok(userService.deleteById(id));
+    public Resp<?> doRemove(@RequestParam String[] uid) {
+        String[] userIds = Arrays.stream(uid)
+                .filter(StringUtils::isNoneBlank)
+                .map(StringUtils::trim)
+                .distinct()
+                .toArray(String[]::new);
+
+        if (userIds.length <= 0) {
+            return new Resp<>(RespCode.FAIL.getCode(), "Invalid id list!", null);
+        }
+
+        userService.deleteByUid(uid);
+        return ok();
     }
+
 
     @ApiOperation(value = "用户详情", notes = "根据用户ID来获取用户详细信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long", paramType = "path")
+            @ApiImplicitParam(name = "uid", value = "用户ID", required = true, dataType = "String", paramType = "path")
     })
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Resp<BasicUserInfo> queryUserDetails(@PathVariable Long id) {
-        return ok(userService.findById(id));
+    @GetMapping(value = "/{uid}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Resp<BasicUserInfo> queryUserDetails(@PathVariable String uid) {
+        return ok(userService.findByUserName(uid));
     }
 }

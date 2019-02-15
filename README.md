@@ -35,3 +35,5 @@
 
 ## 附件
 详细(文档)[http://localhost:8888/swagger-ui.html]
+
+* 使用PageHelp而不是通用Mapper来排序

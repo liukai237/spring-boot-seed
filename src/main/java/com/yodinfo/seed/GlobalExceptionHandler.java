@@ -4,6 +4,7 @@ import com.yodinfo.seed.bo.Resp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -32,6 +33,18 @@ public class GlobalExceptionHandler {
                 .findFirst()
                 .orElse(e.getMessage());
         return new Resp<>(400, errorMsg, null);
+    }
+
+    @ExceptionHandler(DuplicateKeyException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Resp<?> DuplicateKeyExceptionException(DuplicateKeyException e) {
+        Throwable rootCause = e.getRootCause();
+        if (rootCause != null && rootCause.getMessage().contains("username")) {
+            LOGGER.error(rootCause.getMessage());
+            return new Resp<>(400, "duplicate mobile!", null);
+        }
+        return new Resp<>(400, "duplicate key!", e.getRootCause());
     }
 
 //    @ExceptionHandler(ShiroException.class)

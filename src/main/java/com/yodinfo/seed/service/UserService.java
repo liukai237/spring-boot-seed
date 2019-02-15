@@ -1,19 +1,24 @@
 package com.yodinfo.seed.service;
 
 import com.github.pagehelper.PageHelper;
-import com.google.common.base.Strings;
 import com.yodinfo.seed.converter.UserConverter;
 import com.yodinfo.seed.dao.UserMapper;
 import com.yodinfo.seed.domain.User;
 import com.yodinfo.seed.dto.BasicUserInfo;
 import com.yodinfo.seed.dto.UserRegInfo;
+import com.yodinfo.seed.util.HashIdUtils;
 import com.yodinfo.seed.util.IdGen;
+import com.yodinfo.seed.util.PasswordHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Condition;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -33,8 +38,8 @@ public class UserService extends BaseService {
     }
 
     @Transactional(readOnly = true)
-    public BasicUserInfo findById(Long userId) {
-        User user = userMapper.selectOne(User.builder().userId(userId).build());
+    public BasicUserInfo findByUserName(String uid) {
+        User user = userMapper.selectOne(User.builder().username(uid).build());
         return userConverter.toDto(user);
     }
 
@@ -47,25 +52,40 @@ public class UserService extends BaseService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean add(UserRegInfo regInfo) {
         User user = userConverter.toEntity(regInfo);
-        user.setUserId(new IdGen().nextId());
+
+        long userId = new IdGen().nextId(); // 使用雪花算法生成ID
+        user.setUserId(userId);
+        user.setUsername(HashIdUtils.encrypt(System.currentTimeMillis())); // 使用HashIds生成唯一username（临时，用户可自行修改）
         Date now = new Date();
         user.setCreateTime(now);
         user.setUpdateTime(now);
-        if (Strings.isNullOrEmpty(user.getUsername())) {
-            user.setUsername("手机用户" + user.getPhone());
+
+        //String pwd = new SimpleHash("MD5", regInfo.getPassword(), ByteSource.Util.bytes(uid), 1024).toString();
+        String pwd = null;
+        try {
+            pwd = PasswordHash.createHash(regInfo.getPassword());
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            e.printStackTrace(); // should not be happened
         }
-        return userMapper.insert(user) > 0;
+        LOGGER.debug("Encrypted passwd: {}", pwd);
+        user.setPassword(pwd);
+        return userMapper.insertSelective(user) > 0;
     }
 
     @Transactional(rollbackFor = Exception.class)
     public Boolean modify(BasicUserInfo info) {
         User user = userConverter.toEntity(info);
         user.setUpdateTime(new Date());
-        return userMapper.updateByPrimaryKeySelective(user) > 0;
+        Condition condition = new Condition(User.class);
+        condition.createCriteria().andCondition("username = '" + info.getUid() + "'");
+        return userMapper.updateByConditionSelective(user, condition) > 0;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Boolean deleteById(Long id) {
-        return userMapper.deleteByPrimaryKey(User.builder().userId(id).build()) > 0;
+    public void deleteByUid(String... uids) {
+        Condition condition = new Condition(User.class);
+        condition.createCriteria().andIn("username", Arrays.asList(uids));
+        int count = userMapper.deleteByCondition(condition);
+        LOGGER.info("{} users were deleted!", count);
     }
 }

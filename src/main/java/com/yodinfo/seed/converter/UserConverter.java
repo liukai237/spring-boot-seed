@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserConverter {
 
     @Mappings({
-            @Mapping(target = "nickname", source = "username"),
+            @Mapping(target = "uid", source = "username"),
             @Mapping(target = "regTime", source = "createTime")
     })
     @Named("toDto")
@@ -20,7 +20,7 @@ public interface UserConverter {
     User toEntity(UserRegInfo info);
 
     @Mappings({
-            @Mapping(target = "username", source = "nickname"),
+            @Mapping(target = "username", source = "uid")
     })
     User toEntity(BasicUserInfo info);
 
