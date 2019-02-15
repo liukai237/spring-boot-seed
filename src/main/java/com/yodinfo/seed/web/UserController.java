@@ -34,7 +34,7 @@ public class UserController extends BaseController {
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Resp<List<BasicUserInfo>> queryUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
                                                 @RequestParam(required = false, defaultValue = "0") Integer pageSize,
-                                                @RequestParam(required = false, defaultValue = "REG_TIME_ASC") UserOrderBy orderBy) {
+                                                @RequestParam(required = false, defaultValue = "REG_TIME_DESC") UserOrderBy orderBy) {
         return ok(userService.findWithPaging(pageNum, pageSize, orderBy.getRealValue()));
     }
 
@@ -64,10 +64,10 @@ public class UserController extends BaseController {
                 .toArray(String[]::new);
 
         if (userIds.length <= 0) {
-            return new Resp<>(RespCode.FAIL.getCode(), "Invalid id list!", null);
+            return new Resp<>(RespCode.BAD_REQUEST.getCode(), "Invalid id list!", null);
         }
 
-        userService.deleteByUid(uid);
+        userService.deleteByUsernames(uid);
         return ok();
     }
 

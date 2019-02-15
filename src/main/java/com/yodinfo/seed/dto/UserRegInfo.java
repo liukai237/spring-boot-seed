@@ -33,11 +33,11 @@ public class UserRegInfo {
      * 联通：1704,1707,1708,1709,171
      * 卫星通信：148(移动) 1349
      */
-    @ApiModelProperty(name = "phone", value = "电话号码，一般为手机号码。", example = "13400000000", required = true)
+    @ApiModelProperty(name = "tel", value = "电话号码，一般为手机号码。", example = "13400000000", required = true)
     @Pattern(regexp = "^[1](([3][0-9])|([4][5,7,9])|([5][^4,6,9])|([6][6])|([7][3,5,6,7,8])|([8][0-9])|([9][8,9]))[0-9]{8}$", message = "无效的手机格式！")
-    @JsonProperty("phone")
+    @JsonProperty("tel")
     @JsonAlias({"mobile", "account"})
-    private String phone;
+    private String tel;
 
     @NotEmpty(message = "密码不能为空！")
     @Size(max = 24, min = 6, message = "密码长度必须大于6小于24位！")

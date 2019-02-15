@@ -60,15 +60,15 @@ public class UserService extends BaseService {
         user.setCreateTime(now);
         user.setUpdateTime(now);
 
-        //String pwd = new SimpleHash("MD5", regInfo.getPassword(), ByteSource.Util.bytes(uid), 1024).toString();
-        String pwd = null;
+        //String pwdHash = new SimpleHash("MD5", regInfo.getPassword(), ByteSource.Util.bytes(uid), 1024).toString();
+        String pwdHash = null;
         try {
-            pwd = PasswordHash.createHash(regInfo.getPassword());
+            pwdHash = PasswordHash.createHash(regInfo.getPassword());
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            e.printStackTrace(); // should not be happened
+            LOGGER.error(e.getMessage()); // should not be happened
         }
-        LOGGER.debug("Encrypted passwd: {}", pwd);
-        user.setPassword(pwd);
+        LOGGER.debug("Encrypted passwd: {}", pwdHash);
+        user.setPasswdHash(pwdHash);
         return userMapper.insertSelective(user) > 0;
     }
 
@@ -76,15 +76,17 @@ public class UserService extends BaseService {
     public Boolean modify(BasicUserInfo info) {
         User user = userConverter.toEntity(info);
         user.setUpdateTime(new Date());
+
+        //TODO 修改密码字段及防止SQL注入
         Condition condition = new Condition(User.class);
         condition.createCriteria().andCondition("username = '" + info.getUid() + "'");
         return userMapper.updateByConditionSelective(user, condition) > 0;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void deleteByUid(String... uids) {
+    public void deleteByUsernames(String... usernames) {
         Condition condition = new Condition(User.class);
-        condition.createCriteria().andIn("username", Arrays.asList(uids));
+        condition.createCriteria().andIn("username", Arrays.asList(usernames));
         int count = userMapper.deleteByCondition(condition);
         LOGGER.info("{} users were deleted!", count);
     }

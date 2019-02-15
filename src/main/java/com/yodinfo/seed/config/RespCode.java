@@ -9,9 +9,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum RespCode {
-    SUCCESS(200, "SUCCESS"), // 成功
+    FAIL(-1, "FAIL"), // 操作失败
+    SUCCESS(200, "SUCCESS"), // 操作成功
     NORESULT(204, "No records."), // 查询无结果
-    FAIL(400, "Bad Request."), // Bad Request
+    BAD_REQUEST(400, "Bad Request."), // Bad Request
     UNAUTHORIZED(401, "Unauthorized"), // 未认证（签名错误）
     FORBIDDEN(403, "Account has been owed!"), // 接口调用次数为0
     NOT_FOUND(404, "Invalid API."), // 接口不存在

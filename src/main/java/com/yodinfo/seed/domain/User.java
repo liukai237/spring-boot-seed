@@ -25,16 +25,16 @@ public class User implements Serializable {
     private Gender gender;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
-    private String password;
+    private String passwdHash;
+    private String tel;
     private String avatar;
-    private String phone;
     private Province province;
     private String nickname;
-    //private String email;
-    //private String address;
+    private String email;
+    private String address;
+    private Date createTime;
+    private Date updateTime;
     //private String salt;
     //private Boolean locked;
     //private Boolean available;
-    private Date createTime;
-    private Date updateTime;
 }
