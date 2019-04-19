@@ -1,6 +1,7 @@
 package com.yodinfo.seed.service;
 
 import com.github.pagehelper.PageHelper;
+import com.yodinfo.seed.bo.PageData;
 import com.yodinfo.seed.converter.UserConverter;
 import com.yodinfo.seed.dao.UserMapper;
 import com.yodinfo.seed.domain.User;
@@ -20,7 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService extends BaseService {
@@ -44,9 +45,19 @@ public class UserService extends BaseService {
     }
 
     @Transactional(readOnly = true)
-    public List<BasicUserInfo> findWithPaging(Integer pageNum, Integer pageSize, String orderBy) {
+    public PageData<BasicUserInfo> findWithPaging(Integer pageNum, Integer pageSize, String orderBy) {
         PageHelper.startPage(pageNum, pageSize, orderBy);
-        return userConverter.toDtoList(userMapper.selectAll());
+        return new PageData<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public PageData<BasicUserInfo> test(Map<String, Object> params) {
+        return new PageData<>(userMapper.findByCondition(params), UserConverter.INSTANCE::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public PageData<User> test2(Map<String, Object> params) {
+        return new PageData<>(userMapper.findByCondition(params));
     }
 
     @Transactional(rollbackFor = Exception.class)

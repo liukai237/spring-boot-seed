@@ -4,11 +4,14 @@ import com.yodinfo.seed.domain.User;
 import com.yodinfo.seed.dto.BasicUserInfo;
 import com.yodinfo.seed.dto.UserRegInfo;
 import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserConverter {
+
+    UserConverter INSTANCE = Mappers.getMapper(UserConverter.class);
 
     @Mappings({
             @Mapping(target = "uid", source = "username"),
@@ -26,4 +29,6 @@ public interface UserConverter {
 
     @IterableMapping(qualifiedByName = "toDto")
     List<BasicUserInfo> toDtoList(List<User> quotes);
+
+
 }

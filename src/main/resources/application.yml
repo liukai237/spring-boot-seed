@@ -15,7 +15,11 @@ spring:
       enabled: true
       force: true
   jackson:
-    default-property-inclusion: non_null
+    default-property-inclusion: non_empty
+
+mybatis:
+  type-aliases-package: com.yodinfo.seed.domain
+  mapper-locations: classpath:mapper/*.xml,classpath:mapper/*/*.xml
 
 mapper:
   mappers: com.yodinfo.seed.dao.BasicMapper, com.yodinfo.seed.dao.CommonMapper

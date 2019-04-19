@@ -3,7 +3,6 @@ package com.yodinfo.seed.bo;
 import com.yodinfo.seed.config.RespCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +11,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@AllArgsConstructor
-@ApiModel(value = "统一封装的返回结果")
+@ApiModel(value = "Req", description = "分页请求")
 public class Resp<T> {
     @ApiModelProperty(value = "状态码")
     private int code;
@@ -21,6 +19,17 @@ public class Resp<T> {
     private String message;
     @ApiModelProperty(value = "响应数据")
     private T data;
+
+    public Resp(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    public Resp(int code, String message, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
 
     public boolean isSuccess() {
         return code == RespCode.SUCCESS.getCode();

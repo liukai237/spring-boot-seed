@@ -16,4 +16,8 @@ abstract class BaseController {
     Resp<?> fail() {
         return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), RespCode.INTERNAL_SERVER_ERROR.getMessage(), null);
     }
+
+    Resp<?> fail(String msg) {
+        return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), msg, null);
+    }
 }

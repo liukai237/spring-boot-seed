@@ -1,11 +1,12 @@
 package com.yodinfo.seed.web;
 
+import com.yodinfo.seed.bo.PageData;
 import com.yodinfo.seed.bo.Resp;
-import com.yodinfo.seed.config.RespCode;
-import com.yodinfo.seed.constant.UserOrderBy;
 import com.yodinfo.seed.dto.BasicUserInfo;
 import com.yodinfo.seed.dto.UserRegInfo;
 import com.yodinfo.seed.service.UserService;
+import com.yodinfo.seed.util.MapBuilder;
+import com.yodinfo.seed.util.StrUtils;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
 
 @Api(value = "用户管理")
 @RestController
@@ -25,17 +26,61 @@ public class UserController extends BaseController {
     @Resource
     private UserService userService;
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1", dataType = "Long", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示数量", defaultValue = "0", dataType = "Long", paramType = "query"),
+            @ApiImplicitParam(name = "orderBy", value = "排序规则", defaultValue = "createTime-", dataType = "string", paramType = "query"),
+    })
+    @GetMapping(value = "/test", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Object test(@RequestParam String username,
+                       @RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                       @RequestParam(required = false, defaultValue = "0") Integer pageSize,
+                       @RequestParam(required = false, defaultValue = "+create_time") String[] orderBy) {
+        return ok(userService.test(MapBuilder.start()
+                .append("username", username)
+                .append("pageNum", pageNum)
+                .append("pageSize", pageSize)
+                .append("orderBy", StrUtils.parseOrderBy(orderBy))
+                .get()));
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1", dataType = "Long", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示数量", defaultValue = "0", dataType = "Long", paramType = "query"),
+            @ApiImplicitParam(name = "orderBy", value = "排序规则", defaultValue = "createTime-", dataType = "string", paramType = "query"),
+    })
+    @GetMapping(value = "/test2", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Object test2(@RequestParam String username,
+                        @RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                        @RequestParam(required = false, defaultValue = "0") Integer pageSize,
+                        @RequestParam(required = false, defaultValue = "create_time-") String orderBy) {
+        return ok(userService.test2(MapBuilder.start()
+                .append("username", username)
+                .append("pageNum", pageNum)
+                .append("pageSize", pageSize)
+                .append("orderBy", StrUtils.parseOrderBy(orderBy))
+                .get()));
+    }
+
+    @PostMapping(value = "/test3", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Object test3() {
+        HashMap<String, Object> xxx = new HashMap<>();
+        return ok(userService.test(xxx));
+    }
+
     @ApiOperation(value = "用户列表", notes = "根据用户ID来获取用户详细信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1", dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "pageSize", value = "每页显示数量", defaultValue = "0", dataType = "Long", paramType = "query"),
-            @ApiImplicitParam(name = "orderBy", value = "排序规则", defaultValue = "REG_TIME_ASC", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "orderBy", value = "排序规则", defaultValue = "createTime-", dataType = "string", paramType = "query"),
     })
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Resp<List<BasicUserInfo>> queryUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                                                @RequestParam(required = false, defaultValue = "0") Integer pageSize,
-                                                @RequestParam(required = false, defaultValue = "REG_TIME_DESC") UserOrderBy orderBy) {
-        return ok(userService.findWithPaging(pageNum, pageSize, orderBy.getRealValue()));
+    public Resp<PageData<BasicUserInfo>> queryUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                                                    @RequestParam(required = false, defaultValue = "0") Integer pageSize,
+                                                    @RequestParam(required = false, defaultValue = "createTime-") String orderBy) {
+        return ok(userService.findWithPaging(pageNum, pageSize, StrUtils.parseOrderBy(orderBy)));
     }
 
     @ApiOperation(value = "用户注册", notes = "新增用户")
@@ -64,7 +109,7 @@ public class UserController extends BaseController {
                 .toArray(String[]::new);
 
         if (userIds.length <= 0) {
-            return new Resp<>(RespCode.BAD_REQUEST.getCode(), "Invalid id list!", null);
+            return fail("Invalid id list!");
         }
 
         userService.deleteByUsernames(uid);
