@@ -33,7 +33,7 @@ public class DbConfig {
         // 分页插件
         PageInterceptor pageInterceptor = new PageInterceptor();
         Properties properties = new Properties();
-        properties.setProperty("helperDialect", "postgresql");
+        properties.setProperty("helperDialect", "mysql");
         pageInterceptor.setProperties(properties);
         bean.setPlugins(new PageInterceptor[]{pageInterceptor});
 

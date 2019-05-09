@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: 8989
   tomcat:
     uri-encoding: UTF-8
   compression:
@@ -19,12 +19,12 @@ spring:
 
 mybatis:
   type-aliases-package: com.yodinfo.seed.domain
-  mapper-locations: classpath:mapper/*.xml,classpath:mapper/*/*.xml
+  mapper-locations: classpath*:mapper/**/*.xml
 
 mapper:
   mappers: com.yodinfo.seed.dao.BasicMapper, com.yodinfo.seed.dao.CommonMapper
   not-empty: true
-  identity: postgresql
+  identity: mysql
   use-simple-type: false
 
 logging:
@@ -46,10 +46,10 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
-      jdbc-url: jdbc:postgresql://47.99.143.50:5432/kai
-      driver-class-name: org.postgresql.Driver
-      username: postgres
-      password: Yod@[LufBN5drtvdSfQFUDy5v8ANvGQ4sPN6z]
+      jdbc-url: jdbc:mysql://mysql.iakuil.com:3306/kai
+      driver-class-name: com.mysql.jdbc.Driver
+      username: Yod@[YcKTF9RyttwYKyzRGfIDfw==]
+      password: Yod@[SVJAoJSsCcRsKQnxkvBrt7PJBqn4rb69]
 
 logging:
   level:

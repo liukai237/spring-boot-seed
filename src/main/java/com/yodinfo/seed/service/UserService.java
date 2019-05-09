@@ -39,6 +39,11 @@ public class UserService extends BaseService {
     }
 
     @Transactional(readOnly = true)
+    public PageData<User> justInTest(Map<String, Object> params) {
+        return new PageData<>(userMapper.findByCondition(params));
+    }
+
+    @Transactional(readOnly = true)
     public BasicUserInfo findByUserName(String uid) {
         User user = userMapper.selectOne(User.builder().username(uid).build());
         return userConverter.toDto(user);
@@ -48,16 +53,6 @@ public class UserService extends BaseService {
     public PageData<BasicUserInfo> findWithPaging(Integer pageNum, Integer pageSize, String orderBy) {
         PageHelper.startPage(pageNum, pageSize, orderBy);
         return new PageData<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
-    }
-
-    @Transactional(readOnly = true)
-    public PageData<BasicUserInfo> test(Map<String, Object> params) {
-        return new PageData<>(userMapper.findByCondition(params), UserConverter.INSTANCE::toDto);
-    }
-
-    @Transactional(readOnly = true)
-    public PageData<User> test2(Map<String, Object> params) {
-        return new PageData<>(userMapper.findByCondition(params));
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -6,7 +6,7 @@ import com.yodinfo.seed.config.RespCode;
 abstract class BaseController {
 
     Resp<?> ok() {
-        return new Resp<>(RespCode.SUCCESS.getCode(), RespCode.SUCCESS.getMessage(), null);
+        return new Resp<>(RespCode.SUCCESS.getCode(), RespCode.SUCCESS.getMessage());
     }
 
     <T> Resp<T> ok(T data) {
@@ -14,10 +14,18 @@ abstract class BaseController {
     }
 
     Resp<?> fail() {
-        return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), RespCode.INTERNAL_SERVER_ERROR.getMessage(), null);
+        return new Resp<>(RespCode.FAIL.getCode(), RespCode.INTERNAL_SERVER_ERROR.getMessage());
+    }
+
+    public Resp<?> fail(int code) {
+        return new Resp<>(code, RespCode.INTERNAL_SERVER_ERROR.getMessage());
     }
 
     Resp<?> fail(String msg) {
-        return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), msg, null);
+        return new Resp<>(RespCode.FAIL.getCode(), msg);
+    }
+
+    Resp<?> fail(RespCode respCode) {
+        return new Resp<>(respCode.getCode(), respCode.getMessage());
     }
 }
