@@ -11,7 +11,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@ApiModel(value = "Req", description = "分页请求")
+@ApiModel(value = "Resp", description = "统一API响应结果")
 public class Resp<T> {
     @ApiModelProperty(value = "状态码")
     private int code;
@@ -19,6 +19,7 @@ public class Resp<T> {
     private String message;
     @ApiModelProperty(value = "响应数据")
     private T data;
+
 
     public Resp(int code, String message) {
         this.code = code;

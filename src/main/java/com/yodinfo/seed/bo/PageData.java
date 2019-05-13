@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * 分页结果容器
- * 实际上是简化版的PageInfo，或者加强版的ArrayList
+ * 实际上是简化版的PageInfo，用来替代Spring自带的PageRequest和PageHelper的PageInfo
  * @param <T>
  */
 @Getter
@@ -33,7 +33,7 @@ public class PageData<T> implements Serializable {
     @ApiModelProperty(value = "总页数")
     private int pages;
     @ApiModelProperty(value = "当前页的数量")
-    private int size; // 该属性来自List的size属性, 恒小于等于pageSize
+    private int size;
     @ApiModelProperty(value = "额外数据", notes = "谨慎使用") // e.g. 分页同时返回平均年龄
     private Map<String, Object> summary;
 

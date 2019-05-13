@@ -3,6 +3,7 @@ package com.yodinfo.seed.bo;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yodinfo.seed.util.BeanMapUtils;
+import com.yodinfo.seed.util.Flattenable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -15,51 +16,92 @@ import java.util.Map;
  *
  * @param <T>
  */
-@ApiModel(value = "Req", description = "统一封装请求")
+@ApiModel(value = "Req", description = "统一封装的请求，分页和排序参数分开封装")
 @Getter
 @Setter
-public class Req<T> {
-    @ApiModelProperty(name = "filter", value = "过滤参数")
-    private T filter;
+public class Req<T> extends AbstractReq<T> implements Flattenable {
 
-    @ApiModelProperty(value = "分页/排序参数")
-    @JsonProperty("pagination")
-    @JsonAlias("lazyLoadEvent") // 兼容PrimeNG TurboTable(p-Table)组件
-    private Pagination pagination;
+    @ApiModelProperty(value = "分页参数")
+    private Paging paging;
 
+    @ApiModelProperty(value = "排序参数")
+    private Sorting sorting; // 只支持单个排序条件
+
+    @Override
     public Map<String, Object> flatAsMap() {
-        Map<String, Object> paramMap = BeanMapUtils.beanToMap(filter, true);
-
-        String sortField = this.pagination.sortField;
-        if (sortField != null && sortField.length() > 0) {
-            paramMap.put("sortField", sortField);
-            paramMap.put("sortOrder", this.pagination.getSortOrder() == -1 ? "DESC" : "ASC");
-        }
-
-        Integer rows = this.pagination.getSize();
-        if (rows != null && rows != 0) {
-            paramMap.put("pageSize", rows);
-
-            Integer first = this.pagination.getOffset();
-            paramMap.put("pageNum", (first + rows) / rows);
-        }
-
+        Map<String, Object> paramMap = BeanMapUtils.beanToMap(getFilter(), true);
+        paramMap.put("pageSize", this.paging.getPageSize());
+        paramMap.put("pageNum", this.paging.getPageNum());
+        paramMap.put("sortField", this.sorting.getSortField());
+        paramMap.put("sortOrder", this.sorting.getSortOrder() == -1 ? "DESC" : "ASC");
         return paramMap;
     }
 
-    @ApiModel(value = "Pagination", description = "分页及排序")
+    /**
+     * 分页参数
+     * 同时支持pageNum/pageSize和offset/count两种风格
+     * 其中pageSize/count为必需条件，否则默认为0。
+     */
     @Getter
     @Setter
-    private class Pagination {
-
+    private class Paging {
+        @ApiModelProperty(name = "pageNum", value = "分页页码", example = "1")
+        @JsonProperty("pageNum")
+        @JsonAlias({"page", "pageIndex", "pageNo"})
+        private Integer pageNum;
+        @ApiModelProperty(name = "pageSize", value = "分页尺寸", example = "10")
+        @JsonProperty("pageSize")
+        @JsonAlias({"size", "count", "rows", "results"})
+        private Integer pageSize;
+        @ApiModelProperty(name = "offset", value = "位移量，从第几条记录起", example = "0")
         @JsonProperty("offset")
         @JsonAlias("first")
         private Integer offset;
 
-        @JsonProperty("size")
-        @JsonAlias("rows")
-        private Integer size;
+        public Integer getPageNum() {
+            if (!gtZero(pageSize)) {
+                return 0;
+            }
 
+            if (gtZero(pageNum)) {
+                return pageNum;
+            }
+
+            if (gtZero(offset)) {
+                return (offset + pageSize) / pageSize;
+            }
+
+            return pageNum;
+        }
+
+        public Integer getOffset() {
+            if (!gtZero(pageSize)) {
+                return 0;
+            }
+
+            if (gtZero(offset)) {
+                return offset;
+            }
+
+            if (gtZero(pageNum)) {
+                return (pageNum - 1) * pageSize;
+            }
+
+            return offset;
+        }
+
+        private boolean gtZero(Integer num) {
+            return num != null && num > 0;
+        }
+    }
+
+    /**
+     * 排序条件
+     * 默认为正序，-1为倒序
+     */
+    @Getter
+    @Setter
+    private class Sorting {
         private String sortField;
         private Integer sortOrder;
     }

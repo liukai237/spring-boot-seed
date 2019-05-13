@@ -1,7 +1,7 @@
 ## 技术选型
 * String Boot 2.x
 * MyBatis + 通用Mapper + Page Helper分页插件
-* PostgreSQL + Hikari数据库连接池
+* MySQL/PostgreSQL + Hikari数据库连接池
 * MapStruct
 * Swagger2
 * Shiro(备选)
@@ -45,7 +45,18 @@
 > PS. 使用PageHelp而不是通用Mapper来排序
 
 ### 接口约定
-* 分页参数`pageNum`和`pageSize`放在query，pageSize默认为`0`，即不分页。
-* 排序参数`sort`也放在query，支持`a+b-c+`和`+a,-b,+c`两种格式。
-* 其他查询参数等放在body。当参数名为复数时，值为数组。参数值为null表示`全部`，不要使用~~~空字符串~~~或者~~~ALL~~~。
-* 日期查询参数：`startDate`和`endDate`，格式为yyyy-MM-dd。当天示例：`{"startDate": "2018-11-07","endDate": "2018-11-07"}`
+#### 通用约定
+* 所有参数使用驼峰风格。
+* 当参数名为复数时，值为数组。参数值为null表示***全部***，不要使用空字符串或者`ALL`。
+* 分页参数`pageNum`和`pageSize`，pageSize默认为`0`，即不分页。
+
+#### 简单数据展示（分页、排序及简单过滤条件）
+* 使用GET请求。
+* 排序参数`sort`放在query，支持`a+b-c+`和`+a,-b,+c`两种格式。
+* 默认日期查询参数：`startDate`和`endDate`，格式为yyyy-MM-dd。当天示例：`?startDate=2018-11-07&endDate=2018-11-07`
+* 其他参数放在path或者query，尽量不要超过三个，否则应使用POST封装。
+
+#### 复杂过滤条件数据展示
+* 使用POST请求。
+* 所有参数封装在body。
+* 默认日期查询参数：`startDate`和`endDate`，格式为yyyy-MM-dd。当天示例：`{"startDate": "2018-11-07","endDate": "2018-11-07"}`
