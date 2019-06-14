@@ -8,7 +8,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.ObjectUtils;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -29,11 +31,17 @@ public class Req<T> extends AbstractReq<T> implements Flattenable {
 
     @Override
     public Map<String, Object> flatAsMap() {
-        Map<String, Object> paramMap = BeanMapUtils.beanToMap(getFilter(), true);
-        paramMap.put("pageSize", this.paging.getPageSize());
-        paramMap.put("pageNum", this.paging.getPageNum());
-        paramMap.put("sortField", this.sorting.getSortField());
-        paramMap.put("sortOrder", this.sorting.getSortOrder() == -1 ? "DESC" : "ASC");
+        Map<String, Object> paramMap = ObjectUtils.defaultIfNull(BeanMapUtils.beanToMap(getFilter(), true), new LinkedHashMap<>());
+        if (this.paging != null) {
+            paramMap.put("pageSize", this.paging.getPageSize());
+            paramMap.put("pageNum", this.paging.getPageNum());
+        }
+
+        if (this.sorting != null) {
+            paramMap.put("sortField", this.sorting.getSortField());
+            paramMap.put("sortOrder", this.sorting.getSortOrder() == -1 ? "DESC" : "ASC");
+        }
+
         return paramMap;
     }
 
@@ -44,14 +52,14 @@ public class Req<T> extends AbstractReq<T> implements Flattenable {
      */
     @Getter
     @Setter
-    private class Paging {
+    public class Paging {
         @ApiModelProperty(name = "pageNum", value = "分页页码", example = "1")
         @JsonProperty("pageNum")
         @JsonAlias({"page", "pageIndex", "pageNo"})
         private Integer pageNum;
         @ApiModelProperty(name = "pageSize", value = "分页尺寸", example = "10")
         @JsonProperty("pageSize")
-        @JsonAlias({"size", "count", "rows", "results"})
+        @JsonAlias({"size", "count", "rows", "results", "limit"})
         private Integer pageSize;
         @ApiModelProperty(name = "offset", value = "位移量，从第几条记录起", example = "0")
         @JsonProperty("offset")
@@ -101,7 +109,7 @@ public class Req<T> extends AbstractReq<T> implements Flattenable {
      */
     @Getter
     @Setter
-    private class Sorting {
+    public class Sorting {
         private String sortField;
         private Integer sortOrder;
     }
