@@ -22,10 +22,16 @@ mybatis:
   mapper-locations: classpath*:mapper/**/*.xml
 
 mapper:
-  mappers: com.yodinfo.seed.dao.BasicMapper, com.yodinfo.seed.dao.CommonMapper
+  mappers: com.yodinfo.seed.common.BasicMapper, com.yodinfo.seed.common.CommonMapper
   not-empty: true
   identity: mysql
   use-simple-type: false
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 
 logging:
   level:
@@ -44,12 +50,12 @@ jasypt:
 spring:
   profiles: dev
   datasource:
+    url: jdbc:mysql://mysql.iakuil.com:3306/kai
+    username: Yod@[YcKTF9RyttwYKyzRGfIDfw==]
+    password: Yod@[SVJAoJSsCcRsKQnxkvBrt7PJBqn4rb69]
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
-      jdbc-url: jdbc:mysql://mysql.iakuil.com:3306/kai
       driver-class-name: com.mysql.jdbc.Driver
-      username: Yod@[YcKTF9RyttwYKyzRGfIDfw==]
-      password: Yod@[SVJAoJSsCcRsKQnxkvBrt7PJBqn4rb69]
 
 logging:
   level:

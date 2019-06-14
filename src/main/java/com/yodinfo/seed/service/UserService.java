@@ -21,7 +21,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Map;
 
 @Service
 public class UserService extends BaseService {
@@ -36,11 +35,6 @@ public class UserService extends BaseService {
     public UserService(UserMapper userMapper, UserConverter userConverter) {
         this.userMapper = userMapper;
         this.userConverter = userConverter;
-    }
-
-    @Transactional(readOnly = true)
-    public PageData<User> justInTest(Map<String, Object> params) {
-        return new PageData<>(userMapper.findByCondition(params));
     }
 
     @Transactional(readOnly = true)

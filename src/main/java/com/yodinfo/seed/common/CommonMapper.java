@@ -1,4 +1,4 @@
-package com.yodinfo.seed.dao;
+package com.yodinfo.seed.common;
 
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.common.ConditionMapper;

@@ -1,4 +1,4 @@
-package com.yodinfo.seed.dao;
+package com.yodinfo.seed.common;
 
 import tk.mybatis.mapper.common.IdsMapper;
 import tk.mybatis.mapper.common.Mapper;

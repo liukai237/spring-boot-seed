@@ -25,6 +25,6 @@ public class DictController extends BaseController {
     @ResponseBody
     @PostMapping("/list")
     public Resp<PageData<Dict>> list(@RequestBody Req req) {
-        return ok(dictService.listWithPaging(req));
+        return ok(dictService.listWithPaging(req.flatAsMap()));
     }
 }

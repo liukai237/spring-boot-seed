@@ -28,8 +28,8 @@ public class DictService {
         return dictMapper.list(map);
     }
 
-    public PageData<Dict> listWithPaging(Req req) {
-        return new PageData<>(dictMapper.list(req.flatAsMap()));
+    public PageData<Dict> listWithPaging(Map<String, Object> param) {
+        return new PageData<>(dictMapper.list(param));
     }
 
     public int count(Map<String, Object> map) {
