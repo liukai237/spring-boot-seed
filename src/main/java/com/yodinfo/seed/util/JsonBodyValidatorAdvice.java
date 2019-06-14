@@ -1,8 +1,10 @@
 package com.yodinfo.seed.util;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yodinfo.seed.bo.Req;
-import org.apache.commons.lang3.ArrayUtils;
+import com.github.fge.jackson.JsonLoader;
+import com.github.fge.jsonschema.main.JsonSchemaFactory;
+import com.yodinfo.seed.bo.AbstractReq;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
@@ -20,7 +22,7 @@ import java.util.Arrays;
 
 @ControllerAdvice
 public class JsonBodyValidatorAdvice implements RequestBodyAdvice {
-    private ThreadLocal<ObjectMapper> mapperThreadLocal = ThreadLocal.withInitial(ObjectMapper::new);
+    private final static JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
 
     private static final Class[] annos = {
             RequestMapping.class,
@@ -38,14 +40,18 @@ public class JsonBodyValidatorAdvice implements RequestBodyAdvice {
 
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage httpInputMessage, MethodParameter methodParameter, Type type, Class<? extends HttpMessageConverter<?>> aClass) throws IOException {
+        //TODO jsv here!
+//        JsonNode instanceNode = JsonLoader.fromString("");
+
+
         return httpInputMessage;
     }
 
     @Override
     public Object afterBodyRead(Object o, HttpInputMessage httpInputMessage, MethodParameter methodParameter, Type type, Class<? extends HttpMessageConverter<?>> aClass) {
-        if (o instanceof Req) {
-            Object params = ((Req) o).getParam();
-            handleParamsInBody(params);
+        if (o instanceof AbstractReq) {
+            Object params = ((AbstractReq) o).getFilter();
+            handleParamsInBody(params); // 处理空值
         }
 
         return o;
@@ -57,6 +63,10 @@ public class JsonBodyValidatorAdvice implements RequestBodyAdvice {
     }
 
     private void handleParamsInBody(Object obj) {
+        if (obj == null) {
+            return;
+        }
+
         BeanInfo beanInfo;
 
         try {

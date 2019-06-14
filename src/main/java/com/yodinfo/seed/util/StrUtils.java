@@ -11,9 +11,9 @@ public class StrUtils {
         }
 
         String str = StringUtils.deleteWhitespace(sort);
-        if (Pattern.compile("^([\\w_][\\+\\-])+$").matcher(str).matches()) { // e.g. a+b-c+
+        if (Pattern.compile("^([\\w_]*[\\+\\-])+$").matcher(str).matches()) { // e.g. a+b-c+
             return StringUtils.removeEnd(str.replaceAll("([\\w_])\\+", "$1 asc,").replaceAll("([\\w_])\\-", "$1 desc,"), ",");
-        } else if (Pattern.compile("^([\\+\\-][\\w_],)+[\\+\\-][\\w_]$").matcher(str).matches()) { // e.g. +a,-b,+c
+        } else if (Pattern.compile("^([\\+\\-]+[\\w_]*,)+[\\+\\-][\\w_]$").matcher(str).matches()) { // e.g. +a,-b,+c
             str += ",";
             return StringUtils.removeEnd(str.replaceAll("\\+([\\w_]),", "$1 asc,").replaceAll("\\-([\\w_]),", "$1 desc,"), ",");
         } else {
