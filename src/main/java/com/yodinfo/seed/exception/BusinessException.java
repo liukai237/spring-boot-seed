@@ -1,4 +1,4 @@
-package com.yodinfo.seed;
+package com.yodinfo.seed.exception;
 
 import org.springframework.core.NestedExceptionUtils;
 

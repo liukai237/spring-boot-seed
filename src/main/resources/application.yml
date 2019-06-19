@@ -55,7 +55,7 @@ spring:
     password: Yod@[SVJAoJSsCcRsKQnxkvBrt7PJBqn4rb69]
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
-      driver-class-name: com.mysql.jdbc.Driver
+      driver-class-name: com.mysql.cj.jdbc.Driver
 
 logging:
   level:

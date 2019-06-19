@@ -2,6 +2,7 @@ package com.yodinfo.seed.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.yodinfo.seed.util.Jsv;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ApiModel(value = "UserRegInfo", description = "用户注册信息")
+@Jsv("user_reg")
 public class UserRegInfo {
 
     /**
