@@ -1,14 +1,13 @@
 package com.yodinfo.seed.util;
 
 import com.github.pagehelper.PageHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -20,10 +19,10 @@ import java.util.Map;
  * 如果存在orderBy参数则自动排序
  * 排序仅支持一个字段，原SQL排序会被忽略
  */
+@Slf4j
 @Aspect
 @Component
 public class AspectPagination {
-    private Logger LOGGER = LoggerFactory.getLogger(AspectPagination.class);
 
     @Around(value = "execution(* com.yodinfo.seed.dao..*.*(..))")
     public Object aroundMethodWithParam(ProceedingJoinPoint pjd) throws Throwable {

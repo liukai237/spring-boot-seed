@@ -16,6 +16,13 @@ spring:
       force: true
   jackson:
     default-property-inclusion: non_empty
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+  redis:
+    host: redis.iakuil.com
+    port: 6379
+    password: Yod@[ypgh62docYY/PPcZ0v16lGMDdKDTNSxq]
 
 mybatis:
   type-aliases-package: com.yodinfo.seed.domain
@@ -35,9 +42,11 @@ pagehelper:
 
 logging:
   level:
-    root: WARN
-    org.springframework.web: DEBUG
+    root: INFO
+    org.springframework.web: INFO
     com.yodinfo.seed.dao: DEBUG
+    com.p6spy.engine.spy.appender: INFO
+  file: ./logs/spring-boot-seed.log
 
 jasypt:
   encryptor:
@@ -50,17 +59,15 @@ jasypt:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://mysql.iakuil.com:3306/kai
-    username: Yod@[YcKTF9RyttwYKyzRGfIDfw==]
-    password: Yod@[SVJAoJSsCcRsKQnxkvBrt7PJBqn4rb69]
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-
-logging:
-  level:
-    root: INFO
+    url: jdbc:p6spy:mysql://47.99.143.50:33060/test
+    username: root
+    password: Yod@[YWOni6tyv0hHGQtCUoEKAypUoxNCu8OB]
+    driverClassName: com.p6spy.engine.spy.P6SpyDriver
 
 ---
 spring:
   profiles: prod
+
+logging:
+  level:
+    root: WARN

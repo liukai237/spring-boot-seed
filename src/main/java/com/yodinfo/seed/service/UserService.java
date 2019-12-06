@@ -10,8 +10,7 @@ import com.yodinfo.seed.dto.UserRegInfo;
 import com.yodinfo.seed.util.HashIdUtils;
 import com.yodinfo.seed.util.IdGen;
 import com.yodinfo.seed.util.PasswordHash;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +21,9 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Date;
 
+@Slf4j
 @Service
 public class UserService extends BaseService {
-    private final static Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private final UserMapper userMapper;
@@ -65,9 +64,9 @@ public class UserService extends BaseService {
         try {
             pwdHash = PasswordHash.createHash(regInfo.getPassword());
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            LOGGER.error(e.getMessage()); // should not be happened
+            log.error(e.getMessage()); // should not be happened
         }
-        LOGGER.debug("Encrypted passwd: {}", pwdHash);
+        log.debug("Encrypted passwd: {}", pwdHash);
         user.setPasswdHash(pwdHash);
         return userMapper.insertSelective(user) > 0;
     }
@@ -88,6 +87,6 @@ public class UserService extends BaseService {
         Condition condition = new Condition(User.class);
         condition.createCriteria().andIn("username", Arrays.asList(usernames));
         int count = userMapper.deleteByCondition(condition);
-        LOGGER.info("{} users were deleted!", count);
+        log.info("{} users were deleted!", count);
     }
 }

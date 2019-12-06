@@ -1,6 +1,7 @@
 package com.yodinfo.seed.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yodinfo.seed.util.Jsv;
 import io.swagger.annotations.ApiModel;
@@ -16,6 +17,7 @@ import javax.validation.constraints.Size;
 @Setter
 @ApiModel(value = "UserRegInfo", description = "用户注册信息")
 @Jsv("user_reg")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserRegInfo {
 
     /**
@@ -52,4 +54,6 @@ public class UserRegInfo {
     @JsonProperty("vcode")
     @Size(max = 6, min = 4, message = "验证码长度必须大于4小于6位！")
     private String vCode;
+
+    private String test;
 }

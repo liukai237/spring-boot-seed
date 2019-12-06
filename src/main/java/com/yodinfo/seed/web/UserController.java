@@ -71,7 +71,6 @@ public class UserController extends BaseController {
         return ok();
     }
 
-
     @ApiOperation(value = "用户详情", notes = "根据用户ID来获取用户详细信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", value = "用户ID", required = true, dataType = "String", paramType = "path")

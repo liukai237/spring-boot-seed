@@ -18,6 +18,7 @@ import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.beans.*;
 import java.io.IOException;
@@ -30,7 +31,7 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Iterator;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class JsonBodyValidatorAdvice implements RequestBodyAdvice {
     private final static JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
 
@@ -145,6 +146,12 @@ public class JsonBodyValidatorAdvice implements RequestBodyAdvice {
 
         @Override
         public InputStream getBody() throws IOException {
+            if (type instanceof ParameterizedTypeImpl) {
+                for (Type typeArgument : ((ParameterizedTypeImpl) type).getActualTypeArguments()) {
+
+                }
+            }
+            
             InputStream jsvIs = getClass().getResourceAsStream("/jsv/" + this.type.getTypeName() + ".json");
             if (jsvIs != null) {
                 JsonNode b = JsonLoader.fromReader(new InputStreamReader(this.body));

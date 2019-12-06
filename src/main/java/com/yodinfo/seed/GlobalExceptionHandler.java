@@ -1,7 +1,9 @@
 package com.yodinfo.seed;
 
 import com.yodinfo.seed.bo.Resp;
+import com.yodinfo.seed.config.RespCode;
 import com.yodinfo.seed.exception.BusinessException;
+import com.yodinfo.seed.exception.IllegalStatusException;
 import com.yodinfo.seed.exception.JsonBodyNotValidException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,15 +21,15 @@ public class GlobalExceptionHandler {
     private final static Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(BusinessException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Resp<?> processBusinessException(BusinessException e) {
         LOGGER.error("[SERVER ERROR]", e);
-        return new Resp<>(500, e.getRootCause().getMessage());
+        return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), e.getRootCause().getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Resp<?> processMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String errorMsg = e.getBindingResult().getFieldErrors().stream()
@@ -37,8 +39,16 @@ public class GlobalExceptionHandler {
         return new Resp<>(400, errorMsg, null);
     }
 
+    @ExceptionHandler(IllegalStatusException.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Resp<?> processIllegalStatusException(IllegalStatusException e) {
+        LOGGER.error("[STATUS ERROR]", e);
+        return new Resp<>(e.getCode(), e.getMessage());
+    }
+
     @ExceptionHandler(JsonBodyNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Resp<?> processJsonBodyNotValidException(JsonBodyNotValidException e) {
         LOGGER.error("[JSV ERROR]", e);
@@ -46,7 +56,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Resp<?> DuplicateKeyExceptionException(DuplicateKeyException e) {
         Throwable rootCause = e.getRootCause();

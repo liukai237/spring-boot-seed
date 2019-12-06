@@ -40,7 +40,7 @@
 |Page Helper|5.1.8|https://github.com/pagehelper/pagehelper-spring-boot||
 
 ## 附件
-详细(文档)[http://localhost:8888/swagger-ui.html]
+详细(文档)[http://localhost:8989/doc.html]
 
 > PS. 使用PageHelp而不是通用Mapper来排序
 
@@ -49,6 +49,11 @@
 * 所有参数使用驼峰风格。
 * 当参数名为复数时，值为数组。参数值为null表示***全部***，不要使用空字符串或者`ALL`。
 * 分页参数`pageNum`和`pageSize`，pageSize默认为`0`，即不分页。
+
+#### 异常处理
+* Controller使用统一封装的ok()、fail()方法返回。
+* 如有需要，Service层使用`IllegalStatusException`返回错误码和消息。
+* 所有服务端异常使用BusinessException重新封装，统一处理。
 
 #### 简单数据展示（分页、排序及简单过滤条件）
 * 使用GET请求。
@@ -60,3 +65,9 @@
 * 使用POST请求。
 * 所有参数封装在body。
 * 默认日期查询参数：`startDate`和`endDate`，格式为yyyy-MM-dd。当天示例：`{"startDate": "2018-11-07","endDate": "2018-11-07"}`
+
+#### OAuth Grant Types
+* Authorization Code -- 授权码，一般用在开放平台API
+* Client Credentials -- Client可以理解为App
+* Device Code -- 设备码，不方便输入用户名密码的场景
+* Refresh Token -- 刷新Access Toke
