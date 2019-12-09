@@ -1,6 +1,5 @@
 package com.yodinfo.seed.util;
 
-import com.yodinfo.seed.BaseCodeEnum;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 

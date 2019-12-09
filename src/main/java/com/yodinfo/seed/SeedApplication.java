@@ -8,8 +8,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 @EnableSchedulerLock(defaultLockAtMostFor = "PT30S")
 @SpringBootApplication
-public class Application {
+public class SeedApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(SeedApplication.class, args);
     }
 }

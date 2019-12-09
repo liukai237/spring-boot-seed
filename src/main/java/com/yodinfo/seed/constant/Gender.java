@@ -1,27 +1,17 @@
 package com.yodinfo.seed.constant;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.yodinfo.seed.BaseCodeEnum;
+import com.yodinfo.seed.util.BaseCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Objects;
 
 @Getter
 @AllArgsConstructor
 public enum Gender implements BaseCodeEnum {
-    @JsonProperty("male")
-    MALE(0, "男"),
-    @JsonProperty("female")
-    FEMALE(1, "女"),
-    @JsonProperty("other")
-    OTHER(-1, "未知");
+    MALE(0, "male", "男"),
+    FEMALE(1, "female", "女"),
+    OTHER(-1, "other", "未知");
 
     private Integer code;
+    private String value;
     private String desc;
-
-    @Override
-    public Integer getCode() {
-        return code;
-    }
 }

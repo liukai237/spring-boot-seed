@@ -50,11 +50,6 @@
 * 当参数名为复数时，值为数组。参数值为null表示***全部***，不要使用空字符串或者`ALL`。
 * 分页参数`pageNum`和`pageSize`，pageSize默认为`0`，即不分页。
 
-#### 异常处理
-* Controller使用统一封装的ok()、fail()方法返回。
-* 如有需要，Service层使用`IllegalStatusException`返回错误码和消息。
-* 所有服务端异常使用BusinessException重新封装，统一处理。
-
 #### 简单数据展示（分页、排序及简单过滤条件）
 * 使用GET请求。
 * 排序参数`sort`放在query，支持`a+b-c+`和`+a,-b,+c`两种格式。
@@ -65,6 +60,16 @@
 * 使用POST请求。
 * 所有参数封装在body。
 * 默认日期查询参数：`startDate`和`endDate`，格式为yyyy-MM-dd。当天示例：`{"startDate": "2018-11-07","endDate": "2018-11-07"}`
+
+#### 返回值
+* 返回Http Status统一为200。
+* 返回结果统一封装成code、msg、data三段式结构。
+* 除token接口，全部使用驼峰命名。
+
+#### 异常处理
+* Controller使用统一封装的ok()、fail()方法返回。
+* 如有需要，Service层使用`IllegalStatusException`返回错误码和消息。
+* 所有服务端异常使用BusinessException重新封装，统一处理。
 
 #### OAuth Grant Types
 * Authorization Code -- 授权码，一般用在开放平台API

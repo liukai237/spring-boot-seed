@@ -1,10 +1,8 @@
 package com.yodinfo.seed.constant;
 
-import com.yodinfo.seed.BaseCodeEnum;
+import com.yodinfo.seed.util.BaseCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Objects;
 
 @Getter
 @AllArgsConstructor
@@ -46,12 +44,6 @@ public enum Province implements BaseCodeEnum {
     QT(999999, "其他", "其他");
 
     private Integer code;
+    private String value;
     private String fullName;
-    private String shorter;
-
-
-    @Override
-    public Integer getCode() {
-        return code;
-    }
 }
