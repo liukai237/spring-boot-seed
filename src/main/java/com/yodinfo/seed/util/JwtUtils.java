@@ -9,6 +9,7 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.Nullable;
 
 import java.util.Collections;
 import java.util.Date;
@@ -67,6 +68,7 @@ public class JwtUtils {
         return true;
     }
 
+    @Nullable
     public static String getIdentity(String token) {
         Objects.requireNonNull(token, "Token must not be empty!");
         String identity = null;

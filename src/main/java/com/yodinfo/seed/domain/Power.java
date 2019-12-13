@@ -1,16 +1,21 @@
 package com.yodinfo.seed.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
 @Setter
-public class Power {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "t_power")
+public class Power implements Serializable {
+    @Id
     private Long powerId;
     private String powerName;
-    //private Long systemId;
-    //private Long pid;
     private Date createTime;
 }

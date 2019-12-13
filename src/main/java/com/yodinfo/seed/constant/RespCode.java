@@ -1,4 +1,4 @@
-package com.yodinfo.seed.config;
+package com.yodinfo.seed.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -9,7 +9,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import java.io.Serializable;
 
 /**
- * JWT Shiro Token
+ * 短信验证码 Shiro Token
  */
 @Getter
 @Setter

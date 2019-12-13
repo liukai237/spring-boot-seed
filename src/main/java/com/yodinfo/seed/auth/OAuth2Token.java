@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.shiro.authc.AuthenticationToken;
 
+/**
+ * 第三方OAuth2.0 Shiro Token
+ */
 @Getter
 @Setter
 @NoArgsConstructor

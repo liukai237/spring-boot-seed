@@ -8,6 +8,7 @@ import com.yodinfo.seed.service.UserService;
 import com.yodinfo.seed.util.StrUtils;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 @Api(value = "用户管理")
 @RestController
 @RequestMapping("/user/")
+@RequiresRoles("test")
 public class UserController extends BaseController {
 
     @Resource

@@ -1,38 +1,47 @@
 package com.yodinfo.seed.service;
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
 import com.yodinfo.seed.bo.PageData;
 import com.yodinfo.seed.converter.UserConverter;
-import com.yodinfo.seed.dao.UserMapper;
+import com.yodinfo.seed.dao.*;
+import com.yodinfo.seed.domain.Power;
+import com.yodinfo.seed.domain.Role;
 import com.yodinfo.seed.domain.User;
+import com.yodinfo.seed.domain.UserRole;
 import com.yodinfo.seed.dto.BasicUserInfo;
 import com.yodinfo.seed.dto.UserRegInfo;
 import com.yodinfo.seed.util.HashIdUtils;
 import com.yodinfo.seed.util.IdGen;
 import com.yodinfo.seed.util.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class UserService extends BaseService {
 
-    @Autowired
     private final UserMapper userMapper;
-
-    @Autowired
+    private final RoleMapper roleMapper;
+    private final PowerMapper powerMapper;
+    private final RolePowerMapper rolePowerMapper;
+    private final UserRoleMapper userRoleMapper;
     private final UserConverter userConverter;
 
-    public UserService(UserMapper userMapper, UserConverter userConverter) {
+    public UserService(UserMapper userMapper, RoleMapper roleMapper, PowerMapper powerMapper, RolePowerMapper rolePowerMapper, UserRoleMapper userRoleMapper, UserConverter userConverter) {
         this.userMapper = userMapper;
+        this.roleMapper = roleMapper;
+        this.powerMapper = powerMapper;
+        this.rolePowerMapper = rolePowerMapper;
+        this.userRoleMapper = userRoleMapper;
         this.userConverter = userConverter;
     }
 
@@ -93,5 +102,43 @@ public class UserService extends BaseService {
         condition.createCriteria().andIn("username", Arrays.asList(usernames));
         int count = userMapper.deleteByCondition(condition);
         log.info("{} users were deleted!", count);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Power> findPowersByUserId(Long userId) {
+        List<Role> roles = this.findRolesByUserId(userId);
+        List<Power> powers = Lists.newArrayList();
+        for (Role role : roles) {
+            powers.addAll(findPowersByRole(role.getRoleId()));
+        }
+
+        return powers;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Power> findPowersByRole(Long roleId) {
+        Condition condition = new Condition(Role.class);
+        condition.createCriteria().andEqualTo("roleId", roleId);
+        return powerMapper.selectByCondition(condition);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Role> findRolesByUserId(Long userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        Set<Long> roleIds = null;
+        if (user != null) {
+            Condition condition = new Condition(UserRole.class);
+            condition.createCriteria().andEqualTo("userId", userId);
+            List<UserRole> userRoles = userRoleMapper.selectByCondition(condition);
+            roleIds = userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
+        }
+
+        if (CollectionUtils.isNotEmpty(roleIds)) {
+            Condition condition = new Condition(Role.class);
+            condition.createCriteria().andIn("roleId", roleIds);
+            return roleMapper.selectByCondition(condition);
+        }
+
+        return Collections.emptyList();
     }
 }

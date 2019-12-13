@@ -1,6 +1,6 @@
 package com.yodinfo.seed.bo;
 
-import com.yodinfo.seed.config.RespCode;
+import com.yodinfo.seed.constant.RespCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

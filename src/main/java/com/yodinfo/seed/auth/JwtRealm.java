@@ -34,6 +34,9 @@ public class JwtRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         String accessToken = (String) authenticationToken.getCredentials();
         String identityId = JwtUtils.getIdentity(accessToken);
+        if (identityId == null) {
+            throw new AuthenticationException("invalid token!");
+        }
 
         // 非最新
         String accessTokenInCache = authTokenService.getAccessTokenFromCache(identityId);
