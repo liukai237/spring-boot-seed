@@ -15,21 +15,18 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class JwtToken implements AuthenticationToken, Serializable {
+public class SmsToken implements AuthenticationToken, Serializable {
     private String uid;
-    private String secret;
-
-    public JwtToken(String secret) {
-        this.secret = secret;
-    }
+    private String ticket; // 图形验证码等
+    private String code; // 短信验证码
 
     @Override
     public Object getPrincipal() {
-        return uid;
+        return null;
     }
 
     @Override
     public Object getCredentials() {
-        return secret;
+        return null;
     }
 }

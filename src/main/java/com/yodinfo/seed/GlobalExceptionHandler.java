@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import javax.naming.AuthenticationException;
+
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -55,14 +57,6 @@ public class GlobalExceptionHandler {
         return new Resp<>(e.getCode(), e.getMessage());
     }
 
-//    @ExceptionHandler(JsonBodyNotValidException.class)
-//    @ResponseStatus(HttpStatus.OK)
-//    @ResponseBody
-//    public Resp<?> processJsonBodyNotValidException(JsonBodyNotValidException e) {
-//        log.error("[JSV ERROR]", e);
-//        return new Resp<>(400, e.getMessage(), e.getReport());
-//    }
-
     @ExceptionHandler(DuplicateKeyException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -75,10 +69,19 @@ public class GlobalExceptionHandler {
         return new Resp<>(400, "duplicate key!", e.getRootCause());
     }
 
-//    @ExceptionHandler(ShiroException.class)
-//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-//    @ResponseBody
-//    public Resp<String> handleShiroException(ShiroException e) {
-//        return new Resp<>(500, "A auth error has occurred.", e.getMessage());
-//    }
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Resp<?> processAuthenticationException(AuthenticationException e) {
+        log.error("[AUTH ERROR]", e.getMessage());
+        return new Resp<>(RespCode.UNAUTHORIZED.getCode(), RespCode.UNAUTHORIZED.getMessage(), null);
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Resp<?> processOtherException(Exception e) {
+        log.error("[UNKNOWN ERROR]", e.getMessage());
+        return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), RespCode.INTERNAL_SERVER_ERROR.getMessage(), null);
+    }
 }

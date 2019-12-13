@@ -19,7 +19,7 @@ public class DateJsonDeserializer extends JsonDeserializer<Date> {
         }
 
         try {
-            return DateUtils.parseDate(date, "yyyy-MM-dd", "HH:mm:ss", "yyyy-MM-dd HH:mm:ss", "EEE MMM dd yyyy");
+            return DateUtils.parseDate(date, "yyyy-MM-dd", "HH:mm:ss", "yyyy-MM-dd HH:mm:ss");
         } catch (ParseException e) {
             throw new IllegalArgumentException(e);
         }

@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthToken implements Serializable {
+public class TokenInfo implements Serializable {
     @JsonProperty("access_token")
     protected String accessToken;
 

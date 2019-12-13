@@ -2,7 +2,6 @@ package com.yodinfo.seed.web;
 
 import com.yodinfo.seed.bo.PageData;
 import com.yodinfo.seed.bo.Resp;
-import com.yodinfo.seed.constant.Gender;
 import com.yodinfo.seed.dto.BasicUserInfo;
 import com.yodinfo.seed.dto.UserRegInfo;
 import com.yodinfo.seed.service.UserService;
@@ -78,11 +77,5 @@ public class UserController extends BaseController {
     @GetMapping(value = "/{uid}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Resp<BasicUserInfo> queryUserDetails(@PathVariable String uid) {
         return ok(userService.findByUserName(uid));
-    }
-
-    @GetMapping(value = "/justInTest", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Resp<?> justInTest(@RequestParam Gender gender) {
-        // do something...
-        return ok();
     }
 }

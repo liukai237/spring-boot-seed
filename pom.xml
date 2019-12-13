@@ -10,17 +10,18 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
+        <spring.boot.version>2.1.11.RELEASE</spring.boot.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-dependencies</artifactId>
-            <version>2.1.5.RELEASE</version>
+            <version>${spring.boot.version}</version>
             <type>pom</type>
-            <scope>import</scope>
+            <scope>provided</scope>
         </dependency>
+
 
         <!--******** spring ******** -->
         <dependency>
@@ -87,6 +88,17 @@
             <version>3.7</version>
         </dependency>
 
+        <!--<dependency>-->
+            <!--<groupId>org.apache.shiro</groupId>-->
+            <!--<artifactId>shiro-spring-boot-starter</artifactId>-->
+            <!--<version>1.4.2</version>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.4.2</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
@@ -149,12 +161,6 @@
             <groupId>org.hashids</groupId>
             <artifactId>hashids</artifactId>
             <version>1.0.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring</artifactId>
-            <version>1.4.0</version>
         </dependency>
 
         <!--<dependency>-->

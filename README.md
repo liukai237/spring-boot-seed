@@ -4,7 +4,7 @@
 * MySQL/PostgreSQL + Hikari数据库连接池
 * MapStruct
 * Swagger2
-* Shiro(备选)
+* Shiro
 
 ## 基本需求：
 * 统一的权限管理
@@ -34,13 +34,13 @@
   
 |名称|版本号|项目主页|简介|
 |---|---|---|---|
-|String Boot|2.0.5.RELEASE|https://spring.io/projects/spring-boot/||
+|String Boot|2.1.11.RELEASE|https://spring.io/projects/spring-boot/||
 |MyBatis|3.4.6|http://blog.mybatis.org||
-|通用Mapper|2.1.4|https://mapperhelper.github.io||
+|通用Mapper|2.1.5|https://mapperhelper.github.io||
 |Page Helper|5.1.8|https://github.com/pagehelper/pagehelper-spring-boot||
 
 ## 附件
-详细(文档)[http://localhost:8989/doc.html]
+详细(文档)[http://localhost:8089/doc.html]
 
 > PS. 使用PageHelp而不是通用Mapper来排序
 
@@ -66,13 +66,33 @@
 * 返回结果统一封装成code、msg、data三段式结构。
 * 除token接口，全部使用驼峰命名。
 
+### 编程风格
+#### 命名规范
+##### Dao 接口命名
+* insert
+* batchInsert
+* selectOne
+* selectById
+* count
+* selectList
+* update
+* deleteById
+
+##### Service 接口命名
+* add
+* findById
+* findByXXX
+* findXXXList
+* modify
+* remove
+
+#### 业务层
+* Service方法入参不要超过3个，多个参数使用Map<String, Object>。
+* 除分页方法外，返回值不应该直接使用DTO，domain转DTO应在Controller层完成。
+* 只读方法增加注解`@Transactional(readOnly = true)`，修改方法必须增加注释`@Transactional(rollbackFor = Exception.class)`。
+
 #### 异常处理
 * Controller使用统一封装的ok()、fail()方法返回。
-* 如有需要，Service层使用`IllegalStatusException`返回错误码和消息。
-* 所有服务端异常使用BusinessException重新封装，统一处理。
+* Service层使用`IllegalStatusException`返回错误码和消息。
+* 所有Checked Exception使用`BusinessException`重新封装，统一处理。
 
-#### OAuth Grant Types
-* Authorization Code -- 授权码，一般用在开放平台API
-* Client Credentials -- Client可以理解为App
-* Device Code -- 设备码，不方便输入用户名密码的场景
-* Refresh Token -- 刷新Access Toke

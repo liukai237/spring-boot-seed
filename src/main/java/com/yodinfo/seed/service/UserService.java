@@ -43,6 +43,11 @@ public class UserService extends BaseService {
     }
 
     @Transactional(readOnly = true)
+    public User findByUserName2(String uid) {
+        return userMapper.selectOne(User.builder().username(uid).build());
+    }
+
+    @Transactional(readOnly = true)
     public PageData<BasicUserInfo> findWithPaging(Integer pageNum, Integer pageSize, String orderBy) {
         PageHelper.startPage(pageNum, pageSize, orderBy);
         return new PageData<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);

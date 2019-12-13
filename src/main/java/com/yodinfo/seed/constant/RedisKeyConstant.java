@@ -2,7 +2,7 @@ package com.yodinfo.seed.constant;
 
 public abstract class RedisKeyConstant {
 
-    public static final String ACCESS_TOKEN = "Authorization:Bearer";
+    public static final String ACCESS_TOKEN = "Authorization";
 
     public static final String JWT_ACCESS_TOKEN = "jwt-access-key_";
 
