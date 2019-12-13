@@ -5,10 +5,7 @@ import com.google.common.collect.Lists;
 import com.yodinfo.seed.bo.PageData;
 import com.yodinfo.seed.converter.UserConverter;
 import com.yodinfo.seed.dao.*;
-import com.yodinfo.seed.domain.Power;
-import com.yodinfo.seed.domain.Role;
-import com.yodinfo.seed.domain.User;
-import com.yodinfo.seed.domain.UserRole;
+import com.yodinfo.seed.domain.*;
 import com.yodinfo.seed.dto.BasicUserInfo;
 import com.yodinfo.seed.dto.UserRegInfo;
 import com.yodinfo.seed.util.HashIdUtils;
@@ -117,9 +114,18 @@ public class UserService extends BaseService {
 
     @Transactional(readOnly = true)
     public List<Power> findPowersByRole(Long roleId) {
-        Condition condition = new Condition(Role.class);
+        Condition condition = new Condition(RolePower.class);
         condition.createCriteria().andEqualTo("roleId", roleId);
-        return powerMapper.selectByCondition(condition);
+        List<RolePower> rolePowers = rolePowerMapper.selectByCondition(condition);
+
+        List<Power> powers = Lists.newArrayList();
+        for (RolePower rolePower : rolePowers) {
+            Condition cond = new Condition(RolePower.class);
+            cond.createCriteria().andEqualTo("powerId", rolePower.getPowerId());
+            powers.addAll(powerMapper.selectByCondition(cond));
+        }
+
+        return powers;
     }
 
     @Transactional(readOnly = true)
