@@ -1,5 +1,9 @@
 create schema test default character set utf8mb4 collate utf8mb4_unicode_ci;
 
+-- ----------------------------
+-- Table structure for `t_user`
+-- ----------------------------
+drop table if exists `t_user`;
 create table test.t_user
 (
   user_id     bigint       not null,
@@ -22,3 +26,8 @@ create table test.t_user
 
 alter table test.t_user
   add primary key (user_id);
+
+-- ----------------------------
+-- Table structure for `t_role`
+-- ----------------------------
+drop table if exists `t_role`;

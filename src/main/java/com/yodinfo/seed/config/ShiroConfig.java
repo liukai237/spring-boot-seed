@@ -1,7 +1,6 @@
 package com.yodinfo.seed.config;
 
 import com.yodinfo.seed.auth.*;
-import com.yodinfo.seed.service.AuthTokenService;
 import com.yodinfo.seed.service.UserService;
 import org.apache.shiro.authc.Authenticator;
 import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
@@ -42,7 +41,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilters(filterMap);
 
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/**/auth/*", "anon"); // 可匿名访问
+        filterChainDefinitionMap.put("/auth/*", "anon"); // 可匿名访问
         filterChainDefinitionMap.put("/doc.html", "anon");
         filterChainDefinitionMap.put("/webjars/**/*", "anon");
         filterChainDefinitionMap.put("/v2/api-docs", "anon");
@@ -68,10 +67,10 @@ public class ShiroConfig {
     }
 
     @Bean
-    SecurityManager securityManager(UserService userService, AuthTokenService authTokenService) {
+    SecurityManager securityManager(UserService userService) {
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
         manager.setAuthenticator(authenticator());
-        manager.setRealms(Arrays.asList(jwtRealm(authTokenService), dbRealm(userService), oAuth2Realm(), smsRealm()));
+        manager.setRealms(Arrays.asList(jwtRealm(userService), dbRealm(userService), oAuth2Realm(), smsRealm()));
         return manager;
     }
 
@@ -83,8 +82,8 @@ public class ShiroConfig {
     }
 
     @Bean
-    JwtRealm jwtRealm(AuthTokenService authTokenService) {
-        JwtRealm jwtRealm = new JwtRealm(authTokenService);
+    JwtRealm jwtRealm(UserService userService) {
+        JwtRealm jwtRealm = new JwtRealm(userService);
         jwtRealm.setCredentialsMatcher(new JwtCredentialsMatcher());
         return jwtRealm;
     }

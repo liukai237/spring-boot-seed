@@ -6,7 +6,7 @@ import com.yodinfo.seed.constant.RespCode;
 abstract class BaseController {
 
     Resp<?> ok() {
-        return new Resp<>(RespCode.SUCCESS.getCode(), RespCode.SUCCESS.getMessage());
+        return ok(null);
     }
 
     <T> Resp<T> ok(T data) {

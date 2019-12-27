@@ -31,6 +31,7 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Iterator;
 
+@Deprecated
 //@ControllerAdvice
 public class JsonBodyValidatorAdvice implements RequestBodyAdvice {
     private final static JsonSchemaFactory factory = JsonSchemaFactory.byDefault();

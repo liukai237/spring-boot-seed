@@ -3,6 +3,8 @@ package com.yodinfo.seed.domain;
 import com.yodinfo.seed.constant.Gender;
 import com.yodinfo.seed.constant.Province;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Id;
@@ -31,7 +33,9 @@ public class User implements Serializable {
     private String nickname;
     private String email;
     private String address;
+    @CreatedDate
     private Date createTime;
+    @LastModifiedDate
     private Date updateTime;
     //private String salt;
     //private Boolean locked;

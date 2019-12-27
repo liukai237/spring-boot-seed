@@ -3,7 +3,6 @@ package com.yodinfo.seed;
 import com.yodinfo.seed.bo.Resp;
 import com.yodinfo.seed.constant.RespCode;
 import com.yodinfo.seed.exception.BusinessException;
-import com.yodinfo.seed.exception.IllegalStatusException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.springframework.core.NestedRuntimeException;
@@ -19,20 +18,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(IllegalStatusException.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Resp<?> processIllegalStatusException(IllegalStatusException e) {
-        log.error("[STATUS ERROR]", e);
-        return new Resp<>(e.getCode(), e.getMessage());
-    }
-
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Resp<?> processBusinessException(BusinessException e) {
         log.error("[SERVER ERROR]", e);
-        return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), e.getRootCause().getMessage());
+        return new Resp<>(e.getCode(), e.getRootCause().getMessage());
     }
 
     @ExceptionHandler(ServletRequestBindingException.class)
@@ -72,6 +63,6 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Resp<?> processOtherException(Exception e) {
         log.error("[UNKNOWN ERROR]", e);
-        return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), "Occurring an server exception! Please check with admin if you want to get the details!", e.getMessage());
+        return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), "Occurring an unknown exception! Please check with admin if you want to get the details!", e.getMessage());
     }
 }

@@ -21,7 +21,7 @@ public class JwtUtils {
 
     private static final long DEFAULT_EXPIRE_TIME = 30 * 60 * 1000;
     private static final String DEFAULT_SECRET = "com.yodinfo.jwt.secret";
-    private static final String DEFAULT_IDENTITY = "uid";
+    private static final String DEFAULT_IDENTITY = "identity";
 
     public static String sign(String identityId) {
         return sign(identityId, DEFAULT_SECRET, DEFAULT_EXPIRE_TIME, Collections.emptyMap());

@@ -1,4 +1,4 @@
-package com.yodinfo.seed.util;
+package com.yodinfo.seed.aop;
 
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;

@@ -2,7 +2,7 @@ package com.yodinfo.seed.service;
 
 import com.yodinfo.seed.bo.TokenInfo;
 import com.yodinfo.seed.constant.RedisKeyConstant;
-import com.yodinfo.seed.exception.IllegalStatusException;
+import com.yodinfo.seed.exception.BusinessException;
 import com.yodinfo.seed.util.JwtUtils;
 import com.yodinfo.seed.util.StrUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -27,62 +27,63 @@ public class AuthTokenService {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    public TokenInfo generate(String uid, Map<String, String> data) {
-        String accessToken = JwtUtils.sign(uid, DEFAULT_ACCESS_EXPIRES, data);
+    public TokenInfo generate(String identity, Map<String, String> data) {
+        String accessToken = JwtUtils.sign(identity, DEFAULT_ACCESS_EXPIRES, data);
         ValueOperations<String, Object> redis = redisTemplate.opsForValue();
         log.debug("generating access token: {}", accessToken);
-        redis.set(RedisKeyConstant.JWT_ACCESS_TOKEN + uid, accessToken, DEFAULT_ACCESS_EXPIRES, TimeUnit.MILLISECONDS);
+        redis.set(RedisKeyConstant.JWT_ACCESS_TOKEN + identity, accessToken, DEFAULT_ACCESS_EXPIRES, TimeUnit.MILLISECONDS);
 
-        String refreshToken = getRefreshTokenFromCache(uid);
+        String refreshToken = getRefreshTokenFromCache(identity);
         if (refreshToken == null || !JwtUtils.verify(refreshToken)) {
-            refreshToken = JwtUtils.sign(uid, DEFAULT_REFRESH_EXPIRES);
+            refreshToken = JwtUtils.sign(identity, DEFAULT_REFRESH_EXPIRES);
             log.debug("generating refresh token: {}", refreshToken);
-            redis.set(RedisKeyConstant.JWT_REFRESH_IDENTIFICATION + uid, refreshToken, DEFAULT_REFRESH_EXPIRES, TimeUnit.MILLISECONDS);
+            redis.set(RedisKeyConstant.JWT_REFRESH_IDENTIFICATION + identity, refreshToken, DEFAULT_REFRESH_EXPIRES, TimeUnit.MILLISECONDS);
         }
 
         return new TokenInfo(accessToken, DEFAULT_ACCESS_EXPIRES / 1000, StrUtils.getMD5(refreshToken), null);
     }
 
-    public TokenInfo refresh(String uid, String refreshTokenHash) {
+    public TokenInfo refresh(String token, String refreshTokenHash) {
+        String identity = JwtUtils.getIdentity(token);
         ValueOperations<String, Object> redis = redisTemplate.opsForValue();
-        String accessToken = getAccessTokenFromCache(uid);
+        String accessToken = getAccessTokenFromCache(identity);
         if (accessToken == null) {
-            log.info("missing access token for: {}", uid);
-            throw new IllegalStatusException("missing access token", 100701);
+            log.info("missing access token for: {}", identity);
+            throw new BusinessException("missing access token", 100701);
         }
 
-        String refreshToken = getRefreshTokenFromCache(uid);
+        String refreshToken = getRefreshTokenFromCache(identity);
         if (refreshToken == null) {
-            throw new IllegalStatusException("missing refresh token", 100702);
+            throw new BusinessException("missing refresh token", 100702);
         }
         if (!JwtUtils.verify(refreshToken) || !refreshTokenHash.equals(StrUtils.getMD5(refreshToken))) {
-            throw new IllegalStatusException("invalid refresh token", 100703);
+            throw new BusinessException("invalid refresh token", 100703);
         }
 
         Map<String, String> data = JwtUtils.getClaims(accessToken);
         log.debug("stored data in token: {}", data);
-        String newToken = JwtUtils.sign(uid, DEFAULT_ACCESS_EXPIRES, data);
+        String newToken = JwtUtils.sign(identity, DEFAULT_ACCESS_EXPIRES, data);
         log.debug("generating access token: {}", newToken);
-        redis.set(RedisKeyConstant.JWT_ACCESS_TOKEN + uid, newToken, DEFAULT_ACCESS_EXPIRES, TimeUnit.MILLISECONDS);
+        redis.set(RedisKeyConstant.JWT_ACCESS_TOKEN + identity, newToken, DEFAULT_ACCESS_EXPIRES, TimeUnit.MILLISECONDS);
         return new TokenInfo(newToken, DEFAULT_ACCESS_EXPIRES / 1000, refreshTokenHash, null);
     }
 
-    public String getAccessTokenFromCache(String uid) {
+    public String getAccessTokenFromCache(String identity) {
         ValueOperations<String, Object> redis = redisTemplate.opsForValue();
-        Object accessObj = redis.get(RedisKeyConstant.JWT_ACCESS_TOKEN + uid);
+        Object accessObj = redis.get(RedisKeyConstant.JWT_ACCESS_TOKEN + identity);
         return accessObj == null ? null : (String) accessObj;
     }
 
-    public String getRefreshTokenFromCache(String uid) {
+    public String getRefreshTokenFromCache(String identity) {
         ValueOperations<String, Object> redis = redisTemplate.opsForValue();
-        Object refreshObj = redis.get(RedisKeyConstant.JWT_REFRESH_IDENTIFICATION + uid);
+        Object refreshObj = redis.get(RedisKeyConstant.JWT_REFRESH_IDENTIFICATION + identity);
         return refreshObj == null ? null : (String) refreshObj;
     }
 
     public void clear(String token) {
-        String uid = JwtUtils.getIdentity(token);
-        log.info("clearing token for: {}", uid);
-        redisTemplate.delete(RedisKeyConstant.JWT_ACCESS_TOKEN + uid);
-        redisTemplate.delete(RedisKeyConstant.JWT_REFRESH_IDENTIFICATION + uid);
+        String identity = JwtUtils.getIdentity(token);
+        log.info("clearing token for: {}", identity);
+        redisTemplate.delete(RedisKeyConstant.JWT_ACCESS_TOKEN + identity);
+        redisTemplate.delete(RedisKeyConstant.JWT_REFRESH_IDENTIFICATION + identity);
     }
 }
