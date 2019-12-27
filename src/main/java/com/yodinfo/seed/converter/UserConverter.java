@@ -14,21 +14,20 @@ public interface UserConverter {
     UserConverter INSTANCE = Mappers.getMapper(UserConverter.class);
 
     @Mappings({
-            @Mapping(target = "uid", source = "username"),
+            @Mapping(target = "uid", source = "userId"),
             @Mapping(target = "regTime", source = "createTime")
     })
     @Named("toDto")
     BasicUserInfo toDto(User user);
 
+    @Mapping(target = "passwdHash", source = "password")
     User toEntity(UserRegInfo info);
 
     @Mappings({
-            @Mapping(target = "username", source = "uid")
+            @Mapping(target = "userId", source = "uid")
     })
     User toEntity(BasicUserInfo info);
 
     @IterableMapping(qualifiedByName = "toDto")
     List<BasicUserInfo> toDtoList(List<User> quotes);
-
-
 }

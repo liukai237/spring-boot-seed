@@ -10,9 +10,7 @@ import com.yodinfo.seed.service.UserService;
 import com.yodinfo.seed.util.StrUtils;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.apache.shiro.subject.Subject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +21,8 @@ import java.util.Arrays;
 
 @Api(value = "用户管理")
 @RestController
+@RequestMapping("/user/")
+@RequiresRoles("admin")
 public class UserController extends BaseController {
 
     private final UserConverter userConverter;
@@ -47,7 +47,7 @@ public class UserController extends BaseController {
         return ok(userService.findWithPaging(pageNum, pageSize, StrUtils.parseOrderBy(orderBy)));
     }
 
-    @ApiOperation(value = "用户注册", notes = "新增用户") //TODO 放开权限
+    @ApiOperation(value = "用户注册", notes = "新增用户")
     @PostMapping(value = "/reg", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody UserRegInfo regInfo) {
@@ -78,16 +78,16 @@ public class UserController extends BaseController {
             return fail("Invalid id list!");
         }
 
-        userService.deleteByUsernames(uid);
+        userService.deleteByIds(uid);
         return ok();
     }
 
-    @ApiOperation(value = "用户详情", notes = "根据手机号码来获取用户详细信息")
+    @ApiOperation(value = "用户详情", notes = "根据UID来获取用户详细信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "mobile", value = "手机号码", required = true, dataType = "String", paramType = "path")
+            @ApiImplicitParam(name = "uid", value = "用户ID", required = true, dataType = "String", paramType = "path")
     })
-    @GetMapping(value = "/{mobile}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Resp<BasicUserInfo> queryUserDetails(@PathVariable String mobile) {
-        return ok(userConverter.toDto(userService.findByMobile(mobile)));
+    @GetMapping(value = "/{uid}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Resp<BasicUserInfo> queryUserDetails(@PathVariable Long uid) {
+        return ok(userConverter.toDto(userService.findById(uid)));
     }
 }

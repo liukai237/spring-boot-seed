@@ -47,12 +47,6 @@ public class UserService extends BaseService {
     }
 
     @Transactional(readOnly = true)
-    public User findByMobile(String mobile) {
-        User query = User.builder().tel(mobile).build();
-        return userMapper.selectOne(query);
-    }
-
-    @Transactional(readOnly = true)
     public PageData<BasicUserInfo> findWithPaging(Integer pageNum, Integer pageSize, String orderBy) {
         PageHelper.startPage(pageNum, pageSize, orderBy);
         return new PageData<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
@@ -82,9 +76,9 @@ public class UserService extends BaseService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void deleteByUsernames(String... usernames) {
+    public void deleteByIds(String... ids) {
         Condition condition = new Condition(User.class);
-        condition.createCriteria().andIn("username", Arrays.asList(usernames));
+        condition.createCriteria().andIn("userId", Arrays.asList(ids));
         int count = userMapper.deleteByCondition(condition);
         log.info("{} users were deleted!", count);
     }

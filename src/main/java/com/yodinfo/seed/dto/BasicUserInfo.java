@@ -25,11 +25,12 @@ public class BasicUserInfo {
 
     @NotNull(message = "用户ID不能为空！")
     @ApiModelProperty(name = "uid", value = "用户ID")
-    private String uid;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long uid;
 
     @ApiModelProperty(name = "tel", value = "手机号码。", example = "13400000000")
     @Pattern(regexp = "^[1](([3][0-9])|([4][5,7,9])|([5][^4,6,9])|([6][6])|([7][3,5,6,7,8])|([8][0-9])|([9][8,9]))[0-9]{8}$", message = "无效的手机格式！")
-    private String phone;
+    private String tel;
 
     @JsonDeserialize(using = CodeEnumDeserializer.class)
     @ApiModelProperty(name = "gender", value = "性别", example = "male")

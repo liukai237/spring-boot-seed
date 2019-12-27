@@ -7,7 +7,6 @@ import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.*;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.lang.reflect.Field;
@@ -27,10 +26,6 @@ public class AutoDateGenerateInterceptor implements Interceptor {
         Date currentDate = new Date();
         if (SqlCommandType.UPDATE == sqlCommandType) {
             for (Field field : fields) {
-                if (AnnotationUtils.getAnnotation(field, LastModifiedBy.class) != null) {
-                    field.setAccessible(true);
-                    field.setAccessible(false);
-                }
                 if (AnnotationUtils.getAnnotation(field, LastModifiedDate.class) != null) {
                     field.setAccessible(true);
                     field.set(parameter, currentDate);
@@ -40,6 +35,11 @@ public class AutoDateGenerateInterceptor implements Interceptor {
         } else if (SqlCommandType.INSERT == sqlCommandType) {
             for (Field field : fields) {
                 if (AnnotationUtils.getAnnotation(field, CreatedDate.class) != null) {
+                    field.setAccessible(true);
+                    field.set(parameter, currentDate);
+                    field.setAccessible(false);
+                }
+                if (AnnotationUtils.getAnnotation(field, LastModifiedDate.class) != null) {
                     field.setAccessible(true);
                     field.set(parameter, currentDate);
                     field.setAccessible(false);
