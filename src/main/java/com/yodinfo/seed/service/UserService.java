@@ -144,8 +144,8 @@ public class UserService extends BaseService {
             Long uid = user.getUserId();
             Map<String, String> details = Maps.newHashMap();
             details.put("uid", uid.toString());
-            details.put("roles", StringUtils.join(findRolesByUserId(uid)));
-            details.put("perms", StringUtils.join(findPowersByUserId(uid)));
+            details.put("roles", findRolesByUserId(uid).stream().map(Role::getRoleName).distinct().collect(Collectors.joining(",")));
+            details.put("perms", findPowersByUserId(uid).stream().map(Power::getPowerName).distinct().collect(Collectors.joining(",")));
             return details;
         }
 
