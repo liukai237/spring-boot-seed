@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
  */
 @Getter
 @Setter
-@ApiModel(value = "PageData", description = "分页数据")
-public class PageData<T> implements Serializable {
+@ApiModel(value = "Paged", description = "分页数据")
+public class Paged<T> implements Serializable {
     @ApiModelProperty(value = "总记录数")
     private long total;
     @ApiModelProperty(value = "结果集")
@@ -37,7 +37,7 @@ public class PageData<T> implements Serializable {
     @ApiModelProperty(value = "额外数据", notes = "谨慎使用") // e.g. 分页同时返回平均年龄
     private Map<String, Object> summary;
 
-    public PageData(List<T> list) {
+    public Paged(List<T> list) {
         Objects.requireNonNull(list, "data list should not be empty!");
 
         if (list instanceof Page) {
@@ -52,7 +52,7 @@ public class PageData<T> implements Serializable {
         this.list = list;
     }
 
-    public <R> PageData(List<R> list, Function<? super R, ? extends T> mapper) {
+    public <R> Paged(List<R> list, Function<? super R, ? extends T> mapper) {
         Objects.requireNonNull(list, "data list should not be empty!");
 
         if (list instanceof Page) {

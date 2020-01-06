@@ -1,6 +1,6 @@
 package com.yodinfo.seed.web;
 
-import com.yodinfo.seed.bo.PageData;
+import com.yodinfo.seed.bo.Paged;
 import com.yodinfo.seed.bo.Req;
 import com.yodinfo.seed.bo.Resp;
 import com.yodinfo.seed.domain.Dict;
@@ -24,7 +24,7 @@ public class DictController extends BaseController {
 
     @ResponseBody
     @PostMapping("/list")
-    public Resp<PageData<Dict>> list(@RequestBody Req<Dict> req) {
+    public Resp<Paged<Dict>> list(@RequestBody Req<Dict> req) {
         return ok(dictService.listWithPaging(req.flatAsMap()));
     }
 }

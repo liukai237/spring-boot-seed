@@ -12,6 +12,7 @@ import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 统一封装的分页请求
@@ -37,9 +38,10 @@ public class Req<T> extends AbstractReq<T> implements Flattenable {
             paramMap.put("pageNum", this.paging.getPageNum());
         }
 
-        if (this.sorting != null) {
-            paramMap.put("sortField", this.sorting.getSortField());
-            paramMap.put("sortOrder", this.sorting.getSortOrder() == -1 ? "DESC" : "ASC");
+        Sorting sorting = this.sorting;
+        if (sorting != null && sorting.getSortField() != null) {
+            paramMap.put("sortField", sorting.getSortField());
+            paramMap.put("sortOrder", Objects.equals(sorting.getSortOrder(), -1) ? "DESC" : "ASC");
         }
 
         return paramMap;

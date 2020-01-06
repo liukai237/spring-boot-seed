@@ -1,7 +1,6 @@
 package com.yodinfo.seed.service;
 
-import com.yodinfo.seed.bo.PageData;
-import com.yodinfo.seed.bo.Req;
+import com.yodinfo.seed.bo.Paged;
 import com.yodinfo.seed.dao.DictMapper;
 import com.yodinfo.seed.domain.Dict;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +27,8 @@ public class DictService {
         return dictMapper.list(map);
     }
 
-    public PageData<Dict> listWithPaging(Map<String, Object> param) {
-        return new PageData<>(dictMapper.list(param));
+    public Paged<Dict> listWithPaging(Map<String, Object> param) {
+        return new Paged<>(dictMapper.list(param));
     }
 
     public int count(Map<String, Object> map) {

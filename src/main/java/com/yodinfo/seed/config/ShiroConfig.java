@@ -42,15 +42,14 @@ public class ShiroConfig {
 
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/auth/*", "anon"); // 可匿名访问
-        filterChainDefinitionMap.put("/user/reg", "anon");
+        filterChainDefinitionMap.put("/api/user/reg", "anon");
         filterChainDefinitionMap.put("/doc.html", "anon");
         filterChainDefinitionMap.put("/webjars/**/*", "anon");
         filterChainDefinitionMap.put("/v2/api-docs", "anon");
         filterChainDefinitionMap.put("/swagger-resources", "anon");
         filterChainDefinitionMap.put("/configuration/security", "anon");
         filterChainDefinitionMap.put("/configuration/ui", "anon");
-        filterChainDefinitionMap.put("/logout", "logout"); // 退出登录
-        filterChainDefinitionMap.put("/**", "jwtFilter,authc"); // 需登录才能访问
+        filterChainDefinitionMap.put("/api/**/*", "jwtFilter"); // 需登录才能访问
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }

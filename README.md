@@ -35,6 +35,7 @@ Swagger(文档)[http://localhost:8089/doc.html]
 * 角色有优先级的概念，即当某个用色具有多个用色时，按优先级高低来判断权限
 * 实现模块级控制
   
+### 附件  
 |名称|版本号|项目主页|简介|
 |---|---|---|---|
 |String Boot|2.1.11.RELEASE|https://spring.io/projects/spring-boot/||
@@ -69,6 +70,7 @@ Swagger(文档)[http://localhost:8089/doc.html]
 ## 编程风格
 ### 命名规范
 #### Dao 接口命名
+与tkMapper命名风格保持一致，严禁使用getXXX。
 * insert
 * batchInsert
 * selectOne
@@ -79,6 +81,7 @@ Swagger(文档)[http://localhost:8089/doc.html]
 * deleteById
 
 #### Service 接口命名
+使用语义化的动词，不要使用数据库关键字。
 * add
 * findById
 * findByXXX
@@ -87,10 +90,10 @@ Swagger(文档)[http://localhost:8089/doc.html]
 * remove
 
 ### 业务层
-* Service方法入参不要超过3个，多个参数使用Map<String, Object>。
+* Service方法入参不要超过3个，多个参数使用Map<String, Object>（待议）。
 * 除分页方法外，返回值不应该直接使用DTO，domain转DTO应在Controller层完成。
 * 只读方法增加注解`@Transactional(readOnly = true)`，修改方法必须增加注释`@Transactional(rollbackFor = Exception.class)`。
-* 使用PageHelp而不是通用Mapper来排序。
+* 分页场景建议使用PageHelp而不是通用Mapper来排序（待议）。
 * domain创建时间使用`@CreatedDate`注解，修改时间使用`@LastModifiedDate`注解。
 
 ### 异常处理

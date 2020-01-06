@@ -13,6 +13,9 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 微信公众平台用户信息
+ */
 @Getter
 @Setter
 @NoArgsConstructor

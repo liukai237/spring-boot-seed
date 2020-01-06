@@ -4,22 +4,23 @@ import com.yodinfo.seed.bo.Resp;
 import com.yodinfo.seed.bo.TokenInfo;
 import com.yodinfo.seed.constant.AuthSchema;
 import com.yodinfo.seed.constant.DeviceType;
+import com.yodinfo.seed.domain.User;
+import com.yodinfo.seed.dto.UserRegInfo;
 import com.yodinfo.seed.exception.BusinessException;
 import com.yodinfo.seed.service.AuthTokenService;
 import com.yodinfo.seed.service.ClientAuthService;
 import com.yodinfo.seed.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.apache.commons.collections.MapUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.Map;
 
-@Api("鉴权认证接口")
+@Api("注册/鉴权/认证")
 @RestController
 @RequestMapping("/auth/")
 public class AuthController extends BaseController {
@@ -32,6 +33,18 @@ public class AuthController extends BaseController {
 
     @Resource
     private ClientAuthService clientAuthService;
+
+    @ApiOperation(value = "用户注册", notes = "通过手机号码/密码注册用户。")
+    @PostMapping(value = "/reg", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody UserRegInfo regInfo) {
+        String account = regInfo.getTel();
+        String passwd = regInfo.getPassword();
+        User entity = new User();
+        entity.setTel(account);
+        entity.setPasswdHash(passwd);
+        return userService.add(entity) ? applyAccessToken(account, passwd, null, DeviceType.WEBAPP, AuthSchema.PASSWD) : fail();
+    }
 
     @ApiOperation(value = "申请token", notes = "申请token，校验优先级为：密码、短信和第三方平台（比如微信扫码登录）。")
     @ApiImplicitParams({

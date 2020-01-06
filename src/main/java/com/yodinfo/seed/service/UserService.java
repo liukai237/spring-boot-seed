@@ -3,7 +3,7 @@ package com.yodinfo.seed.service;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.yodinfo.seed.bo.PageData;
+import com.yodinfo.seed.bo.Paged;
 import com.yodinfo.seed.converter.UserConverter;
 import com.yodinfo.seed.dao.*;
 import com.yodinfo.seed.domain.*;
@@ -13,7 +13,6 @@ import com.yodinfo.seed.util.IdGen;
 import com.yodinfo.seed.util.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
@@ -47,9 +46,9 @@ public class UserService extends BaseService {
     }
 
     @Transactional(readOnly = true)
-    public PageData<BasicUserInfo> findWithPaging(Integer pageNum, Integer pageSize, String orderBy) {
+    public Paged<BasicUserInfo> findWithPaging(Integer pageNum, Integer pageSize, String orderBy) {
         PageHelper.startPage(pageNum, pageSize, orderBy);
-        return new PageData<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
+        return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -139,7 +138,7 @@ public class UserService extends BaseService {
                 .orEqualTo("email", identity);
         List<User> users = userMapper.selectByCondition(condition);
 
-        if (users != null) {
+        if (CollectionUtils.isNotEmpty(users)) {
             User user = users.get(0);
             Long uid = user.getUserId();
             Map<String, String> details = Maps.newHashMap();

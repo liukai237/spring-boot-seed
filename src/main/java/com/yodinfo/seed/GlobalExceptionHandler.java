@@ -4,7 +4,7 @@ import com.yodinfo.seed.bo.Resp;
 import com.yodinfo.seed.constant.RespCode;
 import com.yodinfo.seed.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.ShiroException;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -18,12 +18,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final String DEFAULT_ERROR_MESSAGE = "Occurring an server exception!";
+
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Resp<?> processBusinessException(BusinessException e) {
         log.error("[SERVER ERROR]", e);
-        return new Resp<>(e.getCode(), e.getRootCause().getMessage());
+        String message = e.getMessage();
+        Throwable rootCause = e.getRootCause();
+        String finalMsg = message == null ? (rootCause == null ? DEFAULT_ERROR_MESSAGE : rootCause.getMessage()) : message;
+        return new Resp<>(e.getCode(), finalMsg);
     }
 
     @ExceptionHandler(ServletRequestBindingException.class)
@@ -34,10 +39,10 @@ public class GlobalExceptionHandler {
         return new Resp<>(RespCode.BAD_REQUEST.getCode(), e.getMessage());
     }
 
-    @ExceptionHandler(AuthenticationException.class)
+    @ExceptionHandler(ShiroException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Resp<?> processAuthenticationException(AuthenticationException e) {
+    public Resp<?> processShiroException(ShiroException e) {
         log.error("[AUTH ERROR]", e);
         return new Resp<>(RespCode.UNAUTHORIZED.getCode(), RespCode.UNAUTHORIZED.getMessage());
     }
@@ -46,7 +51,8 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Resp<?> processDuplicateKeyExceptionException(DuplicateKeyException e) {
-        return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), "duplicate key!", e.getRootCause());
+        Throwable rootCause = e.getRootCause();
+        return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), "duplicate key!", rootCause == null ? null : rootCause.getMessage());
     }
 
     @ExceptionHandler(NestedRuntimeException.class)

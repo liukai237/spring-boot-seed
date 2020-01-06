@@ -1,6 +1,5 @@
 package com.yodinfo.seed.auth;
 
-import com.yodinfo.seed.service.AuthTokenService;
 import com.yodinfo.seed.service.UserService;
 import com.yodinfo.seed.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +34,6 @@ public class JwtRealm extends BasicRealm {
 //            throw new AuthenticationException("invalid token!");
 //        }
 
-        return JwtUtils.verify(accessToken) ? new SimpleAuthenticationInfo(JwtUtils.getClaims(accessToken), accessToken, "jwtRealm") : null;
+        return JwtUtils.verify(accessToken) ? new SimpleAuthenticationInfo(JwtUtils.getClaims(accessToken), accessToken, getName()) : null;
     }
 }

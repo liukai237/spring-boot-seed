@@ -1,16 +1,15 @@
 package com.yodinfo.seed.web;
 
-import com.yodinfo.seed.bo.PageData;
+import com.yodinfo.seed.bo.Paged;
 import com.yodinfo.seed.bo.Resp;
 import com.yodinfo.seed.converter.UserConverter;
 import com.yodinfo.seed.domain.User;
 import com.yodinfo.seed.dto.BasicUserInfo;
-import com.yodinfo.seed.dto.UserRegInfo;
 import com.yodinfo.seed.service.UserService;
 import com.yodinfo.seed.util.StrUtils;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +20,8 @@ import java.util.Arrays;
 
 @Api(value = "用户管理")
 @RestController
-@RequestMapping("/user/")
-@RequiresRoles("admin")
+@RequestMapping("/api/user/")
+//@RequiresRoles("admin")
 public class UserController extends BaseController {
 
     private final UserConverter userConverter;
@@ -41,22 +40,25 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "orderBy", value = "排序规则", defaultValue = "createTime-", dataType = "string", paramType = "query"),
     })
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Resp<PageData<BasicUserInfo>> queryUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                                                    @RequestParam(required = false, defaultValue = "0") Integer pageSize,
-                                                    @RequestParam(required = false, defaultValue = "createTime-") String orderBy) {
+    @RequiresPermissions("sys:user:list")
+    public Resp<Paged<BasicUserInfo>> queryUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                                                 @RequestParam(required = false, defaultValue = "0") Integer pageSize,
+                                                 @RequestParam(required = false, defaultValue = "createTime-") String orderBy) {
         return ok(userService.findWithPaging(pageNum, pageSize, StrUtils.parseOrderBy(orderBy)));
     }
 
-    @ApiOperation(value = "用户注册", notes = "新增用户")
+    @ApiOperation(value = "新增用户", notes = "新增用户")
     @PostMapping(value = "/reg", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequiresPermissions("sys:user:add")
     @ResponseStatus(HttpStatus.CREATED)
-    public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody UserRegInfo regInfo) {
-        User entity = userConverter.toEntity(regInfo);
+    public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody BasicUserInfo userInfo) {
+        User entity = userConverter.toEntity(userInfo);
         return userService.add(entity) ? ok() : fail();
     }
 
     @ApiOperation(value = "用户信息变更", notes = "修改用户信息")
     @PostMapping(value = "/modify", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequiresPermissions("sys:user:edit")
     public Resp<?> doChange(@ApiParam(value = "用户信息", required = true) @Valid @RequestBody BasicUserInfo basicInfo) {
         User entity = userConverter.toEntity(basicInfo);
         return userService.modify(entity) ? ok() : fail();
@@ -67,6 +69,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "uid", value = "用户ID，多个以逗号分隔", required = true, dataType = "String", paramType = "query")
     })
     @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequiresPermissions("sys:user:remove")
     public Resp<?> doRemove(@RequestParam String[] uid) {
         String[] userIds = Arrays.stream(uid)
                 .filter(StringUtils::isNoneBlank)
@@ -87,6 +90,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "uid", value = "用户ID", required = true, dataType = "String", paramType = "path")
     })
     @GetMapping(value = "/{uid}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequiresPermissions("sys:user:view")
     public Resp<BasicUserInfo> queryUserDetails(@PathVariable Long uid) {
         return ok(userConverter.toDto(userService.findById(uid)));
     }

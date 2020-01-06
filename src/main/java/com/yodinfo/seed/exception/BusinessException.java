@@ -4,11 +4,10 @@ import com.yodinfo.seed.constant.RespCode;
 import org.springframework.core.NestedExceptionUtils;
 
 public class BusinessException extends RuntimeException {
-    private static final String DEFAULT_ERROR_MESSAGE = "Occurring an server exception!";
     private int code = RespCode.INTERNAL_SERVER_ERROR.getCode();
 
     public BusinessException() {
-        super(DEFAULT_ERROR_MESSAGE);
+        super();
     }
 
     public BusinessException(String message) {
@@ -21,7 +20,7 @@ public class BusinessException extends RuntimeException {
     }
 
     public BusinessException(int code) {
-        super(DEFAULT_ERROR_MESSAGE);
+        super();
         this.code = code;
     }
 
@@ -30,7 +29,7 @@ public class BusinessException extends RuntimeException {
     }
 
     public BusinessException(int code, Throwable cause) {
-        super(DEFAULT_ERROR_MESSAGE, cause);
+        super(cause);
         this.code = code;
     }
 

@@ -42,6 +42,6 @@ public class DbRealm extends BasicRealm {
         }
 
         Map<String, String> details = userService.findUserDetails(uid);
-        return result ? new SimpleAuthenticationInfo(details, password, "dbRealm") : null;
+        return result ? new SimpleAuthenticationInfo(details, password, getName()) : null;
     }
 }

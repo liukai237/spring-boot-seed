@@ -54,6 +54,4 @@ public class UserRegInfo {
     @JsonProperty("vcode")
     @Size(max = 6, min = 4, message = "验证码长度必须大于4小于6位！")
     private String vCode;
-
-    private String test;
 }
