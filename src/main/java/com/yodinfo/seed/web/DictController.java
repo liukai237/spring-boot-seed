@@ -1,13 +1,15 @@
 package com.yodinfo.seed.web;
 
-import com.yodinfo.seed.bo.Paged;
-import com.yodinfo.seed.bo.Req;
-import com.yodinfo.seed.bo.Resp;
+import com.yodinfo.seed.common.Paged;
+import com.yodinfo.seed.common.Req;
+import com.yodinfo.seed.common.Resp;
 import com.yodinfo.seed.domain.Dict;
 import com.yodinfo.seed.service.DictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 字典表
@@ -22,7 +24,6 @@ public class DictController extends BaseController {
         this.dictService = dictService;
     }
 
-    @ResponseBody
     @PostMapping("/list")
     public Resp<Paged<Dict>> list(@RequestBody Req<Dict> req) {
         return ok(dictService.listWithPaging(req.flatAsMap()));

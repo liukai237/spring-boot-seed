@@ -20,8 +20,8 @@ import java.util.Date;
 
 @Getter
 @Setter
-@ApiModel(value = "BasicUserInfo", description = "用户基本信息")
-public class BasicUserInfo {
+@ApiModel(value = "UserEditDto", description = "修改用户信息")
+public class UserEditDto {
 
     @NotNull(message = "用户ID不能为空！")
     @ApiModelProperty(name = "uid", value = "用户ID")
@@ -55,9 +55,4 @@ public class BasicUserInfo {
 
     @ApiModelProperty(name = "address", value = "详细地址")
     private String address;
-
-    @ApiModelProperty(name = "regTime", value = "注册时间", readOnly = true)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY) // 似乎和swagger有冲突
-    private Date regTime;
 }

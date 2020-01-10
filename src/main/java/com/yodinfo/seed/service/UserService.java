@@ -3,19 +3,18 @@ package com.yodinfo.seed.service;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.yodinfo.seed.bo.Paged;
+import com.yodinfo.seed.common.Paged;
 import com.yodinfo.seed.converter.UserConverter;
 import com.yodinfo.seed.dao.*;
 import com.yodinfo.seed.domain.*;
-import com.yodinfo.seed.dto.BasicUserInfo;
+import com.yodinfo.seed.dto.UserDetailDto;
 import com.yodinfo.seed.util.HashIdUtils;
-import com.yodinfo.seed.util.IdGen;
 import com.yodinfo.seed.util.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.entity.Condition;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -46,18 +45,16 @@ public class UserService extends BaseService {
     }
 
     @Transactional(readOnly = true)
-    public Paged<BasicUserInfo> findWithPaging(Integer pageNum, Integer pageSize, String orderBy) {
+    public Paged<UserDetailDto> findWithPage(Integer pageNum, Integer pageSize, String orderBy) {
         PageHelper.startPage(pageNum, pageSize, orderBy);
         return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public Boolean add(User user) {
-        long userId = new IdGen().nextId(); // 使用雪花算法生成ID
-        user.setUserId(userId);
-        user.setUsername(HashIdUtils.encrypt(System.currentTimeMillis())); // 使用HashIds生成唯一username（临时，用户可自行修改）
+        String username = user.getUsername();
+        user.setUsername(StringUtils.defaultString(username, HashIdUtils.encrypt(System.currentTimeMillis()))); // 使用HashIds生成唯一username
 
-        //String pwdHash = new SimpleHash("MD5", regInfo.getPassword(), ByteSource.Util.bytes(uid), 1024).toString();
         String pwdHash = null;
         try {
             pwdHash = PasswordHash.createHash(user.getPasswdHash());
@@ -76,9 +73,7 @@ public class UserService extends BaseService {
 
     @Transactional(rollbackFor = Exception.class)
     public void deleteByIds(String... ids) {
-        Condition condition = new Condition(User.class);
-        condition.createCriteria().andIn("userId", Arrays.asList(ids));
-        int count = userMapper.deleteByCondition(condition);
+        int count = userMapper.deleteByIds(String.join(",", ids));
         log.info("{} users were deleted!", count);
     }
 
@@ -95,15 +90,15 @@ public class UserService extends BaseService {
 
     @Transactional(readOnly = true)
     public Set<Power> findPowersByRole(Long roleId) {
-        Condition condition = new Condition(RolePower.class);
-        condition.createCriteria().andEqualTo("roleId", roleId);
-        List<RolePower> rolePowers = rolePowerMapper.selectByCondition(condition);
+        RolePower condition = new RolePower();
+        condition.setRoleId(roleId);
+        List<RolePower> rolePowers = rolePowerMapper.select(condition);
 
         Set<Power> powers = Sets.newHashSet();
         for (RolePower rolePower : rolePowers) {
-            Condition cond = new Condition(RolePower.class);
-            cond.createCriteria().andEqualTo("powerId", rolePower.getPowerId());
-            powers.addAll(powerMapper.selectByCondition(cond));
+            Power condition2 = new Power();
+            condition2.setPowerId(rolePower.getPowerId());
+            powers.addAll(powerMapper.select(condition2));
         }
 
         return powers;
@@ -114,29 +109,21 @@ public class UserService extends BaseService {
         User user = userMapper.selectByPrimaryKey(userId);
         Set<Long> roleIds = null;
         if (user != null) {
-            Condition condition = new Condition(UserRole.class);
-            condition.createCriteria().andEqualTo("userId", userId);
-            List<UserRole> userRoles = userRoleMapper.selectByCondition(condition);
+            UserRole condition = new UserRole();
+            condition.setUserId(userId);
+            List<UserRole> userRoles = userRoleMapper.select(condition);
             roleIds = userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
         }
 
         if (CollectionUtils.isNotEmpty(roleIds)) {
-            Condition condition = new Condition(Role.class);
-            condition.createCriteria().andIn("roleId", roleIds);
-            return new HashSet<>(roleMapper.selectByCondition(condition));
+            return new HashSet<>(roleMapper.selectByIds(roleIds.stream().map(String::valueOf).collect(Collectors.joining(","))));
         }
 
         return Collections.emptySet();
     }
 
     public Map<String, String> findUserDetails(String identity) {
-        Condition condition = new Condition(User.class);
-        condition.createCriteria()
-                .orEqualTo("userId", identity)
-                .orEqualTo("username", identity)
-                .orEqualTo("tel", identity)
-                .orEqualTo("email", identity);
-        List<User> users = userMapper.selectByCondition(condition);
+        List<User> users = userMapper.selectByIdentity(identity);
 
         if (CollectionUtils.isNotEmpty(users)) {
             User user = users.get(0);

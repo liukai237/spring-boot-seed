@@ -1,4 +1,4 @@
-package com.yodinfo.seed.bo;
+package com.yodinfo.seed.common;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,7 +22,10 @@ import java.util.Objects;
 @ApiModel(value = "Req", description = "统一封装的请求，分页和排序参数分开封装")
 @Getter
 @Setter
-public class Req<T> extends AbstractReq<T> implements Flattenable {
+public class Req<T> implements Flattenable {
+
+    @ApiModelProperty(name = "filter", value = "过滤参数")
+    private T filter;
 
     @ApiModelProperty(value = "分页参数")
     private Paging paging;

@@ -1,10 +1,8 @@
-package com.yodinfo.seed;
+package com.yodinfo.seed.exception;
 
-import com.yodinfo.seed.bo.Resp;
+import com.yodinfo.seed.common.Resp;
 import com.yodinfo.seed.constant.RespCode;
-import com.yodinfo.seed.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.ShiroException;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -37,14 +35,6 @@ public class GlobalExceptionHandler {
     public Resp<?> processServletRequestBindingException(ServletRequestBindingException e) {
         log.error("[PARAM ERROR]", e);
         return new Resp<>(RespCode.BAD_REQUEST.getCode(), e.getMessage());
-    }
-
-    @ExceptionHandler(ShiroException.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Resp<?> processShiroException(ShiroException e) {
-        log.error("[AUTH ERROR]", e);
-        return new Resp<>(RespCode.UNAUTHORIZED.getCode(), RespCode.UNAUTHORIZED.getMessage());
     }
 
     @ExceptionHandler(DuplicateKeyException.class)

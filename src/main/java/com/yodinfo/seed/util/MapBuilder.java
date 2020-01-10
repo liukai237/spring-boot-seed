@@ -1,14 +1,14 @@
 package com.yodinfo.seed.util;
 
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * Map链式Builder
- * Value为Null、空字符串、空数组、空集合、空Map等时会被过滤掉
+ * 配合MyBatis使用，Value为Null、空字符串、空数组、空集合、空Map等时会被过滤掉
  */
 public class MapBuilder {
     private Map<String, Object> tmp;

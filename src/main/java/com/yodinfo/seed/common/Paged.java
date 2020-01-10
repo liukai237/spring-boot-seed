@@ -1,4 +1,4 @@
-package com.yodinfo.seed.bo;
+package com.yodinfo.seed.common;
 
 import com.github.pagehelper.Page;
 import io.swagger.annotations.ApiModel;
@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 /**
  * 分页结果容器
  * 实际上是简化版的PageInfo，用来替代Spring自带的PageRequest和PageHelper的PageInfo
+ *
  * @param <T>
  */
 @Getter
@@ -34,8 +35,8 @@ public class Paged<T> implements Serializable {
     private int pages;
     @ApiModelProperty(value = "当前页的数量")
     private int size;
-    @ApiModelProperty(value = "额外数据", notes = "谨慎使用") // e.g. 分页同时返回平均年龄
-    private Map<String, Object> summary;
+    @ApiModelProperty(value = "附加数据", notes = "全局附加数据，字段不确定") // e.g. 分页同时返回平均年龄
+    private Map<String, Object> extra;
 
     public Paged(List<T> list) {
         Objects.requireNonNull(list, "data list should not be empty!");

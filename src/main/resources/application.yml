@@ -1,5 +1,5 @@
 server:
-  port: 8089
+  port: 8765
   tomcat:
     uri-encoding: UTF-8
   compression:
@@ -19,6 +19,9 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.99.143.50:33060/test?characterEncoding=utf8
+    username: root
+    password: Yod@[YWOni6tyv0hHGQtCUoEKAypUoxNCu8OB]
   redis:
     host: redis.iakuil.com
     port: 6379
@@ -31,7 +34,7 @@ mybatis:
     default-enum-type-handler: com.yodinfo.seed.util.AutoEnumTypeHandler
 
 mapper:
-  mappers: com.yodinfo.seed.common.BasicMapper, com.yodinfo.seed.common.CommonMapper
+  mappers: com.yodinfo.seed.common.BasicMapper
   not-empty: true
   identity: mysql
   use-simple-type: false
@@ -64,7 +67,6 @@ spring:
     url: jdbc:mysql://47.99.143.50:33060/test?characterEncoding=utf8
     username: root
     password: Yod@[YWOni6tyv0hHGQtCUoEKAypUoxNCu8OB]
-#    driverClassName: com.p6spy.engine.spy.P6SpyDriver
 
 ---
 spring:

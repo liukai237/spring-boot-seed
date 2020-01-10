@@ -1,6 +1,6 @@
 package com.yodinfo.seed.config;
 
-import com.yodinfo.seed.aop.AutoDateGenerateInterceptor;
+import com.yodinfo.seed.aop.AutoColumnFillInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ public class DbConfig {
 
     @PostConstruct
     public void addPageInterceptor() {
-        AutoDateGenerateInterceptor interceptor = new AutoDateGenerateInterceptor();
+        AutoColumnFillInterceptor interceptor = new AutoColumnFillInterceptor();
         for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
             sqlSessionFactory.getConfiguration().addInterceptor(interceptor);
         }

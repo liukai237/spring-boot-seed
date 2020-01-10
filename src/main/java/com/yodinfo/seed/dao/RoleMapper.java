@@ -1,11 +1,13 @@
 package com.yodinfo.seed.dao;
 
-import com.yodinfo.seed.common.CommonMapper;
+import com.yodinfo.seed.common.BasicMapper;
 import com.yodinfo.seed.domain.Role;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 @Mapper
 @CacheNamespace
-public interface RoleMapper extends CommonMapper<Role> {
+@Repository
+public interface RoleMapper extends BasicMapper<Role> {
 }

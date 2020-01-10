@@ -2,11 +2,7 @@
 		<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yodinfo.seed.dao.UserMapper">
 
-<select id="findByCondition" resultType="com.yodinfo.seed.domain.User" parameterType="map">
-		select
-			*
-		 from
-		 t_user
-		 where username = #{username}
+	<select id="selectByIdentity" resultType="com.yodinfo.seed.domain.User" parameterType="string">
+		select * from t_user where userId = #{identity} || username = #{identity} || tel = #{identity} || email = #{identity}
 	</select>
 </mapper>

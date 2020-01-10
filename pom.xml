@@ -31,7 +31,6 @@
         </dependency>
 
 
-
         <!--********** db ********** -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -69,13 +68,6 @@
             <version>5.1.8</version>
         </dependency>
 
-        <dependency>
-            <groupId>p6spy</groupId>
-            <artifactId>p6spy</artifactId>
-            <version>3.8.6</version>
-        </dependency>
-
-
         <!--********** 3rd *********** -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -90,33 +82,10 @@
             <version>3.7</version>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.apache.shiro</groupId>-->
-            <!--<artifactId>shiro-spring-boot-starter</artifactId>-->
-            <!--<version>1.4.2</version>-->
-        <!--</dependency>-->
-
         <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-core</artifactId>
-            <version>1.4.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring</artifactId>
-            <version>1.4.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>3.8.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <version>2.4.0</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
         </dependency>
 
         <dependency>
@@ -171,34 +140,10 @@
             <version>1.0.3</version>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>org.apache.shiro</groupId>-->
-        <!--<artifactId>shiro-spring-boot-web-starter</artifactId>-->
-        <!--<version>1.4.0</version>-->
-        <!--</dependency>-->
-
-        <dependency>
-            <groupId>com.github.fge</groupId>
-            <artifactId>json-schema-validator</artifactId>
-            <version>2.2.6</version>
-        </dependency>
-
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.javacrumbs.shedlock</groupId>
-            <artifactId>shedlock-spring</artifactId>
-            <version>3.0.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.javacrumbs.shedlock</groupId>
-            <artifactId>shedlock-provider-redis-spring</artifactId>
-            <version>3.0.1</version>
         </dependency>
 
         <!--******** test ******** -->

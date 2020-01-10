@@ -2,6 +2,7 @@ package com.yodinfo.seed.dao;
 
 import com.yodinfo.seed.domain.Dict;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Map;
  * 字典表
  */
 @Mapper
+@Repository
 public interface DictMapper {
 
     Dict get(Long id);

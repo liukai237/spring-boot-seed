@@ -1,20 +1,16 @@
 package com.yodinfo.seed.dao;
 
-import com.yodinfo.seed.common.CommonMapper;
+import com.yodinfo.seed.common.BasicMapper;
 import com.yodinfo.seed.domain.User;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 @CacheNamespace
-public interface UserMapper extends CommonMapper<User> {
-
-    List<User> findByCondition(Map<String, Object> params);
-
-    @Select("select * from t_user")
-    List<User> findAll();
+@Repository
+public interface UserMapper extends BasicMapper<User> {
+    List<User> selectByIdentity(String identity);
 }

@@ -1,5 +1,6 @@
 package com.yodinfo.seed.aop;
 
+import com.yodinfo.seed.util.IdGen;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -9,13 +10,17 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.persistence.Id;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Properties;
 
+/**
+ * 自动填充id、create_time，update_time等字段
+ */
 @Slf4j
 @Intercepts({@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})})
-public class AutoDateGenerateInterceptor implements Interceptor {
+public class AutoColumnFillInterceptor implements Interceptor {
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
@@ -34,6 +39,11 @@ public class AutoDateGenerateInterceptor implements Interceptor {
             }
         } else if (SqlCommandType.INSERT == sqlCommandType) {
             for (Field field : fields) {
+                if (AnnotationUtils.getAnnotation(field, Id.class) != null) {
+                    field.setAccessible(true);
+                    field.set(parameter, new IdGen().nextId());
+                    field.setAccessible(false);
+                }
                 if (AnnotationUtils.getAnnotation(field, CreatedDate.class) != null) {
                     field.setAccessible(true);
                     field.set(parameter, currentDate);

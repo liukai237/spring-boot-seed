@@ -1,8 +1,9 @@
 package com.yodinfo.seed.converter;
 
 import com.yodinfo.seed.domain.User;
-import com.yodinfo.seed.dto.BasicUserInfo;
-import com.yodinfo.seed.dto.UserRegInfo;
+import com.yodinfo.seed.dto.UserAddDto;
+import com.yodinfo.seed.dto.UserDetailDto;
+import com.yodinfo.seed.dto.UserEditDto;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -18,16 +19,16 @@ public interface UserConverter {
             @Mapping(target = "regTime", source = "createTime")
     })
     @Named("toDto")
-    BasicUserInfo toDto(User user);
+    UserDetailDto toDto(User user);
 
     @Mapping(target = "passwdHash", source = "password")
-    User toEntity(UserRegInfo info);
+    User toEntity(UserAddDto info);
 
     @Mappings({
             @Mapping(target = "userId", source = "uid")
     })
-    User toEntity(BasicUserInfo info);
+    User toEntity(UserEditDto info);
 
     @IterableMapping(qualifiedByName = "toDto")
-    List<BasicUserInfo> toDtoList(List<User> quotes);
+    List<UserDetailDto> toDtoList(List<User> entities);
 }

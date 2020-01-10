@@ -21,7 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "t_userinfo")
-public class UserInfo implements Serializable {
+public class WxUserInfo implements Serializable {
     private Integer subscribe; // 0 means no
     @Id
     @Column(name = "openid")

@@ -1,6 +1,6 @@
 package com.yodinfo.seed.service;
 
-import com.yodinfo.seed.bo.Paged;
+import com.yodinfo.seed.common.Paged;
 import com.yodinfo.seed.dao.DictMapper;
 import com.yodinfo.seed.domain.Dict;
 import org.springframework.beans.factory.annotation.Autowired;

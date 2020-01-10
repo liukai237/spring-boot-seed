@@ -1,9 +1,9 @@
 package com.yodinfo.seed.service;
 
 import com.github.pagehelper.PageHelper;
-import com.yodinfo.seed.bo.Paged;
-import com.yodinfo.seed.dao.UserInfoMapper;
-import com.yodinfo.seed.domain.UserInfo;
+import com.yodinfo.seed.common.Paged;
+import com.yodinfo.seed.dao.WxUserInfoMapper;
+import com.yodinfo.seed.domain.WxUserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,18 +16,18 @@ import java.util.List;
 @Service
 public class WechatService {
 
-    private final UserInfoMapper userInfoMapper;
+    private final WxUserInfoMapper wxUserInfoMapper;
 
-    public WechatService(UserInfoMapper userInfoMapper) {
-        this.userInfoMapper = userInfoMapper;
+    public WechatService(WxUserInfoMapper wxUserInfoMapper) {
+        this.wxUserInfoMapper = wxUserInfoMapper;
     }
 
-    public List<UserInfo> findAll() {
-        return userInfoMapper.selectAll();
+    public List<WxUserInfo> findAll() {
+        return wxUserInfoMapper.selectAll();
     }
 
-    public Paged<UserInfo> findWithPage(Integer pageNum, Integer pageSize) {
+    public Paged<WxUserInfo> findWithPage(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize, "subscribeTime desc");
-        return new Paged<>(userInfoMapper.selectAll());
+        return new Paged<>(wxUserInfoMapper.selectAll());
     }
 }

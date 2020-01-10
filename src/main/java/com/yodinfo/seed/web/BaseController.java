@@ -1,6 +1,6 @@
 package com.yodinfo.seed.web;
 
-import com.yodinfo.seed.bo.Resp;
+import com.yodinfo.seed.common.Resp;
 import com.yodinfo.seed.constant.RespCode;
 
 abstract class BaseController {

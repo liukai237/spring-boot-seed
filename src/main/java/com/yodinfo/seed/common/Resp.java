@@ -1,4 +1,4 @@
-package com.yodinfo.seed.bo;
+package com.yodinfo.seed.common;
 
 import com.yodinfo.seed.constant.RespCode;
 import io.swagger.annotations.ApiModel;
@@ -19,7 +19,6 @@ public class Resp<T> {
     private String message;
     @ApiModelProperty(value = "响应数据")
     private T data;
-
 
     public Resp(int code, String message) {
         this.code = code;
