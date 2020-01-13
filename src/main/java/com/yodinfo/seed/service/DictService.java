@@ -27,7 +27,7 @@ public class DictService {
         return dictMapper.list(map);
     }
 
-    public Paged<Dict> listWithPaging(Map<String, Object> param) {
+    public Paged<Dict> listWithPage(Map<String, Object> param) {
         return new Paged<>(dictMapper.list(param));
     }
 

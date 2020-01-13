@@ -50,6 +50,11 @@ public class UserService extends BaseService {
         return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
     }
 
+    @Transactional(readOnly = true)
+    public Paged<UserDetailDto> findByCondition(Map<String, Object> condition) {
+        return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public Boolean add(User user) {
         String username = user.getUsername();

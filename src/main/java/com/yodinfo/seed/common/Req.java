@@ -12,7 +12,6 @@ import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 统一封装的分页请求
@@ -30,21 +29,13 @@ public class Req<T> implements Flattenable {
     @ApiModelProperty(value = "分页参数")
     private Paging paging;
 
-    @ApiModelProperty(value = "排序参数")
-    private Sorting sorting; // 只支持单个排序条件
-
     @Override
     public Map<String, Object> flatAsMap() {
         Map<String, Object> paramMap = ObjectUtils.defaultIfNull(BeanMapUtils.beanToMap(getFilter(), true), new LinkedHashMap<>());
         if (this.paging != null) {
             paramMap.put("pageSize", this.paging.getPageSize());
             paramMap.put("pageNum", this.paging.getPageNum());
-        }
-
-        Sorting sorting = this.sorting;
-        if (sorting != null && sorting.getSortField() != null) {
-            paramMap.put("sortField", sorting.getSortField());
-            paramMap.put("sortOrder", Objects.equals(sorting.getSortOrder(), -1) ? "DESC" : "ASC");
+            paramMap.put("orderBy", this.paging.getOrderBy());
         }
 
         return paramMap;
@@ -70,6 +61,10 @@ public class Req<T> implements Flattenable {
         @JsonProperty("offset")
         @JsonAlias("first")
         private Integer offset;
+        @ApiModelProperty(name = "orderBy", value = "排序参数")
+        @JsonProperty("orderBy")
+        @JsonAlias("sort")
+        private String orderBy;
 
         public Integer getPageNum() {
             if (!gtZero(pageSize)) {
@@ -106,16 +101,5 @@ public class Req<T> implements Flattenable {
         private boolean gtZero(Integer num) {
             return num != null && num > 0;
         }
-    }
-
-    /**
-     * 排序条件
-     * 默认为正序，-1为倒序
-     */
-    @Getter
-    @Setter
-    public class Sorting {
-        private String sortField;
-        private Integer sortOrder;
     }
 }

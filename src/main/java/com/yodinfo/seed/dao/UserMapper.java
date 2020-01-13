@@ -13,4 +13,6 @@ import java.util.List;
 @Repository
 public interface UserMapper extends BasicMapper<User> {
     List<User> selectByIdentity(String identity);
+    
+    List<User> selectByCondition(String identity);
 }

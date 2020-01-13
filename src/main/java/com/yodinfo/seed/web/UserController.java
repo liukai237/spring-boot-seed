@@ -1,6 +1,7 @@
 package com.yodinfo.seed.web;
 
 import com.yodinfo.seed.common.Paged;
+import com.yodinfo.seed.common.Req;
 import com.yodinfo.seed.common.Resp;
 import com.yodinfo.seed.converter.UserConverter;
 import com.yodinfo.seed.domain.User;
@@ -8,7 +9,6 @@ import com.yodinfo.seed.dto.UserAddDto;
 import com.yodinfo.seed.dto.UserDetailDto;
 import com.yodinfo.seed.dto.UserEditDto;
 import com.yodinfo.seed.service.UserService;
-import com.yodinfo.seed.util.StrUtils;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -33,17 +33,23 @@ public class UserController extends BaseController {
         this.userConverter = userConverter;
     }
 
-    @ApiOperation(value = "用户列表", notes = "根据用户ID来获取用户详细信息")
+    @ApiOperation(value = "查询用户列表", notes = "查询用户列表，简单分页排序。")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1", dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "pageSize", value = "每页显示数量", defaultValue = "0", dataType = "Long", paramType = "query"),
-            @ApiImplicitParam(name = "orderBy", value = "排序规则", defaultValue = "createTime-", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "sort", value = "排序规则", defaultValue = "create_time-", dataType = "string", paramType = "query"),
     })
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Resp<Paged<UserDetailDto>> queryUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
                                                  @RequestParam(required = false, defaultValue = "0") Integer pageSize,
-                                                 @RequestParam(required = false, defaultValue = "createTime-") String orderBy) {
-        return ok(userService.findWithPage(pageNum, pageSize, StrUtils.parseOrderBy(orderBy)));
+                                                 @RequestParam(required = false, defaultValue = "create_time-") String sort) {
+        return ok(userService.findWithPage(pageNum, pageSize, sort));
+    }
+
+    @ApiOperation(value = "查询用户列表", notes = "查询用户列表，复杂分页排序。")
+    @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Resp<Paged<UserDetailDto>> queryUsers2(@RequestBody Req<UserDetailDto> req) {
+        return ok(userService.findByCondition(req.flatAsMap()));
     }
 
     @ApiOperation(value = "新增用户", notes = "新增用户")

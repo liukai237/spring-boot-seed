@@ -10,7 +10,9 @@ public class StrUtilsTest {
 
     @Test
     public void should_get_a_correct_sort() {
+        assertThat(StrUtils.parseOrderBy("foo"), is("foo"));
         assertThat(StrUtils.parseOrderBy("+a,-b,+c"), is("a asc,b desc,c asc"));
+        assertThat(StrUtils.parseOrderBy("+create_time,-user_id"), is("create_time asc,user_id desc"));
         assertThat(StrUtils.parseOrderBy("a+b-c+"), is("a asc,b desc,c asc"));
     }
 

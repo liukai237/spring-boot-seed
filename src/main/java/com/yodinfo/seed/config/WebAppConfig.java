@@ -2,13 +2,12 @@ package com.yodinfo.seed.config;
 
 import com.yodinfo.seed.aop.SortingParamResolver;
 import com.yodinfo.seed.util.CodeEnumConvertFactory;
+import com.yodinfo.seed.util.ResolverBeanPostProcessor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.List;
 
 @Configuration
 public class WebAppConfig implements WebMvcConfigurer {
@@ -34,10 +33,18 @@ public class WebAppConfig implements WebMvcConfigurer {
     }
 
     /**
-     * 排序规则自动转化
+     * RequestMappingHandlerAdapter后置配置
      */
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new SortingParamResolver());
+    @Bean
+    public ResolverBeanPostProcessor resolverBeanPostProcessor() {
+        return new ResolverBeanPostProcessor(sortingParamResolver());
+    }
+
+    /**
+     * 处理URL中sort参数
+     */
+    @Bean
+    public SortingParamResolver sortingParamResolver() {
+        return new SortingParamResolver();
     }
 }

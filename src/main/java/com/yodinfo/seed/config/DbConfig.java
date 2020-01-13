@@ -18,6 +18,9 @@ public class DbConfig {
     @Autowired
     private List<SqlSessionFactory> sqlSessionFactoryList;
 
+    /**
+     * 自动创建create_time和update_time
+     */
     @PostConstruct
     public void addPageInterceptor() {
         AutoColumnFillInterceptor interceptor = new AutoColumnFillInterceptor();
