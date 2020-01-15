@@ -1,4 +1,4 @@
-package com.yodinfo.seed.util;
+package com.yodinfo.seed.support;
 
 public interface BaseCodeEnum {
     

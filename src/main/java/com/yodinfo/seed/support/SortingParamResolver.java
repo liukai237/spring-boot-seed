@@ -1,6 +1,5 @@
-package com.yodinfo.seed.aop;
+package com.yodinfo.seed.support;
 
-import com.yodinfo.seed.util.StrUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -19,6 +18,6 @@ public class SortingParamResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         Object sortObj = nativeWebRequest.getParameterMap().getOrDefault("sort", ArrayUtils.EMPTY_STRING_ARRAY);
-        return StrUtils.parseOrderBy(((String[]) sortObj)[0]);
+        return Strings.parseOrderBy(((String[]) sortObj)[0]);
     }
 }

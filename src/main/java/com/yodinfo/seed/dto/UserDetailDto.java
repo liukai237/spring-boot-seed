@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.yodinfo.seed.constant.Gender;
 import com.yodinfo.seed.constant.Province;
-import com.yodinfo.seed.util.CodeEnumDeserializer;
+import com.yodinfo.seed.support.CodeEnumDeserializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

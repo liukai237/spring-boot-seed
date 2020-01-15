@@ -1,12 +1,10 @@
 package com.yodinfo.seed.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.yodinfo.seed.constant.Gender;
 import com.yodinfo.seed.constant.Province;
-import com.yodinfo.seed.util.CodeEnumDeserializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -32,7 +30,6 @@ public class UserEditDto {
     @Pattern(regexp = "^[1](([3][0-9])|([4][5,7,9])|([5][^4,6,9])|([6][6])|([7][3,5,6,7,8])|([8][0-9])|([9][8,9]))[0-9]{8}$", message = "无效的手机格式！")
     private String tel;
 
-    @JsonDeserialize(using = CodeEnumDeserializer.class)
     @ApiModelProperty(name = "gender", value = "性别", example = "male")
     private Gender gender;
 

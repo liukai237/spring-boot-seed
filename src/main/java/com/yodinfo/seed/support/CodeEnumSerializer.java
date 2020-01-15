@@ -1,4 +1,4 @@
-package com.yodinfo.seed.util;
+package com.yodinfo.seed.support;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -7,6 +7,9 @@ import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
 
+/**
+ * 全局JSON转枚举
+ */
 @JsonComponent
 public class CodeEnumSerializer extends JsonSerializer<BaseCodeEnum> {
     @Override

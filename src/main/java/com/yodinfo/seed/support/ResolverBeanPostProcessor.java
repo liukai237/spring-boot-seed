@@ -1,4 +1,4 @@
-package com.yodinfo.seed.util;
+package com.yodinfo.seed.support;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;

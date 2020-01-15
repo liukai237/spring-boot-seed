@@ -1,10 +1,10 @@
-package com.yodinfo.seed.util;
+package com.yodinfo.seed.support;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Pattern;
 
-public class StrUtils {
+public class Strings {
 
     public static String parseOrderBy(String sort) {
         if (StringUtils.isBlank(sort)) {

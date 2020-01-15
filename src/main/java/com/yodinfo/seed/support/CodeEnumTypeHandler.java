@@ -1,4 +1,4 @@
-package com.yodinfo.seed.util;
+package com.yodinfo.seed.support;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
@@ -9,6 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
+/**
+ * MyBatis字段转枚举
+ */
 public class CodeEnumTypeHandler<E extends Enum<?> & BaseCodeEnum> extends BaseTypeHandler<BaseCodeEnum> {
 
     private Class<E> type;
@@ -42,6 +45,11 @@ public class CodeEnumTypeHandler<E extends Enum<?> & BaseCodeEnum> extends BaseT
     }
 
     private E codeOf(int code) {
-        return CodeEnumUtil.codeOf(type, code);
+        E[] enumConstants = type.getEnumConstants();
+        for (E e : enumConstants) {
+            if (e.getCode() == code)
+                return e;
+        }
+        return null;
     }
 }

@@ -1,4 +1,4 @@
-package com.yodinfo.seed.util;
+package com.yodinfo.seed.support;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.EnumTypeHandler;
@@ -9,6 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * MyBatis枚举转字段
+ */
 public class AutoEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E> {
 
     private BaseTypeHandler typeHandler;

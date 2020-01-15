@@ -1,7 +1,7 @@
 package com.yodinfo.seed.aop;
 
 import com.github.pagehelper.PageHelper;
-import com.yodinfo.seed.util.StrUtils;
+import com.yodinfo.seed.support.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -41,7 +41,7 @@ public class AspectPagination {
                 String orderBy = MapUtils.getString(map, "orderBy");
                 if (size != null && size != 0) {
                     if (StringUtils.isNoneBlank(orderBy)) {
-                        PageHelper.startPage(num, size, StrUtils.parseOrderBy(orderBy));
+                        PageHelper.startPage(num, size, Strings.parseOrderBy(orderBy));
                     } else {
                         PageHelper.startPage(num, size);
                     }

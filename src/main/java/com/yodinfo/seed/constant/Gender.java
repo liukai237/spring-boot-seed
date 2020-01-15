@@ -1,6 +1,6 @@
 package com.yodinfo.seed.constant;
 
-import com.yodinfo.seed.util.BaseCodeEnum;
+import com.yodinfo.seed.support.BaseCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

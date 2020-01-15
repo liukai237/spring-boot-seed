@@ -1,8 +1,9 @@
 package com.yodinfo.seed.config;
 
-import com.yodinfo.seed.aop.SortingParamResolver;
-import com.yodinfo.seed.util.CodeEnumConvertFactory;
-import com.yodinfo.seed.util.ResolverBeanPostProcessor;
+import com.yodinfo.seed.support.CodeEnumConvertFactory;
+import com.yodinfo.seed.support.DateParamResolver;
+import com.yodinfo.seed.support.ResolverBeanPostProcessor;
+import com.yodinfo.seed.support.SortingParamResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -25,26 +26,28 @@ public class WebAppConfig implements WebMvcConfigurer {
     }
 
     /**
-     * 字符串转枚举支持
+     * Json Body处理
      */
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverterFactory(new CodeEnumConvertFactory());
+        registry.addConverterFactory(new CodeEnumConvertFactory()); // 字符串转枚举支持
     }
 
     /**
-     * RequestMappingHandlerAdapter后置配置
+     * Request Query处理
      */
     @Bean
     public ResolverBeanPostProcessor resolverBeanPostProcessor() {
-        return new ResolverBeanPostProcessor(sortingParamResolver());
+        return new ResolverBeanPostProcessor(sortingParamResolver(), dateParamResolver());
     }
 
-    /**
-     * 处理URL中sort参数
-     */
     @Bean
     public SortingParamResolver sortingParamResolver() {
         return new SortingParamResolver();
+    }
+
+    @Bean
+    public DateParamResolver dateParamResolver() {
+        return new DateParamResolver();
     }
 }

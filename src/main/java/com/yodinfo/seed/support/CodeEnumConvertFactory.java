@@ -1,8 +1,11 @@
-package com.yodinfo.seed.util;
+package com.yodinfo.seed.support;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
+/**
+ * JSON/枚举转换器工厂
+ */
 public class CodeEnumConvertFactory implements ConverterFactory<String, BaseCodeEnum> {
 
     @Override
