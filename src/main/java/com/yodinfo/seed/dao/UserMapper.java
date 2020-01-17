@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @CacheNamespace
@@ -14,5 +15,5 @@ import java.util.List;
 public interface UserMapper extends BasicMapper<User> {
     List<User> selectByIdentity(String identity);
     
-    List<User> selectByCondition(String identity);
+    List<User> selectByCondition(Map<String, Object> condition);
 }

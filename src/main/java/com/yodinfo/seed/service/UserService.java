@@ -52,7 +52,7 @@ public class UserService extends BaseService {
 
     @Transactional(readOnly = true)
     public Paged<UserDetailDto> findByCondition(Map<String, Object> condition) {
-        return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
+        return new Paged<>(userMapper.selectByCondition(condition), UserConverter.INSTANCE::toDto);
     }
 
     @Transactional(rollbackFor = Exception.class)
