@@ -1,6 +1,7 @@
 package com.yodinfo.seed.aop;
 
 import com.github.pagehelper.PageHelper;
+import com.yodinfo.seed.constant.Constant;
 import com.yodinfo.seed.support.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
@@ -38,7 +39,7 @@ public class AspectPagination {
                 Map map = (Map) param;
                 Integer num = MapUtils.getInteger(map, "pageNum");
                 Integer size = MapUtils.getInteger(map, "pageSize"); // zero means no paging!
-                String orderBy = MapUtils.getString(map, "orderBy");
+                String orderBy = MapUtils.getString(map, Constant.DEFAULT_SORT_FIELD);
                 if (size != null && size != 0) {
                     if (StringUtils.isNoneBlank(orderBy)) {
                         PageHelper.startPage(num, size, Strings.parseOrderBy(orderBy));

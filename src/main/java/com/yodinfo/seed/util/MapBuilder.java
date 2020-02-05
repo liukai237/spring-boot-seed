@@ -22,15 +22,15 @@ public class MapBuilder {
         this.tmp.putAll(map);
     }
 
-    public static MapBuilder start() {
+    public static MapBuilder init() {
         return new MapBuilder();
     }
 
-    public static MapBuilder start(Map<String, Object> map) {
+    public static MapBuilder init(Map<String, Object> map) {
         return map == null ? new MapBuilder() : new MapBuilder(map);
     }
 
-    public Map<String, Object> get() {
+    public Map<String, Object> build() {
         removeEmptyEntry();
         return this.tmp;
     }

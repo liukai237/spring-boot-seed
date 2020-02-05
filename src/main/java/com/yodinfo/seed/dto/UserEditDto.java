@@ -42,7 +42,7 @@ public class UserEditDto {
     @ApiModelProperty(name = "email", value = "电子邮件", example = "guest@yodinfo.com")
     private String email;
 
-    @ApiModelProperty(name = "nickname", value = "用户昵称", example = "tom2000")
+    @ApiModelProperty(name = "nickname", value = "用户昵称", example = "Harry")
     private String nickname;
 
     private String avatar;

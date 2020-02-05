@@ -1,5 +1,6 @@
 package com.yodinfo.seed.support;
 
+import com.yodinfo.seed.constant.Constant;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -12,12 +13,12 @@ public class SortingParamResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
         String pName = methodParameter.getParameterName();
-        return "sort".equals(pName);
+        return Constant.DEFAULT_SORT_FIELD.equals(pName);
     }
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
-        Object sortObj = nativeWebRequest.getParameterMap().getOrDefault("sort", ArrayUtils.EMPTY_STRING_ARRAY);
+        Object sortObj = nativeWebRequest.getParameterMap().getOrDefault(Constant.DEFAULT_SORT_FIELD, ArrayUtils.EMPTY_STRING_ARRAY);
         return Strings.parseOrderBy(((String[]) sortObj)[0]);
     }
 }
