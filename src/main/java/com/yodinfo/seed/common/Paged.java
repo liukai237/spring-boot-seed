@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * 分页结果容器
- * 实际上是简化版的PageInfo，用来替代Spring自带的PageRequest和PageHelper的PageInfo
+ * PageHelper的PageInfo简化版本
  *
  * @param <T>
  */
