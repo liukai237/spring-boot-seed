@@ -1,4 +1,4 @@
-package com.yodinfo.seed.aop;
+package com.yodinfo.seed.support;
 
 import com.yodinfo.seed.util.IdGen;
 import lombok.extern.slf4j.Slf4j;

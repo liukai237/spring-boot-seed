@@ -47,8 +47,9 @@ public class CodeEnumTypeHandler<E extends Enum<?> & BaseCodeEnum> extends BaseT
     private E codeOf(int code) {
         E[] enumConstants = type.getEnumConstants();
         for (E e : enumConstants) {
-            if (e.getCode() == code)
+            if (e.getCode() == code) {
                 return e;
+            }
         }
         return null;
     }
