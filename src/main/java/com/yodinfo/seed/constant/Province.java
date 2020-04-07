@@ -1,8 +1,13 @@
 package com.yodinfo.seed.constant;
 
+import com.google.common.collect.Maps;
 import com.yodinfo.seed.support.BaseCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Map;
 
 @Getter
 @AllArgsConstructor
@@ -46,4 +51,14 @@ public enum Province implements BaseCodeEnum {
     private Integer code;
     private String value;
     private String fullName;
+
+    private static final Map<Integer, Province> LOOKUP = Maps.uniqueIndex(
+            Arrays.asList(Province.values()),
+            Province::getCode
+    );
+
+    @Nullable
+    public static Province fromCode(String code) {
+        return LOOKUP.get(code);
+    }
 }

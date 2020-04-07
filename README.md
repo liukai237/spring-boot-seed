@@ -1,4 +1,4 @@
-# 基于Spring Boot 2.X的脚手架项目
+# 基于Spring Boot 2.X的简易脚手架项目
 Swagger(文档)[http://localhost:8089/doc.html]
 
 ## 技术选型
