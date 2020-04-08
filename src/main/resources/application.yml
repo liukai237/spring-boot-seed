@@ -35,7 +35,7 @@ mybatis:
     default-enum-type-handler: com.yodinfo.seed.support.AutoEnumTypeHandler
 
 mapper:
-  mappers: com.yodinfo.seed.common.BasicMapper
+  mappers: com.yodinfo.seed.common.CrudMapper
   not-empty: true
   identity: mysql
   use-simple-type: false

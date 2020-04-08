@@ -7,6 +7,11 @@ import org.springframework.cglib.beans.BeanMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Java Bean与Map转换工具
+ *
+ * <p>封装了Spring框架自带{@link BeanMap}</p>
+ */
 public class BeanMapUtils {
 
     public static <T> Map<String, Object> beanToMap(T bean) {
@@ -36,8 +41,10 @@ public class BeanMapUtils {
      * @return
      */
     public static <T> T mapToBean(Map<String, Object> map, T bean) {
-        BeanMap beanMap = BeanMap.create(bean);
-        beanMap.putAll(map);
+        if (map != null) {
+            BeanMap beanMap = BeanMap.create(bean);
+            beanMap.putAll(map);
+        }
         return bean;
     }
 

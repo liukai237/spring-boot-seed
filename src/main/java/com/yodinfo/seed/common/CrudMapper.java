@@ -11,5 +11,5 @@ import tk.mybatis.mapper.common.Marker;
  * <p>推荐使用tkMapper提供的CRUD方法，不建议使用{@code Example}等对象查询。</p>
  * @param <T> Entity
  */
-public interface BasicMapper<T> extends BaseMapper<T>, IdsMapper<T>, Marker {
+public interface CrudMapper<T> extends BaseMapper<T>, IdsMapper<T>, Marker {
 }

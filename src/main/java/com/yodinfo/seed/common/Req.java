@@ -66,6 +66,9 @@ public class Req<T> implements Flattenable {
         private Integer pageSize;
     }
 
+    /**
+     * 排序参数
+     */
     @Getter
     @Setter
     @ApiModel(value = "Sorting", description = "排序参数")
