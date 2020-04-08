@@ -11,9 +11,9 @@ import java.io.IOException;
  * 全局JSON转枚举
  */
 @JsonComponent
-public class CodeEnumSerializer extends JsonSerializer<BaseCodeEnum> {
+public class LabelEnumSerializer extends JsonSerializer<CodeEnum> {
     @Override
-    public void serialize(BaseCodeEnum baseCodeEnum, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeString(baseCodeEnum.getValue());
+    public void serialize(CodeEnum codeEnum, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        jsonGenerator.writeString(codeEnum.getLabel());
     }
 }

@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * MyBatis字段转枚举
  */
-public class CodeEnumTypeHandler<E extends Enum<?> & BaseCodeEnum> extends BaseTypeHandler<BaseCodeEnum> {
+public class CodeEnumTypeHandler<E extends Enum<?> & CodeEnum> extends BaseTypeHandler<CodeEnum> {
 
     private Class<E> type;
 
@@ -22,7 +22,7 @@ public class CodeEnumTypeHandler<E extends Enum<?> & BaseCodeEnum> extends BaseT
     }
 
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, BaseCodeEnum parameter, JdbcType jdbcType) throws SQLException {
+    public void setNonNullParameter(PreparedStatement ps, int i, CodeEnum parameter, JdbcType jdbcType) throws SQLException {
         ps.setInt(i, parameter.getCode());
     }
 

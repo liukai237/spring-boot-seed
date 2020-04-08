@@ -1,7 +1,7 @@
 package com.yodinfo.seed.constant;
 
 import com.google.common.collect.Maps;
-import com.yodinfo.seed.support.BaseCodeEnum;
+import com.yodinfo.seed.support.CodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Getter
 @AllArgsConstructor
-public enum Province implements BaseCodeEnum {
+public enum Province implements CodeEnum {
     BJ(110000, "北京", "北京市"),
     TJ(120000, "天津", "天津市"),
     HE(130000, "河北", "河北省"),
@@ -49,7 +49,7 @@ public enum Province implements BaseCodeEnum {
     QT(999999, "其他", "其他");
 
     private Integer code;
-    private String value;
+    private String label;
     private String fullName;
 
     private static final Map<Integer, Province> LOOKUP = Maps.uniqueIndex(

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import com.yodinfo.seed.support.CodeEnumConvertFactory;
+import com.yodinfo.seed.support.LabelEnumConvertFactory;
 import com.yodinfo.seed.support.DateParamResolver;
 import com.yodinfo.seed.support.ResolverBeanPostProcessor;
 import com.yodinfo.seed.support.SortingParamResolver;
@@ -80,7 +80,7 @@ public class WebAppConfig implements WebMvcConfigurer {
      */
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverterFactory(new CodeEnumConvertFactory()); // 字符串转枚举支持
+        registry.addConverterFactory(new LabelEnumConvertFactory()); // 字符串转枚举支持
         registry.addConverter(new LocalDateTime2StringConverter());
         registry.addConverter(new String2LocalDateTimeConverter());
         registry.addConverter(new LocalTime2StringConverter());

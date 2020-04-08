@@ -5,16 +5,18 @@ import org.springframework.core.convert.converter.ConverterFactory;
 
 /**
  * JSON/枚举转换器工厂
+ *
+ * <p>如果Java Bean中枚举属性实现了{@link LabelEnum}接口，则可通过value字段映射。</p>
  */
-public class CodeEnumConvertFactory implements ConverterFactory<String, BaseCodeEnum> {
+public class LabelEnumConvertFactory implements ConverterFactory<String, LabelEnum> {
 
     @Override
-    public <T extends BaseCodeEnum> Converter<String, T> getConverter(Class<T> targetType) {
+    public <T extends LabelEnum> Converter<String, T> getConverter(Class<T> targetType) {
         return new StringToEnum<>(targetType);
     }
 
     @SuppressWarnings("all")
-    private class StringToEnum<T extends BaseCodeEnum> implements Converter<String, T> {
+    private class StringToEnum<T extends LabelEnum> implements Converter<String, T> {
 
         private final T[] values;
 
@@ -25,7 +27,7 @@ public class CodeEnumConvertFactory implements ConverterFactory<String, BaseCode
         @Override
         public T convert(String source) {
             for (T t : values) {
-                if (t.getValue().equals(source)) {
+                if (t.getLabel().equals(source)) {
                     return t;
                 }
             }

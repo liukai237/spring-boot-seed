@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * MyBatis枚举转字段
+ * MyBatis枚举处理
  */
 public class AutoEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E> {
 
@@ -20,7 +20,7 @@ public class AutoEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E> {
         if (type == null) {
             throw new IllegalArgumentException("Type argument cannot be null");
         }
-        if (BaseCodeEnum.class.isAssignableFrom(type)) {
+        if (CodeEnum.class.isAssignableFrom(type)) {
             typeHandler = new CodeEnumTypeHandler(type);
         } else {
             typeHandler = new EnumTypeHandler<>(type);
