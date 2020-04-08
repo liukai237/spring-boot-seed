@@ -8,6 +8,9 @@ import lombok.Setter;
 
 /**
  * 统一API响应结果封装
+ *
+ * <p>用于封装Controller层返回结果，配合{@link RespCode}使用。
+ * 其中success为冗余字段。</p>
  */
 @Getter
 @Setter

@@ -14,10 +14,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * 分页结果容器
- * PageHelper的PageInfo简化版本
+ * MyBatis分页结果容器
+ * <p>PageHelper的PageInfo简化版本</p>
  *
- * @param <T>
+ * @param <T> Entity
  */
 @Getter
 @Setter

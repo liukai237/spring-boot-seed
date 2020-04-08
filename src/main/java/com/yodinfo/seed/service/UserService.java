@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class UserService extends BaseService {
+public class UserService {
 
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;

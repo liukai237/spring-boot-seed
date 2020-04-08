@@ -1,5 +1,6 @@
 package com.yodinfo.seed.util;
 
+@Deprecated
 public class IdGen {
 
     public IdGen() {

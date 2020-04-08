@@ -8,7 +8,8 @@ import java.util.Map;
 
 /**
  * Map链式Builder
- * 配合MyBatis使用，Value为Null、空字符串、空数组、空集合、空Map等时会被过滤掉
+ *
+ * <p>配合MyBatis使用，Value为Null、空字符串、空数组、空集合、空Map等时会被过滤掉</p>
  */
 public class MapBuilder {
     private Map<String, Object> tmp;

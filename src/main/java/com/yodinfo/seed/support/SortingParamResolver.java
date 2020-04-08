@@ -8,6 +8,12 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+/**
+ * 排序参数自动转换
+ * <p>自动将a+b-c+或者+a,-b,+c格式的Request Param转换为SQL样式的排序方式。</p>
+ *
+ * @see com.yodinfo.seed.support.Strings
+ */
 public class SortingParamResolver implements HandlerMethodArgumentResolver {
 
     @Override

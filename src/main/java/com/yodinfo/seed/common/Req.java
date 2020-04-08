@@ -14,7 +14,8 @@ import java.util.Map;
 /**
  * 统一封装的分页请求
  *
- * @param <T>
+ * <p>建议使用Java Bean封装入参。</p>
+ * @param <T> 过滤条件
  */
 @ApiModel(value = "Req", description = "统一封装的请求，分页和排序参数分开封装")
 @Getter
@@ -55,6 +56,7 @@ public class Req<T> implements Flattenable {
      */
     @Getter
     @Setter
+    @ApiModel(value = "Paging", description = "分页参数")
     public static class Paging {
         @ApiModelProperty(name = "pageNum", value = "分页页码", example = "1")
         @JsonProperty("pageNum")
@@ -66,8 +68,11 @@ public class Req<T> implements Flattenable {
 
     @Getter
     @Setter
+    @ApiModel(value = "Sorting", description = "排序参数")
     public static class Sorting {
+        @ApiModelProperty(name = "field", value = "排序字段")
         private String field;
+        @ApiModelProperty(name = "order", value = "排序顺序", example = "desc")
         private String order;
     }
 }

@@ -3,8 +3,14 @@ package com.yodinfo.seed.exception;
 import com.yodinfo.seed.constant.RespCode;
 import org.springframework.core.NestedExceptionUtils;
 
+/**
+ * 业务异常
+ *
+ * <p>自定义异常，用于封装业务层一切Checked Exception。
+ * 可传递错误码，会被{@link GlobalExceptionHandler}捕获。</p>
+ */
 public class BusinessException extends RuntimeException {
-    private int code = RespCode.INTERNAL_SERVER_ERROR.getCode();
+    private int code = RespCode.FAIL.getCode();
 
     public BusinessException() {
         super();
@@ -38,6 +44,7 @@ public class BusinessException extends RuntimeException {
         this.code = code;
     }
 
+    @Override
     public String getMessage() {
         return NestedExceptionUtils.buildMessage(super.getMessage(), this.getCause());
     }
