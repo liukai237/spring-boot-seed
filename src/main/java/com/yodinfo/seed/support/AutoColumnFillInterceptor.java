@@ -1,6 +1,5 @@
 package com.yodinfo.seed.support;
 
-import com.yodinfo.seed.util.IdGen;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -41,7 +40,7 @@ public class AutoColumnFillInterceptor implements Interceptor {
             for (Field field : fields) {
                 if (AnnotationUtils.getAnnotation(field, Id.class) != null) {
                     field.setAccessible(true);
-                    field.set(parameter, new IdGen().nextId());
+                    field.set(parameter, Strings.getUuidStr());
                     field.setAccessible(false);
                 }
                 if (AnnotationUtils.getAnnotation(field, CreatedDate.class) != null) {

@@ -2,6 +2,7 @@ package com.yodinfo.seed.support;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -26,5 +27,9 @@ public class Strings {
         } else {
             throw new IllegalArgumentException("Invalid sort: " + sort + ", expected format: a+b-c+ or +a,-b,+c!");
         }
+    }
+
+    public static String getUuidStr() {
+        return StringUtils.removeAll(UUID.randomUUID().toString(), "-");
     }
 }

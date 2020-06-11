@@ -51,7 +51,7 @@ public class JsonUtils {
         return result;
     }
 
-    public static <T> T beanCast(Object obj, Class<T> clazz) {
+    public static <T> T transfer(Object obj, Class<T> clazz) {
         return objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .convertValue(obj, clazz);
     }

@@ -3,14 +3,21 @@ package com.yodinfo.seed.exception;
 import com.yodinfo.seed.common.Resp;
 import com.yodinfo.seed.constant.RespCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.stream.Collectors;
 
 /**
  * 全局异常处理
@@ -32,12 +39,29 @@ public class GlobalExceptionHandler {
         return new Resp<>(e.getCode(), finalMsg);
     }
 
-    @ExceptionHandler(ServletRequestBindingException.class)
+    @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Resp<?> processServletRequestBindingException(ServletRequestBindingException e) {
+    public Resp<?> processBindException(BindException e) {
         log.error("[PARAM ERROR]", e);
-        return new Resp<>(RespCode.BAD_REQUEST.getCode(), e.getMessage());
+        String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
+        return new Resp<>(RespCode.BAD_REQUEST.getCode(), message);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseBody
+    public Resp<?> processConstraintViolationException(ConstraintViolationException e) {
+        log.error("[PARAM ERROR]", e);
+        String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
+        return new Resp<>(RespCode.BAD_REQUEST.getCode(), message);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public Resp<?> processMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error("[PARAM ERROR]", e);
+        String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
+        return new Resp<>(RespCode.BAD_REQUEST.getCode(), message);
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
