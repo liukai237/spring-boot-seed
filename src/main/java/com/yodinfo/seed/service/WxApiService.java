@@ -3,7 +3,7 @@ package com.yodinfo.seed.service;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yodinfo.seed.constant.RedisConstant;
 import com.yodinfo.seed.constant.WxConstant;
-import com.yodinfo.seed.convernter.MpUserInfoConverter;
+import com.yodinfo.seed.converter.MpUserInfoConverter;
 import com.yodinfo.seed.domain.MpUserInfo;
 import com.yodinfo.seed.dto.DecryptDataParam;
 import com.yodinfo.seed.dto.wx.*;

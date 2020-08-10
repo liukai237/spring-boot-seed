@@ -9,13 +9,13 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Id;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Properties;
 
 /**
- * 自动填充id、create_time，update_time等字段
+ * DB字段自动填充
+ * <p>自动填充create_time，update_time等字段</p>
  */
 @Slf4j
 @Intercepts({@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})})
@@ -38,11 +38,6 @@ public class AutoColumnFillInterceptor implements Interceptor {
             }
         } else if (SqlCommandType.INSERT == sqlCommandType) {
             for (Field field : fields) {
-                if (AnnotationUtils.getAnnotation(field, Id.class) != null) {
-                    field.setAccessible(true);
-                    field.set(parameter, Strings.getUuidStr());
-                    field.setAccessible(false);
-                }
                 if (AnnotationUtils.getAnnotation(field, CreatedDate.class) != null) {
                     field.setAccessible(true);
                     field.set(parameter, currentDate);

@@ -2,10 +2,12 @@ package com.yodinfo.seed.domain;
 
 import com.yodinfo.seed.constant.Gender;
 import com.yodinfo.seed.constant.Province;
+import com.yodinfo.seed.support.DefaultGenId;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -21,6 +23,7 @@ import java.util.Date;
 public class User implements Serializable {
 
     @Id
+    @KeySql(genId = DefaultGenId.class)
     private Long userId;
     private String username;
     private Gender gender;

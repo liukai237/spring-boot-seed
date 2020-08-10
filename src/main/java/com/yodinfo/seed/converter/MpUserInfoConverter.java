@@ -1,4 +1,4 @@
-package com.yodinfo.seed.convernter;
+package com.yodinfo.seed.converter;
 
 import com.yodinfo.seed.common.BaseConverter;
 import com.yodinfo.seed.domain.MpUserInfo;
