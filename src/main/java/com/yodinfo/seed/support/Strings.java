@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
  */
 public class Strings {
 
-    private static Pattern PATTERN_NONE_COMMA = Pattern.compile("^([\\w_]*[\\+\\-])+$");
-    private static Pattern PATTERN_WITH_COMMA = Pattern.compile("^([\\+\\-]+[\\w_]*,)+[\\+\\-][\\w_]*$");
+    private static final Pattern PATTERN_NONE_COMMA = Pattern.compile("^([\\w_]*[\\+\\-])+$");
+    private static final Pattern PATTERN_WITH_COMMA = Pattern.compile("^([\\+\\-]+[\\w_]*,)+[\\+\\-][\\w_]*$");
 
     public static String parseOrderBy(String sort) {
         if (StringUtils.isBlank(sort)) {

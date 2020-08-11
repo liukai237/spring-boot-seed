@@ -8,13 +8,16 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 统一封装的分页请求
  *
- * <p>建议使用Java Bean封装入参。</p>
+ * <p>建议使用Java Bean封装查询参数。</p>
+ *
  * @param <T> 过滤条件
  */
 @ApiModel(value = "Req", description = "统一封装的请求，分页和排序参数分开封装")
@@ -22,14 +25,14 @@ import java.util.Map;
 @Setter
 public class Req<T> implements Flattenable {
 
-    @ApiModelProperty(name = "filter", value = "过滤参数。")
+    @ApiModelProperty(name = "filtering", value = "过滤参数。")
     private T filter;
 
-    @ApiModelProperty(value = "paging", notes = "包含排序参数。")
+    @ApiModelProperty(value = "paging", notes = "分页参数。")
     private Paging paging;
 
     @ApiModelProperty(value = "sorting", notes = "排序参数。")
-    private Sorting sorting;
+    private Sorting[] sorting;
 
     @Override
     public Map<String, Object> flatAsMap() {
@@ -44,8 +47,9 @@ public class Req<T> implements Flattenable {
         }
 
         if (this.sorting != null) {
-            paramMap.put("sortField", this.sorting.getField());
-            paramMap.put("sortOrder", this.sorting.getOrder());
+            paramMap.put("orderBy", Arrays.stream(sorting)
+                    .map(item -> item.getField() + " " + item.getOrder().toString())
+                    .collect(Collectors.joining()));
         }
 
         return paramMap;
@@ -75,7 +79,12 @@ public class Req<T> implements Flattenable {
     public static class Sorting {
         @ApiModelProperty(name = "field", value = "排序字段")
         private String field;
-        @ApiModelProperty(name = "order", value = "排序顺序", example = "desc")
-        private String order;
+        @ApiModelProperty(name = "order", value = "排序方向", example = "DESC")
+        private Direction order;
+    }
+
+    @Getter
+    enum Direction {
+        ASC, DESC;
     }
 }

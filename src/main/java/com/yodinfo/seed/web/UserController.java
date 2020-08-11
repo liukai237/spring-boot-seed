@@ -39,7 +39,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "pageSize", value = "每页显示数量", defaultValue = "0", dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "sort", value = "排序规则", defaultValue = "create_time-", dataType = "string", paramType = "query"),
     })
-    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<Paged<UserDetailDto>> queryUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
                                                  @RequestParam(required = false, defaultValue = "0") Integer pageSize,
                                                  @RequestParam(required = false, defaultValue = "create_time-") String sort) {
@@ -47,13 +47,13 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表，复杂分页排序。")
-    @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<Paged<UserDetailDto>> queryUsers2(@RequestBody Req<UserDetailDto> req) {
         return ok(userService.findByCondition(req.flatAsMap()));
     }
 
     @ApiOperation(value = "新增用户", notes = "新增用户")
-    @PostMapping(value = "/reg", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/reg", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody UserAddDto userInfo) {
         User entity = userConverter.toEntity(userInfo);
@@ -61,7 +61,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "用户信息变更", notes = "修改用户信息")
-    @PostMapping(value = "/modify", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/modify", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<?> doChange(@ApiParam(value = "用户信息", required = true) @Valid @RequestBody UserEditDto basicInfo) {
         User entity = userConverter.toEntity(basicInfo);
         return userService.modify(entity) ? ok() : fail();
@@ -71,7 +71,7 @@ public class UserController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", value = "用户ID，多个以逗号分隔", required = true, dataType = "String", paramType = "query")
     })
-    @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<?> doRemove(@RequestParam String[] uid) {
         String[] userIds = Arrays.stream(uid)
                 .filter(StringUtils::isNoneBlank)
@@ -91,7 +91,7 @@ public class UserController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", value = "用户ID", required = true, dataType = "String", paramType = "path")
     })
-    @GetMapping(value = "/{uid}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/{uid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<UserDetailDto> queryUserDetails(@PathVariable Long uid) {
         return ok(userConverter.toDto(userService.findById(uid)));
     }

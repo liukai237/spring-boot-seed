@@ -1,5 +1,5 @@
 # 基于Spring Boot 2.X的简易脚手架项目
-Swagger(文档)[http://localhost:8089/doc.html]
+此版本为通用Mapper与PageHelper深度定制版本。
 
 ## 技术选型
 * String Boot 2.x
@@ -17,10 +17,11 @@ Swagger(文档)[http://localhost:8089/doc.html]
 
 # 《开发约定》
 ## 0x00 通用约定
-* 中心思想：约定重于配置；追求小而美，避免过度封装.
+* 中心思想：约定重于配置；追求小而美，避免过度封装。
 * 编程风格基本遵守《阿里巴巴Java编程规约》，部分微调，比如数据库领域模型不需要加DO。
 
 ## 0x01 Controller层开发约定
+Controller层应该越“薄”越好，主要用于DTO转换，提供详细的Swagger文档，并使用MockMvc进行单元测试。
 
 ### 1. 统一封装的响应结果
 * 返回Http Status统一为200。
@@ -115,7 +116,8 @@ public class Student {
 > BTW，id字段可能会有精度丢失，因此需要加上注解`@JsonSerialize(using = ToStringSerializer.class)`。
 
 ### 4. 开始日期和结束日期
-时间范围参数在后台入参处增加注释@StartDate和@EndDate，前者精确到00:00:00:000，后者精确到23:59:59:999。
+时间范围参数可以还可以使用自定义注释@StartDate和@EndDate，前者精确到00:00:00:000，后者精确到23:59:59:999。  
+比如：
 ```java
 @ApiModel(value = "BondQueryParam", description = "债券查询参数")
 public class BondQueryParam {
@@ -130,36 +132,90 @@ public class BondQueryParam {
 ```
 > 当天示例：`{"startDate": "2018-11-07","endDate": "2018-11-07"}`，即表示：2018年11月7日零点到2018年11月7日23点59分59秒之间的时间段。
 
-### 5. 枚举处理
-枚举类一般继承`LabelEnum`，实现数字和枚举对象的映射。URL参数和JSON字段均支持，建议作为JSON参数使用。
+再比如：
+```java
+  public void initData(@StartDate @RequestParam Date since, @EndDate @RequestParam Date until);
+```
 
-### 6. 其他
-* 当参数名为复数时，值为数组。参数值为null表示***全部***，不要使用空字符串或者`ALL`。
-* 分页参数`pageNum`和`pageSize`，pageSize默认为`0`，即不分页。
-* 排序支持a+b-c+和+a,-b,+c两种格式，以及URL参数和JSON字段两种位置。
+### 5. 排序
+* RESTful风格参数，支持a+b-c+和+a,-b,+c两种格式
 > e.g.
 > ```jshelllanguage
 >  curl http://localhost:8080/users?sort=+create_time,-id
 > ```
-> ```java 
+* Request Body方式，传入数组，支持多重排序
+> ```json 
 > {
->   sort: create_time+id-
+>   “sorting”: [
+>     {
+>       "field": "create_time",
+>       "order": "DESC"
+>     }
+>   ]
 > }
 > ```
 
+### 6. 分页工具
+* 分页参数`pageNum`和`pageSize`，pageSize默认为`0`，即不分页。
+* 使用PageHelper作为默认分页插件，自定义的`Paged`作为分页结果容器。
+* 分页场景可以使用Converter转换器，其他情况应该在Controller层使用。
+
+e.g.
+```java
+public Paged<UserDto> findUserPageInteger pageNum, Integer pageSize) {
+    PageHelper.startPage(pageNum, pageSize, "UPDATETIME DESC");
+    return new Paged<>(.selectAll(), UserConverter.INSTANCE::toDto);
+}
+```
+
+### 7. 枚举处理
+枚举类一般继承`LabelEnum`，实现数字和枚举对象的映射。URL参数和JSON字段均支持，建议作为JSON参数使用。
+
+### 8. 其他
+* 当参数名为复数时，值为数组。参数值为null或者不传表示***全部***，不要使用空字符串或者`ALL`。
+
 ## 0x02 业务层开发约定
+主要业务逻辑都应该写在Service层，除分页方法外，应该尽量做到可复用。对于其它领域对象的引用，优先导入Service而不是Mapper。
 * 只读方法增加注解`@Transactional(readOnly = true)`，修改方法必须增加注释`@Transactional(rollbackFor = Exception.class)`。
+* 在Service层而不是Controller层打印业务日志。
+* 在Service层而不是DAO层实现saveOrModify。
+* 不要在循环中进行IO操作，比如文件和数据库读写。
+
+## 0x03 DAO层开发约定
+### 主键生成策略
+Entity属性增加注解`@KeySql(genId = DefaultGenId.class)`即可实现全局唯一ID。
+
+### 枚举、对象映射
+* 枚举类型实现CodeEnum，即可自动完成Integer与Enum对象之间的映射。
+> 可参考`Gender.java`
+
+* JSON字段对应的Java对象需要手动创建，并继承实现`AbstractJsonTypeHandler`，例如：
+```java
+class Foo {
+    // ...
+}
+
+class FooJsonHandler<Foo> extends AbstractJsonTypeHandler {
+    // ...
+}
+```
+然后做如下配置：
+```java
+@ColumnType(typeHandler = FooJsonHandler.class)
+private Foo foo;
+```
+> 注意：如果存在XML Mapper，需要同步修改。
+
+### 自动填充字段
+使用`@CreatedDate`和`@LastModifiedDate`注解的字段，如果没有赋值，将会自动被填充系统时间。
+
+## 0x04 其他开发约定
 
 ### 异常处理
 * Controller使用统一封装的ok()、fail()方法返回。
 * 所有Checked Exception使用`BusinessException`重新封装，统一处理。比如Service层返回错误消息：“用户名重复!”。
 
-## 0x03 DAO层开发约定
-### 主键生成策略
-### 枚举、对象映射
-### 自动填充字段
-### 分页工具
 ### 代码生成器
+提供基于tkMapper的代码生成器（MBG），只生成实体类、DAO和XML Mapper，并且实体类没有配置ID生成策略，需要自定配置。
 
-## 0x04 其他开发约定
-
+--- END ---
