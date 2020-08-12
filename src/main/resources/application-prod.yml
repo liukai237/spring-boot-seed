@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.99.143.50:33060/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: Yod@[YWOni6tyv0hHGQtCUoEKAypUoxNCu8OB]
+  redis:
+    host: redis.iakuil.com
+    port: 6379
+    password: Yod@[ypgh62docYY/PPcZ0v16lGMDdKDTNSxq]
+    lettuce:
+      pool:
+        max-active: 10
+        max-wait: 5000ms
+        max-idle: 10
+        min-idle: 0
+      timeout: 10000ms
+
+logging:
+  level:
+    root: WARN
+    org.springframework.web: INFO
+    com.yodinfo.seed.dao: INFO
+  file: ./logs/spring-boot-seed.log

@@ -164,7 +164,7 @@ e.g.
 ```java
 public Paged<UserDto> findUserPageInteger pageNum, Integer pageSize) {
     PageHelper.startPage(pageNum, pageSize, "UPDATETIME DESC");
-    return new Paged<>(.selectAll(), UserConverter.INSTANCE::toDto);
+    return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
 }
 ```
 
@@ -183,7 +183,7 @@ public Paged<UserDto> findUserPageInteger pageNum, Integer pageSize) {
 
 ## 0x03 DAO层开发约定
 ### 主键生成策略
-Entity属性增加注解`@KeySql(genId = DefaultGenId.class)`即可实现全局唯一ID。
+Entity ID字段增加注解`@KeySql(genId = DefaultGenId.class)`即可实现全局唯一ID。
 
 ### 枚举、对象映射
 * 枚举类型实现CodeEnum，即可自动完成Integer与Enum对象之间的映射。
@@ -216,6 +216,6 @@ private Foo foo;
 * 所有Checked Exception使用`BusinessException`重新封装，统一处理。比如Service层返回错误消息：“用户名重复!”。
 
 ### 代码生成器
-提供基于tkMapper的代码生成器（MBG），只生成实体类、DAO和XML Mapper，并且实体类没有配置ID生成策略，需要自定配置。
+提供基于tkMapper的代码生成器（MBG），只负责生成实体类、DAO和XML Mapper，并且实体类没有配置ID生成策略，需要自行配置。
 
 --- END ---

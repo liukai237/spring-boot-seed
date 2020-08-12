@@ -20,8 +20,16 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+        <spring-boot-admin-starter-client.version>2.2.3</spring-boot-admin-starter-client.version>
+
+        <lombok.version>1.18.4</lombok.version>
+        <commons-lang3.version>3.7</commons-lang3.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
 
         <mysql-connector-java.version>8.0.20</mysql-connector-java.version>
+        <HikariCP.version>3.4.2</HikariCP.version>
+        <mapper-spring-boot-starter.version>2.1.5</mapper-spring-boot-starter.version>
+        <pagehelper-spring-boot-starter.version>1.2.12</pagehelper-spring-boot-starter.version>
         <mybatis-generator.version>1.3.7</mybatis-generator.version>
     </properties>
 
@@ -33,6 +41,17 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>${spring-boot-admin-starter-client.version}</version>
+        </dependency>
+
         <!--********** db ********** -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -42,51 +61,45 @@
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
-            <version>2.1.5</version>
+            <version>${mapper-spring-boot-starter.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.12</version>
+            <version>${pagehelper-spring-boot-starter.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>3.4.2</version>
+            <version>${HikariCP.version}</version>
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.16</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>5.1.8</version>
+            <version>${mysql-connector-java.version}</version>
         </dependency>
 
         <!--********** 3rd *********** -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.4</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.7</version>
+            <version>${commons-lang3.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
-            <version>4.4</version>
+            <version>${commons-collections4.version}</version>
         </dependency>
 
         <dependency>
@@ -159,6 +172,12 @@
             <version>1.46</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>2.8.1</version>
+        </dependency>
+
         <!--******** test ******** -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -173,7 +192,7 @@
         </dependency>
     </dependencies>
 
-    <build>x`x`
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
