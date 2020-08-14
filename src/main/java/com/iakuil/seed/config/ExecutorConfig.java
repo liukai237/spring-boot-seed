@@ -10,8 +10,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
- * 异步线程池配置
- * 可直接注入xxxExecutor，或者通过@Async("xxxExecutor")引用
+ * 线程池及异步配置
+ * <p>可直接注入xxxExecutor，或者通过@Async("xxxExecutor")引用</p>
  */
 @Slf4j
 @EnableAsync
@@ -28,13 +28,13 @@ public class ExecutorConfig implements AsyncConfigurer {
      */
     private static final int CPU_PROCESSORS_COUNT = Runtime.getRuntime().availableProcessors();
 
+
     /**
      * 默认连接池
      * 用于CPU密集型任务
      */
     @Bean
-    @Override
-    public TaskExecutor getAsyncExecutor() {
+    public ThreadPoolTaskExecutor defaultTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(CPU_PROCESSORS_COUNT + 1);
         executor.setMaxPoolSize(20);
@@ -55,6 +55,11 @@ public class ExecutorConfig implements AsyncConfigurer {
         executor.setQueueCapacity(200);
         executor.initialize();
         return executor;
+    }
+
+    @Override
+    public TaskExecutor getAsyncExecutor() {
+        return defaultTaskExecutor();
     }
 
     @Override

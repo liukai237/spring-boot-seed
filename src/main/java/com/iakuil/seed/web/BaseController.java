@@ -1,12 +1,16 @@
 package com.iakuil.seed.web;
 
-import com.iakuil.seed.constant.RespCode;
 import com.iakuil.seed.common.Resp;
+import com.iakuil.seed.constant.RespCode;
 
 abstract class BaseController {
 
     public <T> Resp<T> ok() {
         return ok(null);
+    }
+
+    public <T> Resp<T> ok(boolean result) {
+        return result ? ok() : fail();
     }
 
     public <T> Resp<T> ok(T data) {
