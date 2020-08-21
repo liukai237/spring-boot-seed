@@ -1,10 +1,28 @@
 spring:
-  datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.99.143.50:33060/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-    username: root
-    password: Yod@[YWOni6tyv0hHGQtCUoEKAypUoxNCu8OB]
+  shardingsphere:
+    datasource:
+      names:
+        master,slave
+      master:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://106.12.99.31:3306/iakuil?characterEncoding=utf-8
+        username: root
+        password: Yod@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
+      slave:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://119.45.239.30:3306/iakuil?characterEncoding=utf-8
+        username: root
+        password: Yod@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
+    masterslave:
+      load-balance-algorithm-type: round_robin
+      name: dataSource
+      master-data-source-name: master
+      slave-data-source-names: slave
+    props:
+      sql:
+        show: true
   redis:
     host: redis.iakuil.com
     port: 6379

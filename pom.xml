@@ -82,6 +82,12 @@
             <version>${mysql-connector-java.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+
         <!--********** 3rd *********** -->
         <dependency>
             <groupId>org.projectlombok</groupId>

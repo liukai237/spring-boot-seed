@@ -1,11 +1,13 @@
 server:
-  port: 8765
+  port: 9001
   tomcat:
     uri-encoding: UTF-8
   compression:
     enabled: true
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: spring-seed
   profiles:
@@ -26,10 +28,10 @@ mybatis:
   type-aliases-package: com.yodinfo.seed.domain
   mapper-locations: classpath*:mapper/**/*.xml
   configuration:
-    default-enum-type-handler: com.yodinfo.seed.support.AutoEnumTypeHandler
+    default-enum-type-handler: com.iakuil.seed.support.AutoEnumTypeHandler
 
 mapper:
-  mappers: com.yodinfo.seed.common.CrudMapper
+  mappers: com.iakuil.seed.common.CrudMapper
   not-empty: true
   identity: mysql
   use-simple-type: false
