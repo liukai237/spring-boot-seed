@@ -3,7 +3,7 @@
 
 ## 技术选型
 * String Boot 2.x
-* MyBatis + tkMapper + Page Helper分页插件
+* MyBatis + tkMapper + Page Helper分页插件 + Sharding-JDBC读写分离
 * MySQL + Hikari数据库连接池
 * MapStruct
 * Swagger2
@@ -14,6 +14,7 @@
 |MyBatis|3.4.6|http://blog.mybatis.org||
 |通用Mapper|2.1.5|https://mapperhelper.github.io||
 |Page Helper|5.1.8|https://github.com/pagehelper/pagehelper-spring-boot||
+|Sharding-JDBC|4.1.1|https://shardingsphere.apache.org/||
 
 # 《开发约定》
 ## 0x00 通用约定

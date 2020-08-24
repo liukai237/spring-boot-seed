@@ -2,24 +2,30 @@ spring:
   shardingsphere:
     datasource:
       names:
-        master,slave
+        master,slave1,slave2
       master:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         jdbc-url: jdbc:mysql://106.12.99.31:3306/iakuil?characterEncoding=utf-8
         username: root
         password: Yod@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
-      slave:
+      slave1:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         jdbc-url: jdbc:mysql://119.45.239.30:3306/iakuil?characterEncoding=utf-8
+        username: root
+        password: Yod@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
+      slave2:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://81.71.3.113:3306/iakuil?characterEncoding=utf-8
         username: root
         password: Yod@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
     masterslave:
       load-balance-algorithm-type: round_robin
       name: dataSource
       master-data-source-name: master
-      slave-data-source-names: slave
+      slave-data-source-names: slave1,slave2
     props:
       sql:
         show: true
@@ -39,5 +45,5 @@ logging:
   level:
     root: WARN
     org.springframework.web: INFO
-    com.yodinfo.seed.dao: INFO
+    com.yodinfo.seed.dao: DEBUG
   file: ./logs/spring-boot-seed.log

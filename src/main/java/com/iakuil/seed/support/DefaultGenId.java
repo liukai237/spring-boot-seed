@@ -5,6 +5,7 @@ import tk.mybatis.mapper.genid.GenId;
 
 /**
  * 默认主键ID生成器
+ * <p>采用Flickr GUID方案。</p><br/>
  * <p>使用方法：Entity ID字段上增加注解{@code @KeySql(genId = DefaultGenId.class)}</p><br/>
  * <p>注意：genId是所有方式中优先级最低的！</p>
  */
