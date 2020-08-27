@@ -30,20 +30,27 @@ spring:
       sql:
         show: true
   redis:
-    host: redis.iakuil.com
-    port: 6379
-    password: Yod@[ypgh62docYY/PPcZ0v16lGMDdKDTNSxq]
+    password: Yod@[w1APlX+Ao7TNZCdV1/1iNILSyfoDVelr]
+    timeout: 10000ms
+    cluster:
+      nodes:
+        - 106.12.99.31:7001
+        - 106.12.99.31:7002
+        - 119.45.239.30:7003
+        - 119.45.239.30:7004
+        - 81.71.3.113:7005
+        - 81.71.3.113:7006
+      max-redirects: 3
     lettuce:
       pool:
-        max-active: 10
-        max-wait: 5000ms
+        max-active: 1000
         max-idle: 10
-        min-idle: 0
-      timeout: 10000ms
+        min-idle: 5
+        max-wait: 5000ms
 
 logging:
   level:
-    root: WARN
+    root: DEBUG
     org.springframework.web: INFO
     com.yodinfo.seed.dao: DEBUG
   file: ./logs/spring-boot-seed.log

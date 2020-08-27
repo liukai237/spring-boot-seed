@@ -11,7 +11,7 @@ spring:
   application:
     name: spring-seed
   profiles:
-    active: prod
+    active: dev
   http:
     encoding:
       charset: UTF-8
