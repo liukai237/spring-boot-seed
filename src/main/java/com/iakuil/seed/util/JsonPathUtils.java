@@ -8,6 +8,7 @@ import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.json.JsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.jayway.jsonpath.spi.mapper.MappingProvider;
+import lombok.experimental.UtilityClass;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Set;
 /**
  * 使用Json Path的方式访问JSON
  */
+@UtilityClass
 public class JsonPathUtils {
 
     public static String readStr(String json, String path) {

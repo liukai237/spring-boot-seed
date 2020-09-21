@@ -1,10 +1,12 @@
 package com.iakuil.seed.util;
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hashids.Hashids;
 
 import java.util.Objects;
 
+@UtilityClass
 public class HashIdUtils {
     private static final String DEFAULT_SALT = "itsADemo4Hash";
     private static final int DEFAULT_HASH_LENGTH = 8;

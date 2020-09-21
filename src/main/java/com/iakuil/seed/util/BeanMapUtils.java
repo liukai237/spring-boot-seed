@@ -2,6 +2,7 @@ package com.iakuil.seed.util;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.experimental.UtilityClass;
 import org.springframework.cglib.beans.BeanMap;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Map;
  *
  * <p>封装了Spring框架自带{@link BeanMap}</p>
  */
+@UtilityClass
 public class BeanMapUtils {
 
     public static <T> Map<String, Object> beanToMap(T bean) {

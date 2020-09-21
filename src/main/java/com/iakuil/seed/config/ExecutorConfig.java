@@ -21,10 +21,11 @@ public class ExecutorConfig implements AsyncConfigurer {
     /**
      * 阻塞因子
      */
-    private static final double BLOCKING_COEFFICIENT = 0.9;
+    private static final double BLOCKING_FACTOR = 0.9;
 
     /**
      * CPU核心数
+     * 极个别情况，比如虚拟机，该方法获取的CPU核心数不准确会造成启动失败。
      */
     private static final int CPU_PROCESSORS_COUNT = Runtime.getRuntime().availableProcessors();
 
@@ -51,7 +52,7 @@ public class ExecutorConfig implements AsyncConfigurer {
     public ThreadPoolTaskExecutor timeConsumingExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(CPU_PROCESSORS_COUNT);
-        executor.setMaxPoolSize((int) (CPU_PROCESSORS_COUNT / (1 - BLOCKING_COEFFICIENT)));
+        executor.setMaxPoolSize((int) (CPU_PROCESSORS_COUNT / (1 - BLOCKING_FACTOR)));
         executor.setQueueCapacity(200);
         executor.initialize();
         return executor;
