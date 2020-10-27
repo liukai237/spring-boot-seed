@@ -22,7 +22,7 @@
 * 编程风格基本遵守《阿里巴巴Java编程规约》，部分微调，比如数据库领域模型不需要加DO。
 
 ## 0x01 Controller层开发约定
-Controller层应该越“薄”越好，主要用于DTO转换，提供详细的Swagger文档，并使用MockMvc进行单元测试。
+Controller层应该越“薄”越好，主要用于DTO/Domain转换，提供详细的Swagger文档，并使用MockMvc进行单元测试。
 
 ### 1. 统一封装的响应结果
 * 返回Http Status统一为200。
@@ -120,8 +120,8 @@ public class Student {
 时间范围参数可以还可以使用自定义注释@StartDate和@EndDate，前者精确到00:00:00:000，后者精确到23:59:59:999。  
 比如：
 ```java
-@ApiModel(value = "BondQueryParam", description = "债券查询参数")
-public class BondQueryParam {
+@ApiModel(value = "SomeQueryParam", description = "债券查询参数")
+public class SomeQueryParam {
     @StartDate
     @ApiModelProperty(name = "startDate", value = "开始日期，自动补齐00:00:00", example = "2019-02-21")
     private Date startDate;
@@ -213,10 +213,14 @@ private Foo foo;
 ## 0x04 其他开发约定
 
 ### 异常处理
-* Controller使用统一封装的ok()、fail()方法返回。
-* 所有Checked Exception使用`BusinessException`重新封装，统一处理。比如Service层返回错误消息：“用户名重复!”。
+* Controller使用统一封装的ok()、fail()方法返回，而不是抛出异常。
+* 所有Checked Exception使用`BusinessException`重新封装，统一处理。
+> 比如Service层返回错误消息：“用户名重复!”。
 
 ### 代码生成器
 提供基于tkMapper的代码生成器（MBG），只负责生成实体类、DAO和XML Mapper，并且实体类没有配置ID生成策略，需要自行配置。
 
+### Code Review
+* 代码评审前应该先进行静态代码检查，不要把时间和精力浪费在低级缺陷上。
+* 原则上所有Controller层暴露的API接口和MyBatis XML中的SQL语句都应该进行评审。
 --- END ---

@@ -1,14 +1,15 @@
 package com.iakuil.seed.web;
 
-import com.iakuil.seed.converter.UserConverter;
-import com.iakuil.seed.domain.User;
-import com.iakuil.seed.service.UserService;
+import com.iakuil.seed.common.BaseController;
 import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.common.Req;
 import com.iakuil.seed.common.Resp;
+import com.iakuil.seed.converter.UserConverter;
+import com.iakuil.seed.domain.User;
 import com.iakuil.seed.dto.UserAddDto;
 import com.iakuil.seed.dto.UserDetailDto;
 import com.iakuil.seed.dto.UserEditDto;
+import com.iakuil.seed.service.UserService;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -52,19 +53,19 @@ public class UserController extends BaseController {
         return ok(userService.findByCondition(req.flatAsMap()));
     }
 
-    @ApiOperation(value = "新增用户", notes = "新增用户")
+    @ApiOperation(value = "用户注册", notes = "新增用户")
     @PostMapping(value = "/reg", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody UserAddDto userInfo) {
         User entity = userConverter.toEntity(userInfo);
-        return userService.add(entity) ? ok() : fail();
+        return ok(userService.add(entity));
     }
 
     @ApiOperation(value = "用户信息变更", notes = "修改用户信息")
     @PostMapping(value = "/modify", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<?> doChange(@ApiParam(value = "用户信息", required = true) @Valid @RequestBody UserEditDto basicInfo) {
         User entity = userConverter.toEntity(basicInfo);
-        return userService.modify(entity) ? ok() : fail();
+        return done(userService.modify(entity));
     }
 
     @ApiOperation(value = "用户删除", notes = "删除用户")

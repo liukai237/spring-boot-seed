@@ -3,6 +3,7 @@ package com.iakuil.seed.service;
 import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.dao.DictMapper;
 import com.iakuil.seed.domain.Dict;
+import com.iakuil.seed.util.MapBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,16 +57,15 @@ public class DictService {
     }
 
     public String getName(String type, String value) {
-        Map<String, Object> param = new HashMap<String, Object>(16);
-        param.put("type", type);
-        param.put("value", value);
-        String rString = dictMapper.list(param).get(0).getName();
-        return rString;
+        return dictMapper.list(MapBuilder.init()
+                .append("type", type)
+                .append("value", value)
+                .build()).get(0).getName();
     }
 
     public List<Dict> listByType(String type) {
-        Map<String, Object> param = new HashMap<>(16);
-        param.put("type", type);
-        return dictMapper.list(param);
+        return dictMapper.list(MapBuilder.init()
+                .append("type", type)
+                .build());
     }
 }

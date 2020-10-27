@@ -1,16 +1,19 @@
-package com.iakuil.seed.web;
+package com.iakuil.seed.common;
 
-import com.iakuil.seed.common.Resp;
 import com.iakuil.seed.constant.RespCode;
 
-abstract class BaseController {
+/**
+ * 视图层基类
+ * <p>所有RestController强制继承。</p>
+ */
+public abstract class BaseController {
 
     public <T> Resp<T> ok() {
         return ok(null);
     }
 
     public <T> Resp<T> ok(boolean result) {
-        return result ? ok() : fail();
+        return done(result);
     }
 
     public <T> Resp<T> ok(T data) {
@@ -31,5 +34,9 @@ abstract class BaseController {
 
     public <T> Resp<T> fail(RespCode respCode) {
         return new Resp<>(respCode.getCode(), respCode.getMessage());
+    }
+
+    public <T> Resp<T> done(boolean result) {
+        return result ? ok() : fail();
     }
 }

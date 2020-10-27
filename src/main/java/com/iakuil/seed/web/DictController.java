@@ -1,5 +1,6 @@
 package com.iakuil.seed.web;
 
+import com.iakuil.seed.common.BaseController;
 import com.iakuil.seed.domain.Dict;
 import com.iakuil.seed.service.DictService;
 import com.iakuil.seed.common.Paged;
@@ -12,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 字典表
+ * 字典表接口
+ * 演示原生SpringMVC + 原生MyBatis XML
  */
 @Controller
-@RequestMapping("/common/dict")
+@RequestMapping("/api/dict")
 public class DictController extends BaseController {
     private final DictService dictService;
 
