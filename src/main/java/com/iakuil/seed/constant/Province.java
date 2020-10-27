@@ -5,7 +5,6 @@ import com.iakuil.seed.support.CodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -57,7 +56,6 @@ public enum Province implements CodeEnum {
             Province::getCode
     );
 
-    @Nullable
     public static Province fromCode(String code) {
         return LOOKUP.get(code);
     }

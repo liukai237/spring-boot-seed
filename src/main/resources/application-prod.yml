@@ -8,19 +8,19 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
         jdbc-url: jdbc:mysql://106.12.99.31:3306/iakuil?characterEncoding=utf-8
         username: root
-        password: Yod@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
+        password: KaZ@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
       slave1:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         jdbc-url: jdbc:mysql://119.45.239.30:3306/iakuil?characterEncoding=utf-8
         username: root
-        password: Yod@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
+        password: KaZ@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
       slave2:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         jdbc-url: jdbc:mysql://81.71.3.113:3306/iakuil?characterEncoding=utf-8
         username: root
-        password: Yod@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
+        password: KaZ@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
     masterslave:
       load-balance-algorithm-type: round_robin
       name: dataSource
@@ -30,7 +30,7 @@ spring:
       sql:
         show: true
   redis:
-    password: Yod@[w1APlX+Ao7TNZCdV1/1iNILSyfoDVelr]
+    password: KaZ@[w1APlX+Ao7TNZCdV1/1iNILSyfoDVelr]
     timeout: 10000ms
     cluster:
       nodes:

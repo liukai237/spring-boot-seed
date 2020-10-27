@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasLength;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 

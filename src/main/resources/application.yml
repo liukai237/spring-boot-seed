@@ -42,6 +42,9 @@ pagehelper:
   supportMethodsArguments: true
   params: count=countSql
 
+knife4j:
+  cors: true
+
 logging:
   level:
     root: INFO
@@ -53,5 +56,5 @@ jasypt:
   encryptor:
     password: Bda7bXaExAA
     property:
-      prefix: "Yod@["
+      prefix: "KaZ@["
       suffix: "]"

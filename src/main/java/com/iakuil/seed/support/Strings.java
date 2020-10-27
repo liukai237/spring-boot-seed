@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  */
 public class Strings {
 
-    private static final Pattern PATTERN_NONE_COMMA = Pattern.compile("^([\\w_]*[\\+\\-])+$");
+    private static final Pattern PATTERN_NONE_COMMA = Pattern.compile("^([\\w_]+[\\+\\-]{1})+$");
     private static final Pattern PATTERN_WITH_COMMA = Pattern.compile("^([\\+\\-]+[\\w_]*,)+[\\+\\-][\\w_]*$");
 
     public static String parseOrderBy(String sort) {
@@ -23,7 +23,7 @@ public class Strings {
         } else if (PATTERN_NONE_COMMA.matcher(str).matches()) { // e.g. a+b-c+
             return StringUtils.removeEnd(str.replaceAll("([\\w_])\\+", "$1 asc,").replaceAll("([\\w_])\\-", "$1 desc,"), ",");
         } else if (PATTERN_WITH_COMMA.matcher(str).matches()) { // e.g. +a,-b,+c
-            return StringUtils.removeEnd(str.replaceAll("\\+([\\w_]*),", "$1 asc,").replaceAll("\\-([\\w_]*),", "$1 desc,"), ",");
+            return StringUtils.removeEnd(str.replaceAll("\\+([\\w_]*)(,|$)", "$1 asc,").replaceAll("\\-([\\w_]*)(,|$)", "$1 desc,"), ",");
         } else {
             throw new IllegalArgumentException("Invalid sort: " + sort + ", expected format: a+b-c+ or +a,-b,+c!");
         }
