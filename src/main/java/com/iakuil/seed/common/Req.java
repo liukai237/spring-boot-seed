@@ -84,6 +84,6 @@ public class Req<T> implements Flattenable {
 
     @Getter
     public enum Direction {
-        asc, desc
+        ASC, DESC
     }
 }

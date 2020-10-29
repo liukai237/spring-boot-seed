@@ -14,10 +14,10 @@ import java.io.IOException;
  * 全局枚举转JSON
  */
 @JsonComponent
-public class LabelEnumDeserializer extends JsonDeserializer<CodeEnum> {
+public class LabelEnumDeserializer extends JsonDeserializer<LabelEnum> {
 
     @Override
-    public CodeEnum deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public LabelEnum deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         JsonNode node = jp.getCodec().readTree(jp);
         String currentName = jp.currentName();
         Object currentValue = jp.getCurrentValue();
@@ -25,9 +25,9 @@ public class LabelEnumDeserializer extends JsonDeserializer<CodeEnum> {
         return getEnumByValue(type, node.textValue());
     }
 
-    CodeEnum getEnumByValue(Class<?> clazz, String value) {
+    LabelEnum getEnumByValue(Class<?> clazz, String value) {
         for (Object enumObj : clazz.getEnumConstants()) {
-            CodeEnum anEnum = (CodeEnum) enumObj;
+            LabelEnum anEnum = (LabelEnum) enumObj;
             if (anEnum.getLabel().equals(value)) {
                 return anEnum;
             }

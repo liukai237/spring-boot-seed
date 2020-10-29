@@ -21,6 +21,8 @@ spring:
     default-property-inclusion: non_empty
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+    mapper:
+      ACCEPT_CASE_INSENSITIVE_ENUMS: true
   mvc:
     date-format: yyyy-MM-dd HH:mm:ss
 

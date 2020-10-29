@@ -26,16 +26,13 @@ public class WebAppConfig implements WebMvcConfigurer {
     }
 
     /**
-     * Json Body处理
+     * Request Query处理
      */
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverterFactory(new LabelEnumConvertFactory()); // 字符串转枚举支持
     }
 
-    /**
-     * Request Query处理
-     */
     @Bean
     public ResolverBeanPostProcessor resolverBeanPostProcessor() {
         return new ResolverBeanPostProcessor(sortingParamResolver(), dateParamResolver());
