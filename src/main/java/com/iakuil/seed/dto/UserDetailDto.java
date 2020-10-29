@@ -48,7 +48,7 @@ public class UserDetailDto {
     @ApiModelProperty(name = "address", value = "详细地址")
     private String address;
 
-    @ApiModelProperty(name = "regTime", value = "注册时间", readOnly = true)
+    @ApiModelProperty(name = "regTime", value = "注册时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date regTime;
 }

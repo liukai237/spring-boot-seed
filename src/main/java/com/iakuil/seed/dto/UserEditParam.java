@@ -18,8 +18,8 @@ import java.util.Date;
 
 @Getter
 @Setter
-@ApiModel(value = "UserEditDto", description = "修改用户信息")
-public class UserEditDto {
+@ApiModel(value = "UserEditParam", description = "修改用户信息参数")
+public class UserEditParam {
 
     @NotNull(message = "用户ID不能为空！")
     @ApiModelProperty(name = "uid", value = "用户ID")

@@ -1,7 +1,5 @@
 package com.iakuil.seed.support;
 
-import cn.hutool.core.text.StrBuilder;
-import cn.hutool.core.util.CharUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.UUID;
@@ -55,7 +53,7 @@ public class Strings {
      * @return 转换后下划线方式命名的字符串
      */
     public static String toUnderlineCase(CharSequence str) {
-        return toSymbolCase(str, CharUtil.UNDERLINE);
+        return toSymbolCase(str, '_');
     }
 
     /**
@@ -72,7 +70,7 @@ public class Strings {
         }
 
         final int length = str.length();
-        final StrBuilder sb = new StrBuilder();
+        final StringBuilder sb = new StringBuilder();
         char c;
         for (int i = 0; i < length; i++) {
             c = str.charAt(i);
@@ -83,7 +81,7 @@ public class Strings {
                 if (null != preChar && Character.isUpperCase(preChar)) {
                     // 前一个字符为大写，则按照一个词对待，例如AB
                     sb.append(c);
-                } else if (null != nextChar && (false == Character.isLowerCase(nextChar))) {
+                } else if (null != nextChar && (!Character.isLowerCase(nextChar))) {
                     // 后一个为非小写字母，按照一个词对待
                     if (null != preChar && symbol != preChar) {
                         // 前一个是非大写时按照新词对待，加连接符，例如xAB
@@ -101,7 +99,7 @@ public class Strings {
             } else {
                 if (symbol != c
                         && sb.length() > 0
-                        && Character.isUpperCase(sb.charAt(-1))
+                        && Character.isUpperCase(sb.charAt(sb.length() -1))
                         && Character.isLowerCase(c)) {
                     // 当结果中前一个字母为大写，当前为小写(非数字或字符)，说明此字符为新词开始（连接符也表示新词）
                     sb.append(symbol);

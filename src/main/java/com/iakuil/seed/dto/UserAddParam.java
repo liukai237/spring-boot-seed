@@ -14,9 +14,9 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@ApiModel(value = "UserAddDto", description = "用户注册信息")
+@ApiModel(value = "UserAddParam", description = "用户注册参数")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserAddDto {
+public class UserAddParam {
 
     /**
      * 三大运营商号码均可验证(不含卫星通信1349)

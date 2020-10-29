@@ -1,9 +1,9 @@
 package com.iakuil.seed.converter;
 
 import com.iakuil.seed.domain.User;
-import com.iakuil.seed.dto.UserAddDto;
+import com.iakuil.seed.dto.UserAddParam;
 import com.iakuil.seed.dto.UserDetailDto;
-import com.iakuil.seed.dto.UserEditDto;
+import com.iakuil.seed.dto.UserEditParam;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -22,12 +22,12 @@ public interface UserConverter {
     UserDetailDto toDto(User user);
 
     @Mapping(target = "passwdHash", source = "password")
-    User toEntity(UserAddDto info);
+    User toEntity(UserAddParam info);
 
     @Mappings({
             @Mapping(target = "userId", source = "uid")
     })
-    User toEntity(UserEditDto info);
+    User toEntity(UserEditParam info);
 
     @IterableMapping(qualifiedByName = "toDto")
     List<UserDetailDto> toDtoList(List<User> entities);

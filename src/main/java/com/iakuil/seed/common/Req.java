@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -42,7 +41,6 @@ public class Req<T> implements Flattenable {
             paramMap.put("pageSize", this.paging.getPageSize());
             paramMap.put("pageNum", this.paging.getPageNum());
         } else {
-            paramMap = new LinkedHashMap<>();
             paramMap.put("pageSize", 0); // zero means no paging
             paramMap.put("pageNum", 1);
         }
@@ -80,12 +78,12 @@ public class Req<T> implements Flattenable {
     public static class Sorting {
         @ApiModelProperty(name = "field", value = "排序字段")
         private String field;
-        @ApiModelProperty(name = "order", value = "排序方向", example = "DESC")
+        @ApiModelProperty(name = "order", value = "排序方向", example = "desc")
         private Direction order;
     }
 
     @Getter
-    enum Direction {
-        ASC, DESC;
+    public enum Direction {
+        asc, desc
     }
 }
