@@ -52,5 +52,5 @@ logging:
   level:
     root: DEBUG
     org.springframework.web: INFO
-    com.yodinfo.seed.dao: DEBUG
+    com.iakuil.seed.dao: DEBUG
   file: ./logs/spring-boot-seed.log

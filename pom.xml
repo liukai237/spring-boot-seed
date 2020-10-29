@@ -10,7 +10,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.yodinfo</groupId>
+    <groupId>com.iakuil</groupId>
     <artifactId>spring-boot-seed</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -31,7 +31,6 @@
         <jasypt-spring-boot-starter.version>2.1.2</jasypt-spring-boot-starter.version>
         <bcprov-jdk16.version>1.46</bcprov-jdk16.version>
         <json-path.version>2.4.0</json-path.version>
-        <hutool.version>5.4.6</hutool.version>
         <hashids.version>1.0.3</hashids.version>
         <aspectjweaver.version>1.9.6</aspectjweaver.version>
 
@@ -160,12 +159,6 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectjweaver.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>${hutool.version}</version>
         </dependency>
 
         <dependency>

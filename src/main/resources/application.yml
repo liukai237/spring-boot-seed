@@ -25,7 +25,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
 
 mybatis:
-  type-aliases-package: com.yodinfo.seed.domain
+  type-aliases-package: com.iakuil.seed.domain
   mapper-locations: classpath*:mapper/**/*.xml
   configuration:
     default-enum-type-handler: com.iakuil.seed.support.AutoEnumTypeHandler
@@ -49,7 +49,7 @@ logging:
   level:
     root: INFO
     org.springframework.web: INFO
-    com.yodinfo.seed.dao: DEBUG
+    com.iakuil.seed.dao: DEBUG
   file: ./logs/spring-boot-seed.log
 
 jasypt:

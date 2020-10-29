@@ -164,18 +164,24 @@ public class SomeQueryParam {
 
 e.g.
 ```java
-public Paged<UserDto> findUserPageInteger pageNum, Integer pageSize) {
-    PageHelper.startPage(pageNum, pageSize, "UPDATETIME DESC");
+public Paged<UserDto> findUserWithPage(Integer pageNum, Integer pageSize) {
+    PageHelper.startPage(pageNum, pageSize, "update_time desc");
     return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
 }
 ```
 > 除此之外还提供了一个`@StartPage`注解，简单替代`PageHelper.startPage()`，不再需要重复输入参数。
 > ```java
->   @StartPage(orderBy = "subscribeTime desc")
->   public Paged<WxUserInfo> findWithPage(Integer pageNum, Integer pageSize) {
->     return new Paged<>(wxUserInfoMapper.selectAll());
+>   @StartPage(pageNum = 1, pageSize = 10)
+>   public List<String> autoComplate(String keyword) {
+>     return fooMapper.selectByKeyword(keyword));
+>   }
+> 
+>   @StartPage(orderBy = "create_time desc")
+>   public Paged<UserInfo> findWithPage(Integer pageNum, Integer pageSize) {
+>     return new Paged<>(userInfoMapper.selectAll());
 >   }
 > ```
+> 注意：注解中的属性是默认值，优先级低于参数列表中的值。
 >
 
 ### 7. 枚举处理
