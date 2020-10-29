@@ -202,11 +202,17 @@ public Paged<UserDto> findUserWithPage(Integer pageNum, Integer pageSize) {
 提供DefaultGenId和UuidGenId两种主键生成策略。前者是可排序的数字，后者是UUID。
 比如，Entity ID字段增加注解`@KeySql(genId = DefaultGenId.class)`即可实现全局唯一ID。
 
-主键自增
+e.g.
 ```java
-@Id
-@KeySql(useGeneratedKeys = true)
-private Long id;
+@Data
+@Table(name = "t_user")
+public class User extends BaseDomain {
+
+    @Id
+    @KeySql(genId = DefaultGenId.class)
+    private Long userId;
+    private String username;
+}
 ```
 
 ### 枚举、对象映射

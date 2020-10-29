@@ -1,5 +1,6 @@
 package com.iakuil.seed.domain;
 
+import com.iakuil.seed.common.BaseDomain;
 import com.iakuil.seed.constant.Gender;
 import com.iakuil.seed.constant.Province;
 import com.iakuil.seed.support.DefaultGenId;
@@ -11,7 +12,6 @@ import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -20,7 +20,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "t_user")
-public class User implements Serializable {
+public class User extends BaseDomain {
 
     @Id
     @KeySql(genId = DefaultGenId.class)
