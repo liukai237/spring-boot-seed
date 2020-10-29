@@ -1,6 +1,7 @@
 package com.iakuil.seed.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.iakuil.seed.support.Strings;
 import com.iakuil.seed.util.BeanMapUtils;
 import com.iakuil.seed.util.Flattenable;
 import io.swagger.annotations.ApiModel;
@@ -48,7 +49,7 @@ public class Req<T> implements Flattenable {
 
         if (this.sorting != null) {
             paramMap.put("orderBy", Arrays.stream(sorting)
-                    .map(item -> item.getField() + " " + item.getOrder().toString())
+                    .map(item -> Strings.toUnderlineCase(item.getField()) + " " + item.getOrder().toString())
                     .collect(Collectors.joining()));
         }
 

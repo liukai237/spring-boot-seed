@@ -25,6 +25,10 @@ public class SortingParamResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         Object sortObj = nativeWebRequest.getParameterMap().getOrDefault(Constant.DEFAULT_SORT_FIELD, ArrayUtils.EMPTY_STRING_ARRAY);
-        return Strings.parseOrderBy(((String[]) sortObj)[0]);
+        String sort = null;
+        if (sortObj != null) {
+            sort = Strings.parseOrderBy(Strings.toUnderlineCase(((String[]) sortObj)[0]));
+        }
+        return sort;
     }
 }

@@ -1,9 +1,9 @@
 package com.iakuil.seed.service;
 
-import com.github.pagehelper.PageHelper;
 import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.dao.WxUserInfoMapper;
 import com.iakuil.seed.domain.WxUserInfo;
+import com.iakuil.seed.support.StartPage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +26,8 @@ public class WechatService {
         return wxUserInfoMapper.selectAll();
     }
 
+    @StartPage(orderBy = "subscribeTime desc")
     public Paged<WxUserInfo> findWithPage(Integer pageNum, Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize, "subscribeTime desc");
         return new Paged<>(wxUserInfoMapper.selectAll());
     }
 }

@@ -113,14 +113,14 @@ public class Student {
     "createTime": "2019-07-10 13:40:06"
 }
 ```
-需要注意的是：JSON序列化时，@DateTimeForma注解换成了@JsonFormat。
+需要注意的是：JSON序列化时，@DateTimeFormat注解换成了@JsonFormat。
 > BTW，id字段可能会有精度丢失，因此需要加上注解`@JsonSerialize(using = ToStringSerializer.class)`。
 
 ### 4. 开始日期和结束日期
 时间范围参数可以还可以使用自定义注释@StartDate和@EndDate，前者精确到00:00:00:000，后者精确到23:59:59:999。  
 比如：
 ```java
-@ApiModel(value = "SomeQueryParam", description = "债券查询参数")
+@ApiModel(value = "SomeQueryParam", description = "查询参数")
 public class SomeQueryParam {
     @StartDate
     @ApiModelProperty(name = "startDate", value = "开始日期，自动补齐00:00:00", example = "2019-02-21")
@@ -142,19 +142,20 @@ public class SomeQueryParam {
 * RESTful风格参数，支持a+b-c+和+a,-b,+c两种格式
 > e.g.
 > ```jshelllanguage
->  curl http://localhost:8080/users?sort=+create_time,-id
+>  curl http://localhost:8080/users?sort=+createTime,-id
 > ```
 * Request Body方式，传入数组，支持多重排序
 > ```json 
 > {
 >   “sorting”: [
 >     {
->       "field": "create_time",
+>       "field": "createTime",
 >       "order": "DESC"
 >     }
 >   ]
 > }
 > ```
+> 注意：对于数据库表不存在的字段，需要在Service层，或者SQL语句中单独处理。
 
 ### 6. 分页工具
 * 分页参数`pageNum`和`pageSize`，pageSize默认为`0`，即不分页。
@@ -168,6 +169,14 @@ public Paged<UserDto> findUserPageInteger pageNum, Integer pageSize) {
     return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
 }
 ```
+> 除此之外还提供了一个`@StartPage`注解，简单替代`PageHelper.startPage()`，不再需要重复输入参数。
+> ```java
+>   @StartPage(orderBy = "subscribeTime desc")
+>   public Paged<WxUserInfo> findWithPage(Integer pageNum, Integer pageSize) {
+>     return new Paged<>(wxUserInfoMapper.selectAll());
+>   }
+> ```
+>
 
 ### 7. 枚举处理
 枚举类一般继承`LabelEnum`，实现数字和枚举对象的映射。URL参数和JSON字段均支持，建议作为JSON参数使用。
@@ -184,7 +193,15 @@ public Paged<UserDto> findUserPageInteger pageNum, Integer pageSize) {
 
 ## 0x03 DAO层开发约定
 ### 主键生成策略
-Entity ID字段增加注解`@KeySql(genId = DefaultGenId.class)`即可实现全局唯一ID。
+提供DefaultGenId和UuidGenId两种主键生成策略。前者是可排序的数字，后者是UUID。
+比如，Entity ID字段增加注解`@KeySql(genId = DefaultGenId.class)`即可实现全局唯一ID。
+
+主键自增
+```java
+@Id
+@KeySql(useGeneratedKeys = true)
+private Long id;
+```
 
 ### 枚举、对象映射
 * 枚举类型实现CodeEnum，即可自动完成Integer与Enum对象之间的映射。
@@ -223,4 +240,5 @@ private Foo foo;
 ### Code Review
 * 代码评审前应该先进行静态代码检查，不要把时间和精力浪费在低级缺陷上。
 * 原则上所有Controller层暴露的API接口和MyBatis XML中的SQL语句都应该进行评审。
+
 --- END ---

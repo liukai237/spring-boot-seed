@@ -1,5 +1,6 @@
 package com.iakuil.seed.web;
 
+import cn.hutool.core.util.StrUtil;
 import com.iakuil.seed.common.BaseController;
 import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.common.Req;
@@ -38,12 +39,12 @@ public class UserController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1", dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "pageSize", value = "每页显示数量", defaultValue = "0", dataType = "Long", paramType = "query"),
-            @ApiImplicitParam(name = "sort", value = "排序规则", defaultValue = "create_time-", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "sort", value = "排序规则", defaultValue = "createTime-", dataType = "string", paramType = "query"),
     })
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<Paged<UserDetailDto>> queryUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
                                                  @RequestParam(required = false, defaultValue = "0") Integer pageSize,
-                                                 @RequestParam(required = false, defaultValue = "create_time-") String sort) {
+                                                 @RequestParam(required = false, defaultValue = "createTime-") String sort) {
         return ok(userService.findWithPage(pageNum, pageSize, sort));
     }
 

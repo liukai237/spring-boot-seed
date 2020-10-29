@@ -31,7 +31,9 @@
         <jasypt-spring-boot-starter.version>2.1.2</jasypt-spring-boot-starter.version>
         <bcprov-jdk16.version>1.46</bcprov-jdk16.version>
         <json-path.version>2.4.0</json-path.version>
+        <hutool.version>5.4.6</hutool.version>
         <hashids.version>1.0.3</hashids.version>
+        <aspectjweaver.version>1.9.6</aspectjweaver.version>
 
         <mysql-connector-java.version>8.0.22</mysql-connector-java.version>
         <HikariCP.version>3.4.5</HikariCP.version>
@@ -152,6 +154,18 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectjweaver.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
         </dependency>
 
         <dependency>
