@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 字典表接口
- * 演示原生SpringMVC + 原生MyBatis XML
+ * <p>演示原生SpringMVC + 原生MyBatis XML</p>
  */
 @Controller
 @RequestMapping("/api/dict")

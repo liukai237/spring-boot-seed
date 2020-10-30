@@ -1,5 +1,6 @@
 package com.iakuil.seed.service;
 
+import com.github.pagehelper.PageHelper;
 import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.dao.DictMapper;
 import com.iakuil.seed.entity.Dict;
@@ -28,6 +29,7 @@ public class DictService {
     }
 
     public Paged<Dict> listWithPage(Map<String, Object> param) {
+        PageHelper.startPage(param);
         return new Paged<>(dictMapper.list(param));
     }
 

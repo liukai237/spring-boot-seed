@@ -1,5 +1,7 @@
 package com.iakuil.seed.entity;
 
+import com.iakuil.seed.common.BaseDomain;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -8,7 +10,7 @@ import java.util.Date;
 /**
  * 数据字典
  */
-public class Dict implements Serializable {
+public class Dict extends BaseDomain {
 	private static final long serialVersionUID = 1L;
 	
 	//编号

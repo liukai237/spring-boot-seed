@@ -1,10 +1,10 @@
 package com.iakuil.seed.entity;
 
+import com.iakuil.seed.common.BaseDomain;
 import lombok.*;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "t_role")
-public class Role implements Serializable {
+public class Role extends BaseDomain {
     @Id
     private Long roleId;
     private String roleName;

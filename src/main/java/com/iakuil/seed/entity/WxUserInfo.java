@@ -1,5 +1,6 @@
 package com.iakuil.seed.entity;
 
+import com.iakuil.seed.common.BaseDomain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -21,7 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "t_userinfo")
-public class WxUserInfo implements Serializable {
+public class WxUserInfo extends BaseDomain {
     private Integer subscribe; // 0 means no
     @Id
     @Column(name = "openid")

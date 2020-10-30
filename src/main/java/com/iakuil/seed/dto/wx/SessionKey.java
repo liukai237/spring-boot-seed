@@ -1,16 +1,15 @@
 package com.iakuil.seed.dto.wx;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.iakuil.seed.common.BaseDomain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.io.Serializable;
-
 @Getter
 @Setter
 @ToString
-public class SessionKey implements Serializable {
+public class SessionKey extends BaseDomain {
     @JsonProperty("openid")
     private String openId;
     @JsonProperty("session_key")

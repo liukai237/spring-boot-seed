@@ -1,9 +1,9 @@
 package com.iakuil.seed.entity;
 
 import com.iakuil.seed.common.BaseDomain;
+import com.iakuil.seed.common.db.DefaultGenId;
 import com.iakuil.seed.constant.Gender;
 import com.iakuil.seed.constant.Province;
-import com.iakuil.seed.common.db.DefaultGenId;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
