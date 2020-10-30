@@ -12,10 +12,6 @@ public abstract class BaseController {
         return ok(null);
     }
 
-    public <T> Resp<T> ok(boolean result) {
-        return done(result);
-    }
-
     public <T> Resp<T> ok(T data) {
         return new Resp<>(RespCode.SUCCESS.getCode(), RespCode.SUCCESS.getMessage(), data);
     }

@@ -168,9 +168,9 @@ public class SomeQueryParam {
 > 注意：对于数据库表不存在的字段，需要在Service层，或者SQL语句中单独处理。
 
 ### 6. 分页工具
-* 分页参数`pageNum`和`pageSize`，pageSize默认为`0`，即不分页。
+* 分页参数`pageNum`和`pageSize`，pageSize范围为0到500。
 * 使用PageHelper作为默认分页插件，自定义的`Paged`作为分页结果容器。
-* 关于Converter转换器，除分页场景，应该只在Controller层使用。
+* 关于Converter转换器，除分页场景，尽量只在Controller层使用。
 
 e.g.
 ```java
@@ -179,20 +179,22 @@ public Paged<UserDto> findUserWithPage(Integer pageNum, Integer pageSize) {
     return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
 }
 ```
-> 除此之外还提供了一个`@StartPage`注解，简单替代`PageHelper.startPage()`，不再需要重复输入参数。
-> ```java
->   @StartPage(pageNum = 1, pageSize = 10)
->   public List<String> autoComplate(String keyword) {
->     return fooMapper.selectByKeyword(keyword));
->   }
-> 
->   @StartPage(orderBy = "create_time desc")
->   public Paged<UserInfo> findWithPage(Integer pageNum, Integer pageSize) {
->     return new Paged<>(userInfoMapper.selectAll());
->   }
-> ```
-> 注意：注解中的属性是默认值，优先级低于参数列表中的值。单次查询最大返回数量为500。
->
+除此之外还提供了一个`@StartPage`注解，替代`PageHelper.startPage()`。一般情况下优先选用注解方式，除非业务特别复杂，需要在多次查询中插入分页查询，才使用原生的分页。
+```java
+  @StartPage(pageNum = 1, pageSize = 10)
+  public List<String> autoComplate(String keyword) {
+    return fooMapper.selectByKeyword(keyword));
+  }
+
+  @StartPage(orderBy = "create_time desc")
+  public Paged<UserInfo> findWithPage(Integer pageNum, Integer pageSize) {
+    return new Paged<>(userInfoMapper.selectAll());
+  }
+```
+> 注意：
+> * 注解中的属性是默认值，优先级低于参数列表中的值。
+> * 注解中的orderBy属性一旦生效，则XML Mapper中排序语句将会被覆盖。
+> * 单次查询最大返回数量为500。
 
 ### 7. 枚举处理
 * 枚举类一般继承`CodeEnum`，前端看到的是`code`和`desc`描述字段，其中code是小写的枚举name，而不是数据库中真实的code字段；

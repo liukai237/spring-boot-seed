@@ -11,8 +11,7 @@ import java.util.Date;
  * 数据字典
  */
 public class Dict extends BaseDomain {
-	private static final long serialVersionUID = 1L;
-	
+
 	//编号
 	private Long id;
 	//标签名
