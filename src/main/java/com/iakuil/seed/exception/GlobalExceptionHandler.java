@@ -1,5 +1,6 @@
 package com.iakuil.seed.exception;
 
+import com.iakuil.seed.annotation.ErrorCode;
 import com.iakuil.seed.constant.RespCode;
 import com.iakuil.seed.common.Resp;
 import lombok.extern.slf4j.Slf4j;

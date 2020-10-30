@@ -1,6 +1,6 @@
 package com.iakuil.seed.service;
 
-import com.iakuil.seed.constant.Constant;
+import com.iakuil.seed.constant.SysConstant;
 import com.iakuil.seed.dao.MpUserInfoMapper;
 import com.iakuil.seed.domain.MpUserInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class MpUserInfoService {
         String openId = newRecord.getOpenId();
         MpUserInfo dbRecord = mpUserInfoMapper.selectByPrimaryKey(openId);
         if (dbRecord == null) {
-            newRecord.setSource(Constant.DEFAULT_INDEX);
+            newRecord.setSource(SysConstant.DEFAULT_INDEX);
             return mpUserInfoMapper.insert(newRecord) > 0;
         } else {
             return mpUserInfoMapper.updateByPrimaryKeySelective(newRecord) > 0;

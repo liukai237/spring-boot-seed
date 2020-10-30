@@ -3,7 +3,7 @@ package com.iakuil.seed.service;
 import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.dao.WxUserInfoMapper;
 import com.iakuil.seed.domain.WxUserInfo;
-import com.iakuil.seed.support.StartPage;
+import com.iakuil.seed.annotation.StartPage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

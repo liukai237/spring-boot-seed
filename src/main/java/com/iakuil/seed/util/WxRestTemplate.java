@@ -1,6 +1,7 @@
 package com.iakuil.seed.util;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.iakuil.seed.common.tool.JsonUtils;
 import com.iakuil.seed.exception.BusinessException;
 import lombok.Getter;
 import lombok.Setter;

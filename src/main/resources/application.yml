@@ -30,7 +30,7 @@ mybatis:
   type-aliases-package: com.iakuil.seed.domain
   mapper-locations: classpath*:mapper/**/*.xml
   configuration:
-    default-enum-type-handler: com.iakuil.seed.support.AutoEnumTypeHandler
+    default-enum-type-handler: com.iakuil.seed.common.db.AutoEnumTypeHandler
 
 mapper:
   mappers: com.iakuil.seed.common.CrudMapper

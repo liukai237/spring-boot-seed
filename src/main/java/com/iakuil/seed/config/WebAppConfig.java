@@ -1,9 +1,9 @@
 package com.iakuil.seed.config;
 
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.iakuil.seed.support.DateParamResolver;
-import com.iakuil.seed.support.ResolverBeanPostProcessor;
-import com.iakuil.seed.support.SortingParamResolver;
+import com.iakuil.seed.common.http.DateParamResolver;
+import com.iakuil.seed.common.http.ResolverBeanPostProcessor;
+import com.iakuil.seed.common.http.SortingParamResolver;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

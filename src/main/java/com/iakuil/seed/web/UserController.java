@@ -2,8 +2,8 @@ package com.iakuil.seed.web;
 
 import com.iakuil.seed.common.BaseController;
 import com.iakuil.seed.common.Paged;
-import com.iakuil.seed.common.Req;
 import com.iakuil.seed.common.Resp;
+import com.iakuil.seed.common.tool.Req;
 import com.iakuil.seed.converter.UserConverter;
 import com.iakuil.seed.domain.User;
 import com.iakuil.seed.dto.UserAddParam;

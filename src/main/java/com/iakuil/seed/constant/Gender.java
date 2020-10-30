@@ -1,6 +1,6 @@
 package com.iakuil.seed.constant;
 
-import com.iakuil.seed.support.CodeEnum;
+import com.iakuil.seed.common.CodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

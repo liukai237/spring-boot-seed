@@ -1,5 +1,6 @@
 package com.iakuil.seed.util;
 
+import com.iakuil.seed.common.tool.JsonUtils;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;

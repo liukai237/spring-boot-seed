@@ -2,7 +2,7 @@ package com.iakuil.seed.config;
 
 import com.dangdang.ddframe.rdb.sharding.id.generator.IdGenerator;
 import com.dangdang.ddframe.rdb.sharding.id.generator.self.CommonSelfIdGenerator;
-import com.iakuil.seed.support.AutoColumnFillInterceptor;
+import com.iakuil.seed.common.db.AutoColumnFillInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
