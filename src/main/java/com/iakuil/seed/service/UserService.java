@@ -5,7 +5,7 @@ import com.google.common.collect.Sets;
 import com.iakuil.seed.converter.UserConverter;
 import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.dao.*;
-import com.iakuil.seed.domain.*;
+import com.iakuil.seed.entity.*;
 import com.iakuil.seed.dto.UserDetailDto;
 import com.iakuil.seed.annotation.StartPage;
 import com.iakuil.seed.util.HashIdUtils;

@@ -1,4 +1,4 @@
-package com.iakuil.seed.domain;
+package com.iakuil.seed.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

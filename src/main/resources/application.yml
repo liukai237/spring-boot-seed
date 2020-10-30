@@ -27,7 +27,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
 
 mybatis:
-  type-aliases-package: com.iakuil.seed.domain
+  type-aliases-package: com.iakuil.seed.entity
   mapper-locations: classpath*:mapper/**/*.xml
   configuration:
     default-enum-type-handler: com.iakuil.seed.common.db.AutoEnumTypeHandler

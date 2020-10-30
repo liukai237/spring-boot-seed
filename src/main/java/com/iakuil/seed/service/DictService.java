@@ -2,12 +2,11 @@ package com.iakuil.seed.service;
 
 import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.dao.DictMapper;
-import com.iakuil.seed.domain.Dict;
+import com.iakuil.seed.entity.Dict;
 import com.iakuil.seed.util.MapBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

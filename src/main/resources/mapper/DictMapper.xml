@@ -3,13 +3,13 @@
 
 <mapper namespace="com.iakuil.seed.dao.DictMapper">
 
-	<select id="get" resultType="com.iakuil.seed.domain.Dict">
+	<select id="get" resultType="com.iakuil.seed.entity.Dict">
 		select
 		`id`,`name`,`value`,`type`,`description`,`sort`,`parent_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`
 		from sys_dict where id = #{value}
 	</select>
 
-	<select id="list" resultType="com.iakuil.seed.domain.Dict">
+	<select id="list" resultType="com.iakuil.seed.entity.Dict">
 		select
 		`id`,`name`,`value`,`type`,`description`,`sort`,`parent_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`
 		from sys_dict
@@ -60,7 +60,7 @@
 		</where>
 	</select>
 
-	<insert id="save" parameterType="com.iakuil.seed.domain.Dict"
+	<insert id="save" parameterType="com.iakuil.seed.entity.Dict"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into sys_dict
 		(
@@ -94,7 +94,7 @@
 		)
 	</insert>
 
-	<update id="update" parameterType="com.iakuil.seed.domain.Dict">
+	<update id="update" parameterType="com.iakuil.seed.entity.Dict">
 		update sys_dict
 		<set>
 			<if test="name != null">`name` = #{name}, </if>
@@ -125,7 +125,7 @@
 		</foreach>
 	</delete>
 
-	<select id="listType" resultType="com.iakuil.seed.domain.Dict">
+	<select id="listType" resultType="com.iakuil.seed.entity.Dict">
 		select distinct `type` , description from sys_dict
 	</select>
 

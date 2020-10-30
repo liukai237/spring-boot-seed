@@ -32,7 +32,7 @@
 * 业务与SQL分离，不推荐任何~~Criteria~~风格的高级语法糖。
 
 ## 0x01 Controller层开发约定
-Controller层应该越“薄”越好，主要用于DTO/Domain转换，提供详细的Swagger文档，并使用MockMvc进行单元测试。
+Controller层应该越“薄”越好，主要用于DTO/Entity转换，提供详细的Swagger文档，并使用MockMvc进行单元测试。
 
 ### 1. 统一封装的响应结果
 * 返回Http Status统一为200。

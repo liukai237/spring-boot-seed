@@ -1,6 +1,6 @@
 package com.iakuil.seed.converter;
 
-import com.iakuil.seed.domain.User;
+import com.iakuil.seed.entity.User;
 import com.iakuil.seed.dto.UserAddParam;
 import com.iakuil.seed.dto.UserDetailDto;
 import com.iakuil.seed.dto.UserEditParam;

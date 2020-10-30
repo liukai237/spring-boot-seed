@@ -2,7 +2,7 @@
 		<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.iakuil.seed.dao.UserMapper">
 
-	<select id="selectByCondition" resultType="com.iakuil.seed.domain.User" parameterType="map">
+	<select id="selectByCondition" resultType="com.iakuil.seed.entity.User" parameterType="map">
 		select
 		  user_id, username, gender, birthday, passwd_hash, tel, avatar, province, nickname, email, address, create_time, update_time
 		from t_user
@@ -18,7 +18,7 @@
 		</where>
 	</select>
 
-	<select id="selectByIdentity" resultType="com.iakuil.seed.domain.User" parameterType="string">
+	<select id="selectByIdentity" resultType="com.iakuil.seed.entity.User" parameterType="string">
 		select * from t_user where userId = #{identity} || username = #{identity} || tel = #{identity} || email = #{identity}
 	</select>
 </mapper>

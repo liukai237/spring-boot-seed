@@ -1,10 +1,10 @@
 package com.iakuil.seed.web;
 
 import com.iakuil.seed.common.BaseController;
-import com.iakuil.seed.domain.Dict;
+import com.iakuil.seed.entity.Dict;
 import com.iakuil.seed.service.DictService;
 import com.iakuil.seed.common.Paged;
-import com.iakuil.seed.common.tool.Req;
+import com.iakuil.seed.common.Req;
 import com.iakuil.seed.common.Resp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

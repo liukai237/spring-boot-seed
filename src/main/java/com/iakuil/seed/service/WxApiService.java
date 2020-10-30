@@ -8,7 +8,7 @@ import com.iakuil.seed.common.tool.JsonUtils;
 import com.iakuil.seed.constant.RedisConstant;
 import com.iakuil.seed.constant.WxConstant;
 import com.iakuil.seed.converter.MpUserInfoConverter;
-import com.iakuil.seed.domain.MpUserInfo;
+import com.iakuil.seed.entity.MpUserInfo;
 import com.iakuil.seed.dto.DecryptDataParam;
 import com.iakuil.seed.util.CryptoDecrypt;
 import com.iakuil.seed.util.WxRestTemplate;

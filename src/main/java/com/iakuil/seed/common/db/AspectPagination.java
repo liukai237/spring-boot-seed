@@ -1,9 +1,10 @@
 package com.iakuil.seed.common.db;
 
 import com.github.pagehelper.PageHelper;
-import com.iakuil.seed.common.BaseDomain;
 import com.iakuil.seed.annotation.StartPage;
+import com.iakuil.seed.common.BaseDomain;
 import com.iakuil.seed.common.tool.BeanMapUtils;
+import com.iakuil.seed.constant.SysConstant;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -46,32 +47,32 @@ public class AspectPagination {
 
             if (value instanceof Map || value instanceof BaseDomain) {
                 Map<String, Object> map = value instanceof BaseDomain ? BeanMapUtils.beanToMap(value) : (Map) value;
-                Integer pn = MapUtils.getInteger(map, "pageNum");
+                Integer pn = MapUtils.getInteger(map, SysConstant.DEFAULT_PAGE_NUM_FIELD);
                 if (pn != null) {
                     pageNum = pn;
                 }
-                Integer ps = MapUtils.getInteger(map, "pageSize");
+                Integer ps = MapUtils.getInteger(map, SysConstant.DEFAULT_PAGE_SIZE_FIELD);
                 if (ps != null) {
                     pageSize = ps;
                 }
-                String ob = MapUtils.getString(map, "orderBy", MapUtils.getString(map, "sort"));
+                String ob = MapUtils.getString(map, SysConstant.DEFAULT_ORDER_FIELD, MapUtils.getString(map, SysConstant.DEFAULT_SORT_FIELD));
                 if (StringUtils.isNoneBlank(ob)) {
                     orderBy = ob;
                 }
                 continue;
             }
 
-            if (value instanceof Integer && "pageNum".equals(name)) {
+            if (value instanceof Integer && SysConstant.DEFAULT_PAGE_NUM_FIELD.equals(name)) {
                 pageNum = (Integer) value;
                 continue;
             }
 
-            if (value instanceof Integer && "pageSize".equals(name)) {
+            if (value instanceof Integer && SysConstant.DEFAULT_PAGE_SIZE_FIELD.equals(name)) {
                 pageSize = (Integer) value;
                 continue;
             }
 
-            if (value instanceof String && ("orderBy".equals(name) || "sort".equals(name))) {
+            if (value instanceof String && (SysConstant.DEFAULT_ORDER_FIELD.equals(name) || SysConstant.DEFAULT_SORT_FIELD.equals(name))) {
                 orderBy = (String) value;
             }
         }

@@ -1,6 +1,6 @@
 package com.iakuil.seed.dao;
 
-import com.iakuil.seed.domain.Dict;
+import com.iakuil.seed.entity.Dict;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

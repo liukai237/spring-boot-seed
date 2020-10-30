@@ -1,4 +1,4 @@
-package com.iakuil.seed.domain;
+package com.iakuil.seed.entity;
 
 import lombok.*;
 
@@ -12,10 +12,10 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "t_role")
-public class Role implements Serializable {
-    @Id
+@Table(name = "t_role_power")
+public class RolePower implements Serializable {
     private Long roleId;
-    private String roleName;
+    @Id
+    private Long powerId;
     private Date createTime;
 }

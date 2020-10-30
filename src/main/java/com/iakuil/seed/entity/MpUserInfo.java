@@ -1,4 +1,4 @@
-package com.iakuil.seed.domain;
+package com.iakuil.seed.entity;
 
 import com.iakuil.seed.common.BaseDomain;
 import lombok.Getter;

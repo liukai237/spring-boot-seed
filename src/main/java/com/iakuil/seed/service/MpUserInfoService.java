@@ -2,7 +2,7 @@ package com.iakuil.seed.service;
 
 import com.iakuil.seed.constant.SysConstant;
 import com.iakuil.seed.dao.MpUserInfoMapper;
-import com.iakuil.seed.domain.MpUserInfo;
+import com.iakuil.seed.entity.MpUserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

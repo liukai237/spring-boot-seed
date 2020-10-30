@@ -1,4 +1,4 @@
-package com.iakuil.seed.common.tool;
+package com.iakuil.seed.legacy;
 
 import com.iakuil.seed.common.CodeEnum;
 import org.springframework.core.convert.converter.Converter;

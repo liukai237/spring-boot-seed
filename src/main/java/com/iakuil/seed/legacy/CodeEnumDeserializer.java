@@ -1,4 +1,4 @@
-package com.iakuil.seed.common.tool;
+package com.iakuil.seed.legacy;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

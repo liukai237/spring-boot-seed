@@ -6,6 +6,10 @@ import com.iakuil.seed.common.http.StartDateDeserializer;
 
 import java.lang.annotation.*;
 
+/**
+ * 开始时间时间
+ * <p>精确到00:00:00:000</p>
+ */
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

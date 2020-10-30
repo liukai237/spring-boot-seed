@@ -1,6 +1,6 @@
 package com.iakuil.seed.dao;
 
-import com.iakuil.seed.domain.RolePower;
+import com.iakuil.seed.entity.RolePower;
 import com.iakuil.seed.common.CrudMapper;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Mapper;
