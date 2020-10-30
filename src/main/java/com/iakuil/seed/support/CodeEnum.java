@@ -1,5 +1,7 @@
 package com.iakuil.seed.support;
 
-public interface CodeEnum extends LabelEnum {
+public interface CodeEnum{
     Integer getCode();
+
+    String getDesc();
 }

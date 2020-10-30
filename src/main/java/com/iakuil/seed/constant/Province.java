@@ -48,7 +48,7 @@ public enum Province implements CodeEnum {
     QT(999999, "其他", "其他");
 
     private Integer code;
-    private String label;
+    private String desc;
     private String fullName;
 
     private static final Map<Integer, Province> LOOKUP = Maps.uniqueIndex(

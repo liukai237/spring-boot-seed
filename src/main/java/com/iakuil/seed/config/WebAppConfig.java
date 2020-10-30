@@ -1,12 +1,12 @@
 package com.iakuil.seed.config;
 
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.iakuil.seed.support.DateParamResolver;
-import com.iakuil.seed.support.LabelEnumConvertFactory;
 import com.iakuil.seed.support.ResolverBeanPostProcessor;
 import com.iakuil.seed.support.SortingParamResolver;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -25,12 +25,11 @@ public class WebAppConfig implements WebMvcConfigurer {
                 .maxAge(3600 * 24);
     }
 
-    /**
-     * Request Query处理
-     */
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addConverterFactory(new LabelEnumConvertFactory()); // 字符串转枚举支持
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer builderCustomizer() {
+        return builder -> {
+            builder.serializerByType(Long.class, ToStringSerializer.instance);
+        };
     }
 
     @Bean

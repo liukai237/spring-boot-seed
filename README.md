@@ -96,7 +96,6 @@ Response ：2020-02-21 00:00:00
 ```java
 @Data
 public class Student {
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -113,8 +112,8 @@ public class Student {
     "createTime": "2019-07-10 13:40:06"
 }
 ```
-需要注意的是：JSON序列化时，@DateTimeFormat注解换成了@JsonFormat。
-> BTW，id字段可能会有精度丢失，因此需要加上注解`@JsonSerialize(using = ToStringSerializer.class)`。
+注意：JSON序列化时，@DateTimeFormat注解换成了@JsonFormat。
+> BTW，id字段是Long类型，可能存在精度丢失，因此全局转为字符串。
 
 ### 4. 开始日期和结束日期
 时间范围参数可以还可以使用自定义注释@StartDate和@EndDate，前者精确到00:00:00:000，后者精确到23:59:59:999。  
@@ -150,7 +149,7 @@ public class SomeQueryParam {
 >   “sorting”: [
 >     {
 >       "field": "createTime",
->       "order": "DESC"
+>       "order": "desc"
 >     }
 >   ]
 > }
@@ -160,7 +159,7 @@ public class SomeQueryParam {
 ### 6. 分页工具
 * 分页参数`pageNum`和`pageSize`，pageSize默认为`0`，即不分页。
 * 使用PageHelper作为默认分页插件，自定义的`Paged`作为分页结果容器。
-* 分页场景可以使用Converter转换器，其他情况应该在Controller层使用。
+* 关于Converter转换器，除分页场景，应该只在Controller层使用。
 
 e.g.
 ```java
@@ -185,7 +184,8 @@ public Paged<UserDto> findUserWithPage(Integer pageNum, Integer pageSize) {
 >
 
 ### 7. 枚举处理
-枚举类一般继承`LabelEnum`，实现数字和枚举对象的映射。URL参数和JSON字段均支持，建议作为JSON参数使用。
+* 枚举类一般继承`CodeEnum`，前端看到的是`code`和`desc`描述字段，其中code是小写的枚举name，而不是数据库中真实的code字段；
+* 接口调用时，使用`code`（不区分大小写）即可反序列化成对应枚举。
 
 ### 8. 其他
 * 当参数名为复数时，值为数组。参数值为null或者不传表示***全部***，不要使用空字符串或者`ALL`。
@@ -217,7 +217,7 @@ public class User extends BaseDomain {
 
 ### 枚举、对象映射
 * 枚举类型实现CodeEnum，即可自动完成Integer与Enum对象之间的映射。
-> 可参考`Gender.java`
+> 可参考`Gender.java`实现。注意：API接口传递的code是枚举的name（不区分大小写），而不是数据库中真实的code字段。
 
 * JSON字段对应的Java对象需要手动创建，并继承实现`AbstractJsonTypeHandler`，例如：
 ```java

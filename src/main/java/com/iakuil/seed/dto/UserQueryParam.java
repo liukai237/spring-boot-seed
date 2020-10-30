@@ -14,7 +14,6 @@ import lombok.Setter;
 public class UserQueryParam {
 
     @ApiModelProperty(name = "uid", value = "用户ID")
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long uid;
 
     @ApiModelProperty(name = "tel", value = "手机号码。", example = "13400000000")

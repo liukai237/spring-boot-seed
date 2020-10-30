@@ -23,7 +23,6 @@ public class UserEditParam {
 
     @NotNull(message = "用户ID不能为空！")
     @ApiModelProperty(name = "uid", value = "用户ID")
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long uid;
 
     @ApiModelProperty(name = "tel", value = "手机号码。", example = "13400000000")

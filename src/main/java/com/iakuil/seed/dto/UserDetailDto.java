@@ -1,8 +1,6 @@
 package com.iakuil.seed.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.iakuil.seed.constant.Gender;
 import com.iakuil.seed.constant.Province;
 import io.swagger.annotations.ApiModel;
@@ -18,7 +16,6 @@ import java.util.Date;
 public class UserDetailDto {
 
     @ApiModelProperty(name = "uid", value = "用户ID")
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long uid;
 
     @ApiModelProperty(name = "tel", value = "手机号码。", example = "13400000000")
