@@ -16,11 +16,20 @@
 |Page Helper|5.1.8|https://github.com/pagehelper/pagehelper-spring-boot||
 |Sharding-JDBC|4.1.1|https://shardingsphere.apache.org/||
 
+## 附加功能
+除了传统SSM框架提供的特性外，还集成如下功能：
+* MBG代码生成器
+* ID发号器
+* 创建/修改时间自动填充
+* MySQL JSON/枚举字段映射
+* 分页排序和日期参数处理
+* 统一返回结果格式及异常处理
+
 # 《开发约定》
 ## 0x00 通用约定
 * 中心思想：约定重于配置；追求小而美，避免过度封装。
 * 编程风格基本遵守《阿里巴巴Java编程规约》，部分微调，比如数据库领域模型不需要加DO。
-* 业务与SQL分离，不推荐任何Criteria风格的高级语法糖。
+* 业务与SQL分离，不推荐任何~~Criteria~~风格的高级语法糖。
 
 ## 0x01 Controller层开发约定
 Controller层应该越“薄”越好，主要用于DTO/Domain转换，提供详细的Swagger文档，并使用MockMvc进行单元测试。
@@ -219,8 +228,8 @@ public class User extends BaseDomain {
 ```
 
 ### 枚举、对象映射
+* code字段应该设计成int类型，Java程序中映射成枚举，前端传递的是枚举的name（小写）和描述文字。
 * 枚举类型实现CodeEnum，即可自动完成Integer与Enum对象之间的映射。
-> 可参考`Gender.java`实现。注意：API接口传递的code是枚举的name（不区分大小写），而不是数据库中真实的code字段。
 
 * JSON字段对应的Java对象需要手动创建，并继承实现`AbstractJsonTypeHandler`，例如：
 ```java
@@ -259,7 +268,7 @@ private Foo foo;
 ## 0x05 写在最后
 * 此乃单机版本，并不适合直接改造成分布式。
 * 如果Controller和Service分开部署，Service层方法入参不应该是Map。
-* 安全框架和ID发号器后续再补上。
+* 安全框架后续再补上。
 * 为何不用MyBatis Plus？  
 ***生活不止眼前的苟且，接口不止简单的CRUD~~***
 

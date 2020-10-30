@@ -18,7 +18,7 @@ import java.util.Map;
  * <p>从参数列表、参数对象属性或者Map参数Key Set中获取分页排序参数。</p><br/>
  * <p>Service层方法添加{@code @StartPage}注解后，如果任意位置存在pageNum则自动分页，
  * 如果存在sort/orderBy则自动排序，重复出现则以最后一个值为准。</p><br/>
- * <p>BTW. 可以通过{@code @StartPage}注解指定分页排序默认值。</p>
+ * <p>BTW. 可以通过{@code @StartPage}注解指定分页和排序默认值。</p>
  */
 @Aspect
 @Component
