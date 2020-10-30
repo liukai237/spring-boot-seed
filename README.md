@@ -20,6 +20,7 @@
 ## 0x00 通用约定
 * 中心思想：约定重于配置；追求小而美，避免过度封装。
 * 编程风格基本遵守《阿里巴巴Java编程规约》，部分微调，比如数据库领域模型不需要加DO。
+* 业务与SQL分离，不推荐任何Criteria风格的高级语法糖。
 
 ## 0x01 Controller层开发约定
 Controller层应该越“薄”越好，主要用于DTO/Domain转换，提供详细的Swagger文档，并使用MockMvc进行单元测试。
@@ -154,6 +155,7 @@ public class SomeQueryParam {
 >   ]
 > }
 > ```
+* 排序字段统一使用驼峰风格，后端自动转换为下划线风格。
 > 注意：对于数据库表不存在的字段，需要在Service层，或者SQL语句中单独处理。
 
 ### 6. 分页工具
@@ -199,8 +201,9 @@ public Paged<UserDto> findUserWithPage(Integer pageNum, Integer pageSize) {
 
 ## 0x03 DAO层开发约定
 ### 主键生成策略
-提供DefaultGenId和UuidGenId两种主键生成策略。前者是可排序的数字，后者是UUID。
-比如，Entity ID字段增加注解`@KeySql(genId = DefaultGenId.class)`即可实现全局唯一ID。
+* ID尽量使用Long类型，反序列化成JSON时会自动转换为字符串。
+* 提供DefaultGenId和UuidGenId两种主键生成策略。前者是可排序的数字，后者是UUID。
+> 比如，Entity ID字段增加注解`@KeySql(genId = DefaultGenId.class)`即可实现全局唯一ID。
 
 e.g.
 ```java
@@ -242,7 +245,7 @@ private Foo foo;
 ## 0x04 其他开发约定
 
 ### 异常处理
-* Controller使用统一封装的ok()、fail()方法返回，而不是抛出异常。
+* Controller层使用统一封装的ok()、fail()方法返回，而不是抛出异常。
 * 所有Checked Exception使用`BusinessException`重新封装，统一处理。
 > 比如Service层返回错误消息：“用户名重复!”。
 
@@ -252,5 +255,12 @@ private Foo foo;
 ### Code Review
 * 代码评审前应该先进行静态代码检查，不要把时间和精力浪费在低级缺陷上。
 * 原则上所有Controller层暴露的API接口和MyBatis XML中的SQL语句都应该进行评审。
+
+## 0x05 写在最后
+* 此乃单机版本，并不适合直接改造成分布式。
+* 如果Controller和Service分开部署，Service层方法入参不应该是Map。
+* 安全框架和ID发号器后续再补上。
+* 为何不用MyBatis Plus？  
+***生活不止眼前的苟且，接口不止简单的CRUD~~***
 
 --- END ---
