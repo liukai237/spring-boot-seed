@@ -5,6 +5,7 @@ import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.common.Resp;
 import com.iakuil.seed.common.Req;
 import com.iakuil.seed.converter.UserConverter;
+import com.iakuil.seed.dao.UidSequenceMapper;
 import com.iakuil.seed.entity.User;
 import com.iakuil.seed.dto.UserAddParam;
 import com.iakuil.seed.dto.UserDetailDto;
@@ -59,7 +60,7 @@ public class UserController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody UserAddParam userInfo) {
         User entity = userConverter.toEntity(userInfo);
-        return ok(userService.add(entity));
+        return done(userService.add(entity));
     }
 
     @ApiOperation(value = "用户信息变更", notes = "修改用户信息")
@@ -96,5 +97,15 @@ public class UserController extends BaseController {
     @GetMapping(value = "/{uid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<UserDetailDto> queryUserDetails(@PathVariable Long uid) {
         return ok(userConverter.toDto(userService.findById(uid)));
+    }
+
+    @Resource
+    private UidSequenceMapper uidSequenceMapper;
+
+    @GetMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Resp<?> justInTest() {
+        UidSequenceMapper.UidSequence uidSequence = new UidSequenceMapper.UidSequence();
+        uidSequenceMapper.getUid(uidSequence);
+        return ok(uidSequence);
     }
 }

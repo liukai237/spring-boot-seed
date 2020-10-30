@@ -30,7 +30,7 @@ public class MpUserInfoService {
         return mpUserInfoMapper.selectOne(query);
     }
 
-    @StartPage(orderBy = "createTime desc")
+    @StartPage(orderBy = "create_time desc")
     public List<MpUserInfo> findByCondition(MpUserInfo condition) {
         return mpUserInfoMapper.select(condition);
     }

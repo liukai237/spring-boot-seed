@@ -11,6 +11,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.CodeSignature;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -27,7 +28,7 @@ import java.util.Map;
 public class AspectPagination {
     @Around(value = "execution(* com.iakuil.seed.service..*.*(..))")
     public Object aroundMethodWithParam(ProceedingJoinPoint pjd) throws Throwable {
-        StartPage sp = pjd.getClass().getAnnotation(StartPage.class);
+        StartPage sp = ((MethodSignature) pjd.getSignature()).getMethod().getAnnotation(StartPage.class);
         if (sp == null) {
             return pjd.proceed();
         }
@@ -63,28 +64,36 @@ public class AspectPagination {
             }
 
             if (value instanceof Integer && SysConstant.DEFAULT_PAGE_NUM_FIELD.equals(name)) {
-                pageNum = (Integer) value;
+                Integer pn = (Integer) value;
+                if (pn > 0) {
+                    pageNum = pn;
+                }
                 continue;
             }
 
             if (value instanceof Integer && SysConstant.DEFAULT_PAGE_SIZE_FIELD.equals(name)) {
-                pageSize = (Integer) value;
+                Integer ps = (Integer) value;
+                if (ps > 0) {
+                    pageSize = ps;
+                }
                 continue;
             }
 
             if (value instanceof String && (SysConstant.DEFAULT_ORDER_FIELD.equals(name) || SysConstant.DEFAULT_SORT_FIELD.equals(name))) {
-                orderBy = (String) value;
+                String ob = (String) value;
+                if (StringUtils.isNoneBlank(ob)) {
+                    orderBy = ob;
+                }
             }
         }
 
-        if (pageNum != 0) {
-            if (StringUtils.isNoneBlank(orderBy)) {
-                PageHelper.startPage(pageNum, pageSize, orderBy);
-            } else {
-                PageHelper.startPage(pageNum, pageSize);
-            }
+        // 限制单次查询最大返回数量
+        pageSize = (pageSize == 0 || pageSize > SysConstant.MAX_PAGE_SIZE) ? SysConstant.MAX_PAGE_SIZE : pageSize;
+        if (StringUtils.isNoneBlank(orderBy)) {
+            PageHelper.startPage(pageNum, pageSize, orderBy);
+        } else {
+            PageHelper.startPage(pageNum, pageSize);
         }
-
         return pjd.proceed();
     }
 }

@@ -191,7 +191,7 @@ public Paged<UserDto> findUserWithPage(Integer pageNum, Integer pageSize) {
 >     return new Paged<>(userInfoMapper.selectAll());
 >   }
 > ```
-> 注意：注解中的属性是默认值，优先级低于参数列表中的值。
+> 注意：注解中的属性是默认值，优先级低于参数列表中的值。单次查询最大返回数量为500。
 >
 
 ### 7. 枚举处理
@@ -211,8 +211,8 @@ public Paged<UserDto> findUserWithPage(Integer pageNum, Integer pageSize) {
 ## 0x03 DAO层开发约定
 ### 主键生成策略
 * ID尽量使用Long类型，反序列化成JSON时会自动转换为字符串。
-* 提供DefaultGenId、SelfGenId和UuidGenId三种主键生成策略。前两者是可排序的数字，后者是UUID。
-> 比如，Entity ID字段增加注解`@KeySql(genId = DefaultGenId.class)`即可实现全局唯一ID。
+* 提供SelfGenId和UuidGenId两种主键生成策略。前者是可排序的数字，后者是UUID。
+> 比如，Entity ID字段增加注解`@KeySql(genId = SelfGenId.class)`即可实现全局唯一ID。
 
 e.g.
 ```java

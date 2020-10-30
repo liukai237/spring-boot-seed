@@ -26,7 +26,7 @@ public class WechatService {
         return wxUserInfoMapper.selectAll();
     }
 
-    @StartPage(orderBy = "subscribeTime desc")
+    @StartPage(orderBy = "subscribe_time desc")
     public Paged<WxUserInfo> findWithPage(Integer pageNum, Integer pageSize) {
         return new Paged<>(wxUserInfoMapper.selectAll());
     }

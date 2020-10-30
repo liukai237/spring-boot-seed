@@ -1,7 +1,7 @@
 package com.iakuil.seed.entity;
 
 import com.iakuil.seed.common.BaseDomain;
-import com.iakuil.seed.common.db.DefaultGenId;
+import com.iakuil.seed.common.db.SelfGenId;
 import com.iakuil.seed.constant.Gender;
 import com.iakuil.seed.constant.Province;
 import lombok.*;
@@ -23,7 +23,7 @@ import java.util.Date;
 public class User extends BaseDomain {
 
     @Id
-    @KeySql(genId = DefaultGenId.class)
+    @KeySql(genId = SelfGenId.class)
     private Long userId;
     private String username;
     private Gender gender;

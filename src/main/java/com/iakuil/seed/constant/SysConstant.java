@@ -6,4 +6,6 @@ public abstract class SysConstant {
     public static final String DEFAULT_PAGE_NUM_FIELD = "pageNum";
     public static final String DEFAULT_SORT_FIELD = "sort";
     public static final String DEFAULT_ORDER_FIELD = "orderBy";
+
+    public static final Integer MAX_PAGE_SIZE = 500;
 }
