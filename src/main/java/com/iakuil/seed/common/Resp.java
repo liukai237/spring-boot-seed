@@ -1,5 +1,6 @@
 package com.iakuil.seed.common;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.iakuil.seed.constant.RespCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 统一API响应结果封装
+ * API响应体
  *
  * <p>用于封装Controller层返回结果，配合{@link RespCode}使用。
  * 其中success为冗余字段。</p>
@@ -21,6 +22,7 @@ public class Resp<T> {
     @ApiModelProperty(value = "描述信息")
     private String message;
     @ApiModelProperty(value = "响应数据")
+    @JsonUnwrapped
     private T data;
 
     public Resp(int code, String message) {

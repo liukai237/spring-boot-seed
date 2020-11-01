@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 
 /**
  * 开始时间时间
- * <p>精确到00:00:00:000</p>
+ * <p>用于请求参数校验，精确到00:00:00:000</p>
  */
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)

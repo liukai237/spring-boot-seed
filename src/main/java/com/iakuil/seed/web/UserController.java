@@ -2,15 +2,14 @@ package com.iakuil.seed.web;
 
 import com.iakuil.seed.common.BaseController;
 import com.iakuil.seed.common.Paged;
-import com.iakuil.seed.common.Resp;
 import com.iakuil.seed.common.Req;
+import com.iakuil.seed.common.Resp;
 import com.iakuil.seed.converter.UserConverter;
-import com.iakuil.seed.dao.UidSequenceMapper;
-import com.iakuil.seed.entity.User;
 import com.iakuil.seed.dto.UserAddParam;
 import com.iakuil.seed.dto.UserDetailDto;
 import com.iakuil.seed.dto.UserEditParam;
 import com.iakuil.seed.dto.UserQueryParam;
+import com.iakuil.seed.entity.User;
 import com.iakuil.seed.service.UserService;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
@@ -97,15 +96,5 @@ public class UserController extends BaseController {
     @GetMapping(value = "/{uid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<UserDetailDto> queryUserDetails(@PathVariable Long uid) {
         return ok(userConverter.toDto(userService.findById(uid)));
-    }
-
-    @Resource
-    private UidSequenceMapper uidSequenceMapper;
-
-    @GetMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<?> justInTest() {
-        UidSequenceMapper.UidSequence uidSequence = new UidSequenceMapper.UidSequence();
-        uidSequenceMapper.getUid(uidSequence);
-        return ok(uidSequence);
     }
 }

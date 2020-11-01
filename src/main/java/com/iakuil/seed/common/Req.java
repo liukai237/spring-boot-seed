@@ -1,7 +1,7 @@
 package com.iakuil.seed.common;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.iakuil.seed.common.Flattenable;
 import com.iakuil.seed.common.tool.BeanMapUtils;
 import com.iakuil.seed.common.tool.Strings;
 import com.iakuil.seed.constant.SysConstant;
@@ -12,17 +12,22 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 统一封装的分页请求
+ * 复杂查询请求体
  *
- * <p>建议使用Java Bean封装查询参数。</p>
+ * <p>【强制】所有分页接口必须使用该组件作为唯一的入参（自动查询这种简单的接口除外）。</p><br/>
+ * <p>【建议】使用Java Bean而不是Map作为filtering查询参数。</p><br/>
+ * <p>除filtering、paging和sorting之外的属性统一放入other，不直接参与数据库查询逻辑。
+ * 比如：某接口需要在业务层对比签名，又不想将它作为过滤条件，这时就可以单独传入该参数。
+ * 请不要滥用这种半公开的传参方式！</p>
  *
  * @param <T> 过滤条件
  */
-@ApiModel(value = "Req", description = "统一封装的请求，分页和排序参数分开封装")
+@ApiModel(value = "Req", description = "统一封装的请求体")
 @Getter
 @Setter
 public class Req<T> implements Flattenable {
@@ -36,6 +41,16 @@ public class Req<T> implements Flattenable {
     @ApiModelProperty(value = "sorting", notes = "排序参数。")
     private Sorting[] sorting;
 
+    private Map<String, Object> other = new LinkedHashMap<>();
+
+    @JsonAnySetter
+    public void setOther(String key, Object value) {
+        this.other.put(key, value);
+    }
+
+    /**
+     * 将所有属性扁平化输出为Map
+     */
     @Override
     public Map<String, Object> flatAsMap() {
         Map<String, Object> paramMap = BeanMapUtils.beanToMap(getFilter(), true);
@@ -59,6 +74,7 @@ public class Req<T> implements Flattenable {
 
     /**
      * 分页参数
+     * <p>合法pageSize范围：0到500</p>
      */
     @Getter
     @Setter

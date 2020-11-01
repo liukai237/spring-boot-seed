@@ -1,5 +1,5 @@
 # 基于Spring Boot 2.X的简易脚手架项目
-此版本为通用Mapper与PageHelper深度定制版本。
+基于Jackson、通用Mapper与PageHelper的深度定制版本。
 
 ## 技术选型
 * String Boot 2.x
@@ -10,7 +10,7 @@
  
 |名称|版本号|项目主页|简介|
 |---|---|---|---|
-|String Boot|2.1.11.RELEASE|https://spring.io/projects/spring-boot/||
+|String Boot|2.2.10.RELEASE|https://spring.io/projects/spring-boot/||
 |MyBatis|3.4.6|http://blog.mybatis.org||
 |通用Mapper|2.1.5|https://mapperhelper.github.io||
 |Page Helper|5.1.8|https://github.com/pagehelper/pagehelper-spring-boot||
@@ -18,8 +18,8 @@
 
 ## 附加功能
 除了传统SSM框架提供的特性外，还集成如下功能：
-* MBG代码生成器
-* ID发号器
+* 基于通用Mapper的MBG代码生成器
+* 基于Sharding-JDBC的ID发号器
 * 创建/修改时间自动填充
 * MySQL JSON/枚举字段映射
 * 分页排序和日期参数处理
@@ -36,8 +36,8 @@ Controller层应该越“薄”越好，主要用于DTO/Entity转换，提供详
 
 ### 1. 统一封装的响应结果
 * 返回Http Status统一为200。
-* 返回结果统一封装成code、msg、data三段式结构。并额外提供冗余字段success。
-* Controller层继承BaseController，使用ok()、fail()方法返回结果。
+* 返回结果统一封装成code、msg、data三段式结构，以及冗余字段success（分页接口提供额外字段）。
+* Controller层继承BaseController，使用ok()、fail()或者done()方法返回结果。
 > 之所以不提供类似R.ok()的方法是为了防止滥用封装对象。`Resp`对象只应该出现在Controller层。
 * 所有的Controller都应该提供Swagger文档，尽量不要返回Resp<?>或者Map。
 
