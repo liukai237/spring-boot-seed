@@ -179,7 +179,7 @@ public Paged<UserDto> findUserWithPage(Integer pageNum, Integer pageSize) {
     return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
 }
 ```
-除此之外还提供了一个`@StartPage`注解，替代`PageHelper.startPage()`。一般情况下优先选用注解方式，除非业务特别复杂，需要在多次查询中插入分页查询，才使用原生的分页。
+本项目提供了一个`@StartPage`注解，替代`PageHelper.startPage()`。一般情况下优先选用注解方式，除非业务特别复杂，需要在多次查询中插入分页查询，才使用原生的分页。
 ```java
   @StartPage(pageNum = 1, pageSize = 10)
   public List<String> autoComplate(String keyword) {

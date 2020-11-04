@@ -13,7 +13,9 @@ import java.util.Map;
 @CacheNamespace
 @Repository
 public interface UserMapper extends CrudMapper<User> {
-    List<User> selectByIdentity(String identity);
-    
+    User selectByOpenId(String identity);
+
+    User selectByIdentity(String identity);
+
     List<User> selectByCondition(Map<String, Object> condition);
 }

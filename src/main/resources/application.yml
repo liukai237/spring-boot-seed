@@ -30,6 +30,7 @@ mybatis:
   type-aliases-package: com.iakuil.seed.entity
   mapper-locations: classpath*:mapper/**/*.xml
   configuration:
+    map-underscore-to-camel-case: true
     default-enum-type-handler: com.iakuil.seed.common.db.AutoEnumTypeHandler
 
 mapper:

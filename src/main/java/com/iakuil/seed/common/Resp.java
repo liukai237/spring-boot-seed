@@ -1,6 +1,5 @@
 package com.iakuil.seed.common;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.iakuil.seed.constant.RespCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,7 +21,6 @@ public class Resp<T> {
     @ApiModelProperty(value = "描述信息")
     private String message;
     @ApiModelProperty(value = "响应数据")
-    @JsonUnwrapped
     private T data;
 
     public Resp(int code, String message) {
@@ -34,6 +32,11 @@ public class Resp<T> {
         this.code = code;
         this.message = message;
         this.data = data;
+    }
+
+    public Resp(RespCode rc) {
+        this.code = rc.getCode();
+        this.message = rc.getMessage();
     }
 
     public boolean isSuccess() {

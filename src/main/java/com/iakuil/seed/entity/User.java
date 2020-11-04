@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import tk.mybatis.mapper.annotation.KeySql;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
@@ -35,6 +36,8 @@ public class User extends BaseDomain {
     private Province province;
     private String nickname;
     private String email;
+    @Column(name = "openid")
+    private String openId;
     private String address;
     @CreatedDate
     private Date createTime;

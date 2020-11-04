@@ -19,6 +19,10 @@
 	</select>
 
 	<select id="selectByIdentity" resultType="com.iakuil.seed.entity.User" parameterType="string">
-		select * from t_user where userId = #{identity} || username = #{identity} || tel = #{identity} || email = #{identity}
+		select * from t_user where user_id = #{identity} || username = #{identity} || tel = #{identity} || email = #{identity}
+	</select>
+
+	<select id="selectByOpenId" resultType="com.iakuil.seed.entity.User" parameterType="string">
+		select * from t_user where openid = #{identity}
 	</select>
 </mapper>

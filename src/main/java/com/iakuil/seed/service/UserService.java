@@ -2,12 +2,12 @@ package com.iakuil.seed.service;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.iakuil.seed.converter.UserConverter;
-import com.iakuil.seed.common.Paged;
-import com.iakuil.seed.dao.*;
-import com.iakuil.seed.entity.*;
-import com.iakuil.seed.dto.UserDetailDto;
 import com.iakuil.seed.annotation.StartPage;
+import com.iakuil.seed.common.Paged;
+import com.iakuil.seed.converter.UserConverter;
+import com.iakuil.seed.dao.*;
+import com.iakuil.seed.dto.UserDetailDto;
+import com.iakuil.seed.entity.*;
 import com.iakuil.seed.util.HashIdUtils;
 import com.iakuil.seed.util.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
@@ -128,14 +128,32 @@ public class UserService {
         return Collections.emptySet();
     }
 
-    public Map<String, String> findUserDetails(String identity) {
-        List<User> users = userMapper.selectByIdentity(identity);
+    /**
+     * 根据多种ID获取用户信息
+     */
+    public User findByOpenId(String openId) {
+        return userMapper.selectByOpenId(openId);
+    }
 
-        if (CollectionUtils.isNotEmpty(users)) {
-            User user = users.get(0);
+    /**
+     * 根据多种ID获取系统用户
+     */
+    public User findUserByIdentity(String identity) {
+        return userMapper.selectByIdentity(identity);
+    }
+
+    /**
+     * 根据多种ID获取用户信息（认证用）
+     */
+    public Map<String, String> findUserDetails(String identity) {
+        User user = userMapper.selectByIdentity(identity);
+
+        if (user != null) {
             Long uid = user.getUserId();
             Map<String, String> details = Maps.newHashMap();
-            details.put("uid", uid.toString());
+            details.put("userId", uid.toString());
+            details.put("username", user.getUsername());
+            details.put("password", user.getPasswdHash());
             details.put("roles", findRolesByUserId(uid).stream().map(Role::getRoleName).distinct().collect(Collectors.joining(",")));
             details.put("perms", findPowersByUserId(uid).stream().map(Power::getPowerName).distinct().collect(Collectors.joining(",")));
             return details;

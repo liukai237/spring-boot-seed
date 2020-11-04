@@ -7,6 +7,8 @@ import java.lang.annotation.Target;
 
 /**
  * 分页注解
+ *
+ * <p>方法体内第一条查询语句将会被分页，请不要与原生的PageHelper语句混合使用。</p>
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
