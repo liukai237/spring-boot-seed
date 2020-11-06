@@ -262,13 +262,13 @@ private Foo foo;
 * updateByExample
 * updateByExampleSelective
 
+> 注意：无论修改还是删除，执行操作前必须先查询一次才能生效。
+
 逻辑删除使用`@LogicDelete`注解，支持的方法有：
 * int delete
 * deleteByExample
 * deleteByCondition
 * deleteByPrimaryKey
-
-> 注意：无论乐观锁还是逻辑删除，执行修改或删除操作前必须先查询一次。
 
 ## 0x04 其他开发约定
 

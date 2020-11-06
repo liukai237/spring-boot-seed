@@ -74,7 +74,15 @@ public class UserService {
 
     @Transactional(rollbackFor = Exception.class)
     public Boolean modify(User user) {
+        User entity = userMapper.selectByPrimaryKey(user.getUserId());
+        user.setVersion(entity.getVersion());
         return userMapper.updateByPrimaryKeySelective(user) > 0;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteById(Long uid) {
+        userMapper.deleteByPrimaryKey(uid);
+        log.info("users {} were deleted!", uid);
     }
 
     @Transactional(rollbackFor = Exception.class)
