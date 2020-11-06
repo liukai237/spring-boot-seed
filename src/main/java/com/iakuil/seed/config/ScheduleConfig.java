@@ -1,22 +1,21 @@
 package com.iakuil.seed.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.*;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
-import org.springframework.scheduling.config.TaskManagementConfigUtils;
 
 /**
  * 定时任务开关及线程池配置
+ * <p>scheduling.enable=true开启定时任务</p>
  */
 @Slf4j
 @Configuration
 @EnableScheduling
+@Conditional(ScheduleConfig.SchedulerCondition.class)
 public class ScheduleConfig implements SchedulingConfigurer {
 
     @Override
@@ -34,13 +33,6 @@ public class ScheduleConfig implements SchedulingConfigurer {
         return scheduler;
     }
 
-    @Conditional(SchedulerCondition.class)
-    @Bean(name = TaskManagementConfigUtils.SCHEDULED_ANNOTATION_PROCESSOR_BEAN_NAME)
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public ScheduledAnnotationBeanPostProcessor scheduledAnnotationProcessor() {
-        return new ScheduledAnnotationBeanPostProcessor();
-    }
-
     public static class SchedulerCondition implements Condition {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
@@ -49,5 +41,4 @@ public class ScheduleConfig implements SchedulingConfigurer {
             return turnOn;
         }
     }
-
 }
