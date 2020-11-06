@@ -1,10 +1,12 @@
 package com.iakuil.seed.common;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.github.pagehelper.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,7 +29,7 @@ public class Paged<T> implements Serializable {
     @ApiModelProperty(value = "总记录数")
     private long total;
     @ApiModelProperty(value = "结果集")
-    private List<T> data;
+    private List<T> list;
     @ApiModelProperty(value = "第几页")
     private int pageNum;
     @ApiModelProperty(value = "每页记录数")
@@ -36,14 +38,19 @@ public class Paged<T> implements Serializable {
     private int pages;
     @ApiModelProperty(value = "当前页的数量")
     private int size;
-    @ApiModelProperty(value = "附加数据", notes = "额外返回的数据，比如：分页同时返回平均年龄。")
+
+    /**
+     * 额外返回的数据
+     * <p>比如：分页同时返回平均年龄</p>
+     * <p>PS. 为避免出现多层嵌套，该属性内字段会被扁平化，与total、pageSize等处于同一层级。</p><br/>
+     */
     private Map<String, Object> extra;
 
-    public Paged(List<T> data) {
-        Objects.requireNonNull(data, "data list should not be empty!");
+    public Paged(List<T> list) {
+        Objects.requireNonNull(list, "data list should not be empty!");
 
-        if (data instanceof Page) {
-            Page<T> page = (Page<T>) data;
+        if (list instanceof Page) {
+            Page<T> page = (Page<T>) list;
             this.pageNum = page.getPageNum();
             this.pageSize = page.getPageSize();
             this.total = page.getTotal();
@@ -51,7 +58,7 @@ public class Paged<T> implements Serializable {
             this.size = page.size();
         }
 
-        this.data = data;
+        this.list = list;
     }
 
     public <R> Paged(List<R> data, Function<? super R, ? extends T> mapper) {
@@ -66,6 +73,12 @@ public class Paged<T> implements Serializable {
             this.size = page.size();
         }
 
-        this.data = data.stream().map(mapper).collect(Collectors.toList());
+        this.list = data.stream().map(mapper).collect(Collectors.toList());
+    }
+
+    @ApiIgnore
+    @JsonAnyGetter
+    public Map<String, Object> getExtra() {
+        return extra;
     }
 }
