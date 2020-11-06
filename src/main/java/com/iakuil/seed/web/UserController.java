@@ -74,7 +74,17 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "uid", value = "用户ID，多个以逗号分隔", required = true, dataType = "String", paramType = "query")
     })
     @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<?> doRemove(@RequestParam String[] uid) {
+    public Resp<?> doRemove(@RequestParam Long uid) {
+        userService.deleteById(uid);
+        return ok();
+    }
+
+    @ApiOperation(value = "用户批量删除", notes = "删除用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "uid", value = "用户ID，多个以逗号分隔", required = true, dataType = "String", paramType = "query")
+    })
+    @PostMapping(value = "/batchRemove", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Resp<?> doBatchRemove(@RequestParam String[] uid) {
         String[] userIds = Arrays.stream(uid)
                 .filter(StringUtils::isNoneBlank)
                 .map(StringUtils::trim)

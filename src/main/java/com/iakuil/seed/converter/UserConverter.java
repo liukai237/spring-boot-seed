@@ -1,6 +1,5 @@
 package com.iakuil.seed.converter;
 
-import com.iakuil.seed.dto.BasicUserInfoDto;
 import com.iakuil.seed.entity.User;
 import com.iakuil.seed.dto.UserAddParam;
 import com.iakuil.seed.dto.UserDetailDto;
@@ -32,10 +31,4 @@ public interface UserConverter {
 
     @IterableMapping(qualifiedByName = "toDto")
     List<UserDetailDto> toDtoList(List<User> entities);
-
-    @Mappings({
-            @Mapping(target = "uid", source = "userId"),
-            @Mapping(target = "regTime", source = "createTime")
-    })
-    BasicUserInfoDto toBasicUserInfo(User user);
 }

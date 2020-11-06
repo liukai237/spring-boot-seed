@@ -31,12 +31,4 @@ public class DbConfig {
             sqlSessionFactory.getConfiguration().addInterceptor(interceptor);
         }
     }
-
-    /**
-     * Sharding-JDBC ID发号器
-     */
-    @Bean
-    public IdGenerator getIdGenerator() {
-        return new CommonSelfIdGenerator();
-    }
 }

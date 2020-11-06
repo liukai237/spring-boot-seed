@@ -212,9 +212,9 @@ public Paged<UserDto> findUserWithPage(Integer pageNum, Integer pageSize) {
 
 ## 0x03 DAO层开发约定
 ### 主键生成策略
-* ID尽量使用Long类型，反序列化成JSON时会自动转换为字符串。
-* 提供SelfGenId和UuidGenId两种主键生成策略。前者是可排序的数字，后者是UUID。
-> 比如，Entity ID字段增加注解`@KeySql(genId = SelfGenId.class)`即可实现全局唯一ID。
+* ID尽量使用Long类型，反序列化成JSON时会自动转换为字符串，不会造成精度丢失。
+* 提供CommonSelfId和UUID两种主键生成策略。Long类型的ID默认使用前者，String类型默认后者。
+> 如果使用了其他的主键生成策略，默认的策略将不会生效。
 
 e.g.
 ```java
@@ -223,7 +223,7 @@ e.g.
 public class User extends BaseDomain {
 
     @Id
-    @KeySql(genId = DefaultGenId.class)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select replace(uuid(), '-', '')")
     private Long userId;
     private String username;
 }
@@ -252,6 +252,23 @@ private Foo foo;
 
 ### 自动填充字段
 使用`@CreatedDate`和`@LastModifiedDate`注解的字段，如果没有赋值，将会自动被填充系统时间。
+
+### 乐观锁和逻辑删除
+乐观锁使用`@Version`注解，支持的方法有：
+* delete
+* deleteByPrimaryKey
+* updateByPrimaryKey
+* updateByPrimaryKeySelective
+* updateByExample
+* updateByExampleSelective
+
+逻辑删除使用`@LogicDelete`注解，支持的方法有：
+* int delete
+* deleteByExample
+* deleteByCondition
+* deleteByPrimaryKey
+
+> 注意：无论乐观锁还是逻辑删除，执行修改或删除操作前必须先查询一次。
 
 ## 0x04 其他开发约定
 
