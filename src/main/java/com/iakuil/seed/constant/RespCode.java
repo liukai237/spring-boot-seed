@@ -18,7 +18,10 @@ public enum RespCode {
     UNAUTHORIZED(100401, "Unauthorized"), // 未认证（签名错误）
     FORBIDDEN(100403, "No Permission!"), // 无权限
     NOT_FOUND(100404, "Resource Not Found."), // 资源不存在
-    INTERNAL_SERVER_ERROR(100500, "A server error has occurred."); // 未知错误、服务器内部错误
+    INTERNAL_SERVER_ERROR(100500, "A server error has occurred."), // 未知错误、服务器内部错误
+    INVALID_TOKEN(200001, "Invalid Token!"),
+    INVALID_CAPTCHA(200002, "Invalid Captcha!"),
+    INVALID_SMS_CODE(200002, "Invalid SMS Code!");
 
     private final int code;
     private final String message;

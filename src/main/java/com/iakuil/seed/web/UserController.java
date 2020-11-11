@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.Arrays;
 
-@Api(value = "用户管理")
+@Api(value = "用户管理", tags = {"用户管理"})
 @RestController
 @RequestMapping("/api/user/")
 public class UserController extends BaseController {

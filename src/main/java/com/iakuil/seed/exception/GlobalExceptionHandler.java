@@ -1,8 +1,9 @@
 package com.iakuil.seed.exception;
 
+import com.baomidou.kaptcha.exception.KaptchaException;
 import com.iakuil.seed.annotation.ErrorCode;
-import com.iakuil.seed.constant.RespCode;
 import com.iakuil.seed.common.Resp;
+import com.iakuil.seed.constant.RespCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -103,6 +104,12 @@ public class GlobalExceptionHandler {
     public Resp<?> processCannotGetJdbcConnectionException(CannotGetJdbcConnectionException e) {
         log.error("[DB ERROR]\n{}", e.getMessage());
         return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), "网络繁忙，请稍后再试！");
+    }
+
+    @ExceptionHandler(value = KaptchaException.class)
+    public Resp<?> processKaptchaExceptionHandler(KaptchaException e) {
+        log.error("[Captcha ERROR]\n{}", e.getMessage());
+        return new Resp<>(RespCode.INVALID_CAPTCHA);
     }
 
     @ExceptionHandler(Exception.class)
