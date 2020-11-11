@@ -51,7 +51,7 @@ public class TokenService {
         String data = stringRedisTemplate.opsForValue().get(TOKEN_KEY + token);
         stringRedisTemplate.delete(TOKEN_KEY + token);
         if (data == null) {
-            throw new BusinessException(RespCode.INVALID_TOKEN.getMessage(), RespCode.INVALID_TOKEN.getCode());
+            throw new BusinessException(RespCode.INVALID_TOKEN);
         }
     }
 
@@ -76,7 +76,7 @@ public class TokenService {
         String cached = stringRedisTemplate.opsForValue().get(SMS_CODE_KEY + tel);
         if (cached == null || !cached.equalsIgnoreCase(code)) {
             stringRedisTemplate.delete(SMS_CODE_KEY + tel);
-            throw new BusinessException(RespCode.INVALID_SMS_CODE.getMessage(), RespCode.INVALID_SMS_CODE.getCode());
+            throw new BusinessException(RespCode.INVALID_SMS_CODE);
         }
     }
 }

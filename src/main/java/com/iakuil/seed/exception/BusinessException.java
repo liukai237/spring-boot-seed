@@ -44,6 +44,10 @@ public class BusinessException extends RuntimeException {
         this.code = code;
     }
 
+    public BusinessException(RespCode rc) {
+        this(rc.getMessage(), rc.getCode());
+    }
+
     @Override
     public String getMessage() {
         return NestedExceptionUtils.buildMessage(super.getMessage(), this.getCause());
