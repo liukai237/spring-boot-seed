@@ -1,5 +1,6 @@
 package com.iakuil.seed.common.tool;
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.regex.Pattern;
 /**
  * 字符串工具类
  */
+@UtilityClass
 public class Strings {
 
     private static final Pattern PATTERN_NONE_COMMA = Pattern.compile("^([\\w_]+[\\+\\-]{1})+$");

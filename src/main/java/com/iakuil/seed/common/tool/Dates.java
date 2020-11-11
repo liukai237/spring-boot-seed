@@ -1,5 +1,6 @@
 package com.iakuil.seed.common.tool;
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.ParseException;
@@ -9,6 +10,7 @@ import java.util.Date;
 /**
  * 日期工具类
  */
+@UtilityClass
 public class Dates {
 
     public static final String ISO_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";

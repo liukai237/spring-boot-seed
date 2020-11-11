@@ -1,5 +1,7 @@
 package com.iakuil.seed.util;
 
+import lombok.experimental.UtilityClass;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.math.BigInteger;
@@ -11,6 +13,7 @@ import java.security.spec.InvalidKeySpecException;
  * 盐值生成工具
  * See http://blog.jobbole.com/61872/#java
  */
+@UtilityClass
 public class PasswordHash {
     public static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
 

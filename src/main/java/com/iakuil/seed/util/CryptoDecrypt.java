@@ -2,6 +2,7 @@ package com.iakuil.seed.util;
 
 
 import com.iakuil.seed.exception.BusinessException;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import sun.misc.BASE64Decoder;
@@ -14,6 +15,7 @@ import java.security.Key;
 import java.security.Security;
 
 @Slf4j
+@UtilityClass
 public class CryptoDecrypt {
 
     static {

@@ -25,6 +25,9 @@ public class WebAppConfig implements WebMvcConfigurer {
                 .maxAge(3600 * 24);
     }
 
+    /**
+     * JSON反序列化时，全局Long转字符串
+     */
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer builderCustomizer() {
         return builder -> {
@@ -32,6 +35,9 @@ public class WebAppConfig implements WebMvcConfigurer {
         };
     }
 
+    /**
+     * URL排序及日期参数处理
+     */
     @Bean
     public ResolverBeanPostProcessor resolverBeanPostProcessor() {
         return new ResolverBeanPostProcessor(sortingParamResolver(), dateParamResolver());
