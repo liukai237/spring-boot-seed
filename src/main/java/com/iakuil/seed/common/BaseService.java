@@ -14,6 +14,7 @@ import tk.mybatis.mapper.annotation.Version;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.lang.reflect.Field;
+import java.util.Collection;
 
 /**
  * 非泛型化的BaseService
@@ -52,6 +53,21 @@ public abstract class BaseService {
         }
 
         return succ;
+    }
+
+    /**
+     * 批量新增或者修改Entity
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean saveOrUpdateBatch(Collection<Object> entityList) {
+        int count = 0;
+        for (Object obj : entityList) {
+            if (saveOrUpdate(obj)) {
+                count++;
+            }
+        }
+
+        return count == entityList.size();
     }
 
     private boolean hasAnnotation(Object entity, Class annotation) {
