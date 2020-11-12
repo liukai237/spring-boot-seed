@@ -75,7 +75,6 @@ public class TokenService {
     public void verifySmsCode(String tel, String code) {
         String cached = stringRedisTemplate.opsForValue().get(SMS_CODE_KEY + tel);
         if (cached == null || !cached.equalsIgnoreCase(code)) {
-            stringRedisTemplate.delete(SMS_CODE_KEY + tel);
             throw new BusinessException(RespCode.INVALID_SMS_CODE);
         }
     }

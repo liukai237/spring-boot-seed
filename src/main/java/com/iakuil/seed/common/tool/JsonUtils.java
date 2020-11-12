@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import com.iakuil.seed.exception.BusinessException;
 import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
@@ -28,7 +27,7 @@ public class JsonUtils {
         try {
             result = OBJECT_MAPPER.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
-            throw new BusinessException("Occurring an exception during object parsing!", e);
+            throw new IllegalStateException("Occurring an exception during object parsing!", e);
         }
 
         return result;
@@ -40,7 +39,7 @@ public class JsonUtils {
         try {
             result = OBJECT_MAPPER.readValue(jsonStr, clazz);
         } catch (IOException e) {
-            throw new BusinessException("Occurring an exception during json parsing!", e);
+            throw new IllegalStateException("Occurring an exception during json parsing!", e);
         }
 
         return result;
@@ -53,7 +52,7 @@ public class JsonUtils {
         try {
             result = OBJECT_MAPPER.readValue(jsonStr, listType);
         } catch (IOException e) {
-            throw new BusinessException("Occurring an exception during json parsing!", e);
+            throw new IllegalStateException("Occurring an exception during json parsing!", e);
         }
 
         return result;

@@ -3,6 +3,7 @@ package com.iakuil.seed.service;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.iakuil.seed.annotation.StartPage;
+import com.iakuil.seed.common.BaseService;
 import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.converter.UserConverter;
 import com.iakuil.seed.dao.*;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class UserService {
+public class UserService extends BaseService {
 
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;

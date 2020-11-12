@@ -63,7 +63,7 @@ public class TokenController extends BaseController {
         return ok();
     }
 
-    @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码（需要先获取短信验证码）")
+    @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码（需要先获取图形验证码）")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "tel", value = "需要验证的手机号码", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "captcha", value = "图形验证码", required = true, dataType = "String", paramType = "query")

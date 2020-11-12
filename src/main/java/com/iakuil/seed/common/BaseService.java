@@ -2,7 +2,6 @@ package com.iakuil.seed.common;
 
 import com.iakuil.seed.common.tool.ApplicationContextHolder;
 import com.iakuil.seed.common.tool.Strings;
-import com.iakuil.seed.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -18,6 +17,7 @@ import java.util.Collection;
 
 /**
  * 非泛型化的BaseService
+ * <p>提供一些业务层常用的公用方法。</p>
  */
 @Slf4j
 @Service
@@ -42,7 +42,7 @@ public abstract class BaseService {
             } else {
                 Object before = mapper.selectByPrimaryKey(id);
                 if (before == null) {
-                    throw new BusinessException("无效的ID！");
+                    throw new IllegalStateException("无效的ID！");
                 } else {
                     if (hasAnnotation(entity, Version.class)) { // 处理乐观锁
                         setValueByAnnotation(entity, ObjectUtils.defaultIfNull(getValueByAnnotation(before, Version.class), 1), Version.class);
@@ -57,17 +57,15 @@ public abstract class BaseService {
 
     /**
      * 批量新增或者修改Entity
+     * <p>一次操作失败则全部回滚。</p>
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveOrUpdateBatch(Collection<Object> entityList) {
-        int count = 0;
+    public void saveOrUpdateBatch(Collection<Object> entityList) {
         for (Object obj : entityList) {
-            if (saveOrUpdate(obj)) {
-                count++;
+            if (!saveOrUpdate(obj)) {
+                throw new IllegalStateException("saveOrUpdatePatch fail!");
             }
         }
-
-        return count == entityList.size();
     }
 
     private boolean hasAnnotation(Object entity, Class annotation) {
@@ -90,7 +88,7 @@ public abstract class BaseService {
                 try {
                     value = field.get(entity);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    throw new IllegalStateException(e);
                 }
                 field.setAccessible(false);
             }
@@ -107,7 +105,7 @@ public abstract class BaseService {
                 try {
                     field.set(entity, value);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    throw new IllegalStateException(e);
                 }
                 field.setAccessible(false);
             }
