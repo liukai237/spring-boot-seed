@@ -34,7 +34,7 @@ mybatis:
     default-enum-type-handler: com.iakuil.seed.common.db.AutoEnumTypeHandler
 
 mapper:
-  mappers: com.iakuil.seed.common.CrudMapper
+  mappers: com.iakuil.seed.common.CrudMapper, com.iakuil.seed.common.ReadOnlyMapper
   not-empty: true
   identity: mysql
   use-simple-type: false

@@ -36,7 +36,7 @@ public class BeanMapUtils {
     }
 
     /**
-     * 将map装换为javabean对象
+     * 将map转换为javabean对象
      *
      * @param map
      * @param bean
