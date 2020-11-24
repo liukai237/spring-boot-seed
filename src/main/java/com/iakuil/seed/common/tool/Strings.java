@@ -113,10 +113,16 @@ public class Strings {
         return sb.toString();
     }
 
+    /**
+     * 首字母小写
+     */
     public static String toUpperCaseFirstLetter(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
+    /**
+     * 首字母大写
+     */
     public static String toLowerCaseFirstLetter(String str) {
         return str.substring(0, 1).toLowerCase() + str.substring(1);
     }
