@@ -3,6 +3,10 @@ package com.iakuil.seed.common.tool;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
@@ -33,7 +37,7 @@ class BeanUtilsTest {
     @Test
     void should_copy_non_null_and_the_same_type_properties() {
         Foo foo = new Foo();
-        foo.setName("Harry");
+        foo.setName("Tom");
         foo.setAge(18);
 
         Baz baz = BeanUtils.copy(foo, Baz.class);
@@ -42,7 +46,17 @@ class BeanUtilsTest {
     }
 
     @Test
-    void testCopyList() {
+    void should_copy_two_items() {
+        Foo foo = new Foo();
+        foo.setName("Page");
+        foo.setAge(18);
+
+        Foo bar = new Foo();
+        bar.setName("George");
+        bar.setAge(8);
+
+        List<Bar> family = BeanUtils.copyMany(Arrays.asList(foo, bar), Bar.class);
+        assertThat(family, hasSize(2));
     }
 
     @Data

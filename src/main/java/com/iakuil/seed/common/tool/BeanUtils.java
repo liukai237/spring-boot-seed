@@ -1,16 +1,16 @@
 package com.iakuil.seed.common.tool;
 
-import com.iakuil.seed.exception.BusinessException;
 import lombok.experimental.UtilityClass;
 import net.sf.cglib.beans.BeanCopier;
 import org.apache.commons.collections4.map.MultiKeyMap;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
- * 对象属性复制
- * <p>性能低于Mapstruct，适用于懒得创建Converter方法的场景。</p><br/>
+ * 对象属性复制工具
+ * <p>性能低于Mapstruct，适用于懒得创建{@link com.iakuil.seed.common.BaseConverter}方法的场景。</p><br/>
  * <p>注意：属性名称相同而类型不同的属性不会被拷贝。</p>
  */
 @UtilityClass
@@ -34,13 +34,13 @@ public class BeanUtils {
     /**
      * 批量对象属性复制
      */
-    public static <T> List<T> copyList(List<?> from, Class<T> to) {
+    public static <T> List<T> copyMany(Collection<?> from, Class<T> to) {
         if (from == null || from.size() == 0) {
             return null;
         }
 
         List<T> results = new ArrayList<>();
-        BeanCopier copier = getCopier(from.get(0).getClass(), to);
+        BeanCopier copier = getCopier(from.stream().findFirst().get().getClass(), to);
         for (Object obj : from) {
             T toObj = getInstance(to);
             copier.copy(obj, toObj, null);
@@ -55,7 +55,7 @@ public class BeanUtils {
         try {
             inst = clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            throw new BusinessException("InstantiationException", e);
+            throw new IllegalStateException("InstantiationException", e);
         }
 
         return inst;
