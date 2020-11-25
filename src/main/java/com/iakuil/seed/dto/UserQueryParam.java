@@ -12,8 +12,8 @@ import lombok.Setter;
 @ApiModel(value = "UserQueryParam", description = "用户查询参数")
 public class UserQueryParam extends QueryBase {
 
-    @ApiModelProperty(name = "uid", value = "用户ID")
-    private Long uid;
+    @ApiModelProperty(name = "userId", value = "用户ID")
+    private Long userId;
 
     @ApiModelProperty(name = "tel", value = "手机号码。", example = "13400000000")
     private String tel;

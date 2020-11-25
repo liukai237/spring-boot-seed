@@ -3,6 +3,7 @@ package com.iakuil.seed.common.db;
 import com.github.pagehelper.PageHelper;
 import com.iakuil.seed.annotation.StartPage;
 import com.iakuil.seed.common.BaseDomain;
+import com.iakuil.seed.common.QueryBase;
 import com.iakuil.seed.common.tool.BeanMapUtils;
 import com.iakuil.seed.constant.SysConstant;
 import org.apache.commons.collections4.MapUtils;
@@ -12,19 +13,22 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 /**
  * 分页拦截器
- * <p>从参数列表、参数对象属性或者Map参数Key Set中获取分页排序参数。</p><br/>
+ * <p>当pagehelper.supportMethodsArguments配置为<strong>false</strong>时，
+ * 从参数列表、参数对象属性或者Map参数Key Set中获取分页排序参数。</p><br/>
  * <p>Service层方法添加{@code @StartPage}注解后，如果任意位置存在pageNum则自动分页，
  * 如果存在sort/orderBy则自动排序，重复出现则以最后一个值为准。</p><br/>
  * <p>BTW. 可以通过{@code @StartPage}注解指定分页和排序默认值。</p>
  */
 @Aspect
 @Component
+@ConditionalOnProperty(prefix="pagehelper",name = "supportMethodsArguments", havingValue = "false")
 public class AspectPagination {
     @Around(value = "execution(* com.iakuil.seed.service..*.*(..))")
     public Object aroundMethodWithParam(ProceedingJoinPoint pjd) throws Throwable {
@@ -46,8 +50,8 @@ public class AspectPagination {
                 continue;
             }
 
-            if (value instanceof Map || value instanceof BaseDomain) {
-                Map<String, Object> map = value instanceof BaseDomain ? BeanMapUtils.beanToMap(value) : (Map) value;
+            if (value instanceof Map || value instanceof BaseDomain || value instanceof QueryBase) {
+                Map<String, Object> map = value instanceof Map ? (Map) value : BeanMapUtils.beanToMap(value);
                 Integer pn = MapUtils.getInteger(map, SysConstant.DEFAULT_PAGE_NUM_FIELD);
                 if (pn != null) {
                     pageNum = pn;

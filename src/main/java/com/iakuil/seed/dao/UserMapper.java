@@ -13,6 +13,8 @@ import java.util.List;
 public interface UserMapper extends CrudMapper<User> {
     User selectByOpenId(String identity);
 
+    int deleteOpenId(String tel);
+
     User selectByIdentity(String identity);
 
     List<User> selectByCondition(QueryBase condition);

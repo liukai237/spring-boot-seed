@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 /**
  * MyBatis分页结果容器
  * <p>功能同PageInfo，额外支持转换器参数</p><br/>
- * <p>序列化时属性会被扁平化，不会多出一层嵌套。</p>
  *
  * @param <T> Entity
  */

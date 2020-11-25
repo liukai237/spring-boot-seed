@@ -54,8 +54,8 @@ public class UserService extends BaseService {
 
     @StartPage(orderBy = "create_time desc")
     @Transactional(readOnly = true)
-    public Paged<UserDetailDto> findByCondition(Map<String, Object> condition) {
-        return new Paged<>(userMapper.selectByCondition(null), UserConverter.INSTANCE::toDto);
+    public Paged<UserDetailDto> findByCondition(QueryBase condition) {
+        return new Paged<>(userMapper.selectByCondition(condition), UserConverter.INSTANCE::toDto);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -146,6 +146,13 @@ public class UserService extends BaseService {
     }
 
     /**
+     * 解绑微信
+     */
+    public boolean unbindWx(String tel) {
+        return userMapper.deleteOpenId(tel) > 0;
+    }
+
+    /**
      * 根据多种ID获取系统用户
      */
     public User findUserByIdentity(String identity) {
@@ -170,10 +177,5 @@ public class UserService extends BaseService {
         }
 
         return null;
-    }
-
-    @Transactional(readOnly = true)
-    public Paged<UserDetailDto> test(QueryBase condition) {
-        return new Paged<>(userMapper.selectByCondition(condition), UserConverter.INSTANCE::toDto);
     }
 }

@@ -14,7 +14,7 @@ public interface DictMapper {
 
     Dict get(Long id);
 
-    List<Dict> list(Map<String, Object> map);
+    List<Dict> list(Dict query);
 
     int count(Map<String, Object> map);
 

@@ -8,13 +8,8 @@
 		from t_user
 		<where>
 			<if test="userId != null"> and user_id = #{userId} </if>
-			<if test="username != null and username != ''"> and username = #{username} </if>
 			<if test="gender != null"> and gender = #{gender} </if>
 			<if test="tel != null and tel != ''"> and tel = #{tel} </if>
-			<if test="email != null and email != ''"> and email = #{email} </if>
-			<if test="birthday != null"> and birthday = #{birthday} </if>
-			<if test="startDate != null"> and startDate &gt; #{startDate} </if>
-			<if test="endDate != null"> and endDate &lt;= #{endDate} </if>
 		</where>
 	</select>
 
@@ -25,4 +20,8 @@
 	<select id="selectByOpenId" resultType="com.iakuil.seed.entity.User" parameterType="string">
 		select * from t_user where openid = #{identity}
 	</select>
+
+	<update id="deleteOpenId" parameterType="string">
+		update t_user set openid = null where tel = #{tel}
+	</update>
 </mapper>

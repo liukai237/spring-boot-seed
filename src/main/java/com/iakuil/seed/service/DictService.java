@@ -4,7 +4,6 @@ import com.iakuil.seed.annotation.StartPage;
 import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.dao.DictMapper;
 import com.iakuil.seed.entity.Dict;
-import com.iakuil.seed.util.MapBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +23,12 @@ public class DictService {
         return dictMapper.get(id);
     }
 
-    public List<Dict> list(Map<String, Object> map) {
-        return dictMapper.list(map);
+    public List<Dict> list(Dict dict) {
+        return dictMapper.list(dict);
     }
 
     @StartPage
-    public Paged<Dict> listWithPage(Map<String, Object> param) {
+    public Paged<Dict> listWithPage(Dict param) {
         return new Paged<>(dictMapper.list(param));
     }
 
@@ -55,18 +54,5 @@ public class DictService {
 
     public List<Dict> listType() {
         return dictMapper.listType();
-    }
-
-    public String getName(String type, String value) {
-        return dictMapper.list(MapBuilder.init()
-                .append("type", type)
-                .append("value", value)
-                .build()).get(0).getName();
-    }
-
-    public List<Dict> listByType(String type) {
-        return dictMapper.list(MapBuilder.init()
-                .append("type", type)
-                .build());
     }
 }
