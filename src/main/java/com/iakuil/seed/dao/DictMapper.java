@@ -1,7 +1,6 @@
 package com.iakuil.seed.dao;
 
 import com.iakuil.seed.entity.Dict;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.Map;
 /**
  * 字典表
  */
-@Mapper
 @Repository
 public interface DictMapper {
 

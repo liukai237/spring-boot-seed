@@ -6,8 +6,7 @@ import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-@Mapper
-@CacheNamespace
 @Repository
+@CacheNamespace
 public interface RoleMapper extends CrudMapper<Role> {
 }

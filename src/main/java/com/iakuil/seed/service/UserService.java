@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.iakuil.seed.annotation.StartPage;
 import com.iakuil.seed.common.BaseService;
 import com.iakuil.seed.common.Paged;
+import com.iakuil.seed.common.QueryBase;
 import com.iakuil.seed.converter.UserConverter;
 import com.iakuil.seed.dao.*;
 import com.iakuil.seed.dto.UserDetailDto;
@@ -54,7 +55,7 @@ public class UserService extends BaseService {
     @StartPage(orderBy = "create_time desc")
     @Transactional(readOnly = true)
     public Paged<UserDetailDto> findByCondition(Map<String, Object> condition) {
-        return new Paged<>(userMapper.selectByCondition(condition), UserConverter.INSTANCE::toDto);
+        return new Paged<>(userMapper.selectByCondition(null), UserConverter.INSTANCE::toDto);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -169,5 +170,10 @@ public class UserService extends BaseService {
         }
 
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public Paged<UserDetailDto> test(QueryBase condition) {
+        return new Paged<>(userMapper.selectByCondition(condition), UserConverter.INSTANCE::toDto);
     }
 }

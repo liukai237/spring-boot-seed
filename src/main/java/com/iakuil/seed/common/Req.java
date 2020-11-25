@@ -1,8 +1,9 @@
 package com.iakuil.seed.common;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.iakuil.seed.common.tool.BeanMapUtils;
+import com.iakuil.seed.common.tool.BeanUtils;
 import com.iakuil.seed.common.tool.Strings;
 import com.iakuil.seed.constant.SysConstant;
 import io.swagger.annotations.ApiModel;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
 @ApiModel(value = "Req", description = "统一封装的请求体")
 @Getter
 @Setter
-public class Req<T> implements Flattenable {
+public class Req<T extends QueryBase> {
 
     @ApiModelProperty(name = "filtering", value = "过滤参数。")
     private T filter;
@@ -48,28 +49,25 @@ public class Req<T> implements Flattenable {
         this.other.put(key, value);
     }
 
-    /**
-     * 将所有属性扁平化输出为Map
-     */
-    @Override
-    public Map<String, Object> flatAsMap() {
-        Map<String, Object> paramMap = BeanMapUtils.beanToMap(getFilter(), true);
+    @JsonIgnore
+    public QueryBase getQuery() {
+        QueryBase query = BeanUtils.copy(this.filter, filter.getClass());
         if (this.paging != null) {
-            paramMap.put(SysConstant.DEFAULT_PAGE_SIZE_FIELD, this.paging.getPageSize());
-            paramMap.put(SysConstant.DEFAULT_PAGE_NUM_FIELD, this.paging.getPageNum());
+            query.setPageSize(this.paging.getPageSize());
+            query.setPageNum(this.paging.getPageNum());
         } else {
-            paramMap.put(SysConstant.DEFAULT_PAGE_SIZE_FIELD, 0); // zero means no paging
-            paramMap.put(SysConstant.DEFAULT_PAGE_NUM_FIELD, 1);
+            query.setPageSize(0); // zero means no paging
+            query.setPageNum(1);
         }
 
         if (this.sorting != null) {
-            paramMap.put(SysConstant.DEFAULT_ORDER_FIELD, Arrays.stream(sorting)
+            query.setOrderBy(Arrays.stream(sorting)
                     .filter(item -> StringUtils.isNoneBlank(item.getField()))
                     .map(item -> Strings.toUnderlineCase(item.getField()) + " " + item.getOrder().toString())
                     .collect(Collectors.joining()));
         }
 
-        return paramMap;
+        return query;
     }
 
     /**
