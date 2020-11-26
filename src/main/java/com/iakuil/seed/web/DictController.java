@@ -1,7 +1,7 @@
 package com.iakuil.seed.web;
 
 import com.iakuil.seed.common.BaseController;
-import com.iakuil.seed.common.Paged;
+import com.iakuil.seed.common.PageData;
 import com.iakuil.seed.common.Resp;
 import com.iakuil.seed.entity.Dict;
 import com.iakuil.seed.service.DictService;
@@ -27,7 +27,7 @@ public class DictController extends BaseController {
     }
 
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<Paged<Dict>> list(@RequestBody Dict dict) {
+    public Resp<PageData<Dict>> list(@RequestBody Dict dict) {
         return ok(dictService.listWithPage(dict));
     }
 }

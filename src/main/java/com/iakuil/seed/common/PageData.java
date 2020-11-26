@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
  */
 @Getter
 @Setter
-@ApiModel(value = "Paged", description = "分页数据")
-public class Paged<T> implements Serializable {
+@ApiModel(value = "PageData", description = "分页数据")
+public class PageData<T> implements Serializable {
     @ApiModelProperty(value = "总记录数")
     private long total;
     @ApiModelProperty(value = "结果集")
@@ -45,7 +45,7 @@ public class Paged<T> implements Serializable {
      */
     private Map<String, Object> extra;
 
-    public Paged(List<T> list) {
+    public PageData(List<T> list) {
         Objects.requireNonNull(list, "data list should not be empty!");
 
         if (list instanceof Page) {
@@ -60,7 +60,7 @@ public class Paged<T> implements Serializable {
         this.list = list;
     }
 
-    public <R> Paged(List<R> data, Function<? super R, ? extends T> mapper) {
+    public <R> PageData(List<R> data, Function<? super R, ? extends T> mapper) {
         Objects.requireNonNull(data, "data list should not be empty!");
 
         if (data instanceof Page) {

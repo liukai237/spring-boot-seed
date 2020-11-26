@@ -1,6 +1,6 @@
 package com.iakuil.seed.service;
 
-import com.iakuil.seed.common.Paged;
+import com.iakuil.seed.common.PageData;
 import com.iakuil.seed.dao.DictMapper;
 import com.iakuil.seed.entity.Dict;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +26,8 @@ public class DictService {
         return dictMapper.list(dict);
     }
 
-    public Paged<Dict> listWithPage(Dict param) {
-        return new Paged<>(dictMapper.list(param));
+    public PageData<Dict> listWithPage(Dict param) {
+        return new PageData<>(dictMapper.list(param));
     }
 
     public int count(Map<String, Object> map) {

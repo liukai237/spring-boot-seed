@@ -171,7 +171,7 @@ public class SomeQueryParam {
 
 ### 6. 分页工具
 * 分页参数`pageNum`和`pageSize`，pageSize范围为0到500。
-* 使用PageHelper作为默认分页插件，自定义的`Paged`作为分页结果容器。
+* 使用PageHelper作为默认分页插件，自定义的`PageData`作为分页结果容器。
 * 关于Converter转换器，除分页场景，尽量只在Controller层使用。
 
 e.g.
