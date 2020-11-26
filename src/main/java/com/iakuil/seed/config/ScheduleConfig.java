@@ -1,8 +1,9 @@
 package com.iakuil.seed.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.*;
-import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -15,7 +16,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 @Slf4j
 @Configuration
 @EnableScheduling
-@Conditional(ScheduleConfig.SchedulerCondition.class)
+@ConditionalOnProperty(prefix = "scheduling", name = "enabled", havingValue = "true")
 public class ScheduleConfig implements SchedulingConfigurer {
 
     @Override
@@ -31,14 +32,5 @@ public class ScheduleConfig implements SchedulingConfigurer {
         scheduler.setAwaitTerminationSeconds(60);
         scheduler.setWaitForTasksToCompleteOnShutdown(true);
         return scheduler;
-    }
-
-    public static class SchedulerCondition implements Condition {
-        @Override
-        public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            boolean turnOn = Boolean.parseBoolean(context.getEnvironment().getProperty("scheduling.enabled"));
-            log.info("当前工程定时任务[{}]!", turnOn ? "已开启" : "未开启");
-            return turnOn;
-        }
     }
 }

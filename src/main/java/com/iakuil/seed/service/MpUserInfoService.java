@@ -1,6 +1,5 @@
 package com.iakuil.seed.service;
 
-import com.iakuil.seed.annotation.StartPage;
 import com.iakuil.seed.constant.SysConstant;
 import com.iakuil.seed.dao.MpUserInfoMapper;
 import com.iakuil.seed.entity.MpUserInfo;
@@ -30,7 +29,6 @@ public class MpUserInfoService {
         return mpUserInfoMapper.selectOne(query);
     }
 
-    @StartPage(orderBy = "create_time desc")
     public List<MpUserInfo> findByCondition(MpUserInfo condition) {
         return mpUserInfoMapper.select(condition);
     }

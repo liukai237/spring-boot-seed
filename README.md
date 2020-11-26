@@ -28,8 +28,10 @@
 # 《开发约定》
 ## 0x00 通用约定
 * 中心思想：约定重于配置；追求小而美，避免过度封装。
-* 编程风格基本遵守《阿里巴巴Java编程规约》，部分微调，比如数据库领域模型不需要加DO。
 * 业务与SQL分离，不推荐任何~~Criteria~~风格的高级语法糖。
+* 编程风格基本遵守《阿里巴巴Java编程规约》，部分微调：
+> * 领域对象采用贫血模型，只有两种POJO：Entity和DTO，前者不要有Swagger注解，后者不要有数据库相关注解。放到对应package即可，不强制要求加上类型后缀，比如数据库领域模型不需要加DO。
+> * 关于应用分层，最多只有三层。当Service和DAO层方法都可以使用时，优先调用Service层方法。
 
 ## 0x01 Controller层开发约定
 Controller层应该越“薄”越好，主要用于DTO/Entity转换，提供详细的Swagger文档，并使用MockMvc进行单元测试。
@@ -179,21 +181,27 @@ public Paged<UserDto> findUserWithPage(Integer pageNum, Integer pageSize) {
     return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
 }
 ```
-本项目提供了一个`@StartPage`注解，替代`PageHelper.startPage()`。一般情况下优先选用注解方式，除非业务特别复杂，需要在多次查询中插入分页查询，才使用原生的分页。
+此外还提供`QueryBase`分页方式。一般情况下优先选用这种方式。
 ```java
-  @StartPage(pageNum = 1, pageSize = 10)
-  public List<String> autoComplate(String keyword) {
-    return fooMapper.selectByKeyword(keyword));
-  }
+@Getter
+@Setter
+public class UserQueryParam extends QueryBase {
+    private Long userId;
+    private Gender gender;
+}
 
-  @StartPage(orderBy = "create_time desc")
-  public Paged<UserInfo> findWithPage(Integer pageNum, Integer pageSize) {
-    return new Paged<>(userInfoMapper.selectAll());
-  }
+public Resp<Paged<UserDetailDto>> queryUsers2(@RequestBody Req<UserQueryParam> req) {
+    return ok(userService.findByCondition(req.getQuery()));
+}
+
+@Transactional(readOnly = true)
+public Paged<UserDetailDto> findByCondition(QueryBase condition) {
+    return new Paged<>(userMapper.selectByCondition(condition), UserConverter.INSTANCE::toDto);
+}
 ```
 > 注意：
-> * 注解中的属性是默认值，优先级低于参数列表中的值。
-> * 注解中的orderBy属性一旦生效，则XML Mapper中排序语句将会被覆盖。
+> * QueryBase中的属性是默认值，优先级低于参数列表中的值。
+> * QueryBase的orderBy属性一旦生效，则XML Mapper中排序语句将会被覆盖。
 > * 单次查询最大返回数量为500。
 
 ### 7. 枚举处理

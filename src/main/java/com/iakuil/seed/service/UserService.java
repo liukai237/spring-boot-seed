@@ -1,8 +1,8 @@
 package com.iakuil.seed.service;
 
+import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.iakuil.seed.annotation.StartPage;
 import com.iakuil.seed.common.BaseService;
 import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.common.QueryBase;
@@ -46,13 +46,12 @@ public class UserService extends BaseService {
         return userMapper.selectOne(User.builder().userId(userId).build());
     }
 
-    @StartPage
     @Transactional(readOnly = true)
     public Paged<UserDetailDto> findWithPage(Integer pageNum, Integer pageSize, String orderBy) {
+        PageHelper.startPage(pageNum, pageSize, orderBy);
         return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
     }
 
-    @StartPage(orderBy = "create_time desc")
     @Transactional(readOnly = true)
     public Paged<UserDetailDto> findByCondition(QueryBase condition) {
         return new Paged<>(userMapper.selectByCondition(condition), UserConverter.INSTANCE::toDto);

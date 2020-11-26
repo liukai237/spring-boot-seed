@@ -1,6 +1,5 @@
 package com.iakuil.seed.service;
 
-import com.iakuil.seed.annotation.StartPage;
 import com.iakuil.seed.common.Paged;
 import com.iakuil.seed.dao.DictMapper;
 import com.iakuil.seed.entity.Dict;
@@ -27,7 +26,6 @@ public class DictService {
         return dictMapper.list(dict);
     }
 
-    @StartPage
     public Paged<Dict> listWithPage(Dict param) {
         return new Paged<>(dictMapper.list(param));
     }
