@@ -3,12 +3,12 @@ package com.iakuil.seed.dto;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.iakuil.seed.annotation.PasswordValidator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -41,8 +41,7 @@ public class UserAddParam {
     @JsonAlias({"mobile", "account"})
     private String tel;
 
-    @NotEmpty(message = "密码不能为空！")
-    @Size(max = 24, min = 6, message = "密码长度必须大于6小于24位！")
+    @PasswordValidator
     @ApiModelProperty(name = "password", value = "用户密码。", example = "123456", required = true)
     @JsonProperty("password")
     @JsonAlias({"Password", "passWd", "passwd"})
