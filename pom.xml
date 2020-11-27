@@ -43,6 +43,7 @@
         <sharding-jdbc-spring-boot-starter.version>4.1.1</sharding-jdbc-spring-boot-starter.version>
         <sharding-jdbc-self-id-generator.version>1.4.2</sharding-jdbc-self-id-generator.version>
 
+        <sentinel.version>2.2.3.RELEASE</sentinel.version>
         <spring-boot-admin-starter-client.version>2.2.3</spring-boot-admin-starter-client.version>
         <knife4j-spring-boot-starter.version>2.0.5</knife4j-spring-boot-starter.version>
     </properties>
@@ -61,10 +62,16 @@
         </dependency>
 
         <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-starter-client</artifactId>
-            <version>${spring-boot-admin-starter-client.version}</version>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+            <version>${sentinel.version}</version>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>de.codecentric</groupId>-->
+<!--            <artifactId>spring-boot-admin-starter-client</artifactId>-->
+<!--            <version>${spring-boot-admin-starter-client.version}</version>-->
+<!--        </dependency>-->
 
         <!--********** db ********** -->
         <dependency>
