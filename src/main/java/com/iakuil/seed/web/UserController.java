@@ -1,7 +1,7 @@
 package com.iakuil.seed.web;
 
 import com.iakuil.seed.common.BaseController;
-import com.iakuil.seed.common.Paged;
+import com.iakuil.seed.common.PageData;
 import com.iakuil.seed.common.Req;
 import com.iakuil.seed.common.Resp;
 import com.iakuil.seed.converter.UserConverter;
@@ -42,7 +42,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "sort", value = "排序规则", defaultValue = "createTime-", dataType = "string", paramType = "query"),
     })
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<Paged<UserDetailDto>> queryUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
+    public Resp<PageData<UserDetailDto>> queryUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
                                                  @RequestParam(required = false, defaultValue = "0") Integer pageSize,
                                                  @RequestParam(required = false, defaultValue = "createTime-") String sort) {
         return ok(userService.findWithPage(pageNum, pageSize, sort));
@@ -50,7 +50,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表，复杂分页排序。")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<Paged<UserDetailDto>> queryUsersByCondition(@RequestBody Req<UserQueryParam> req) {
+    public Resp<PageData<UserDetailDto>> queryUsersByCondition(@RequestBody Req<UserQueryParam> req) {
         return ok(userService.findByCondition(req.getQuery()));
     }
 
