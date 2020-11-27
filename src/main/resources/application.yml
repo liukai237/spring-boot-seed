@@ -1,5 +1,5 @@
 server:
-  port: 9001
+  port: 10080
   tomcat:
     uri-encoding: UTF-8
   compression:

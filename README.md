@@ -1,5 +1,5 @@
 # 基于Spring Boot 2.X的简易脚手架项目
-基于Jackson、通用Mapper与PageHelper的深度定制版本。
+基于SpringBoot、Jackson、通用Mapper/PageHelper深度定制的单机版本。
 
 ## 技术选型
 * String Boot 2.x
