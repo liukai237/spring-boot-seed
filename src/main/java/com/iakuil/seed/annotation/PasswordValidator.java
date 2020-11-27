@@ -14,7 +14,7 @@ import java.lang.annotation.*;
  */
 @Constraint(validatedBy = PassWordValidator.class)
 @Repeatable(PasswordValidator.List.class)
-@Target({ElementType.PARAMETER})
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface PasswordValidator {
