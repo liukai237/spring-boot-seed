@@ -1,0 +1,104 @@
+server:
+  port: 10010
+  tomcat:
+    uri-encoding: UTF-8
+  compression:
+    enabled: true
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: baseframework
+  profiles:
+    active: dev
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  jackson:
+    default-property-inclusion: non_empty
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    mapper:
+      ACCEPT_CASE_INSENSITIVE_ENUMS: true
+  mvc:
+    date-format: yyyy-MM-dd HH:mm:ss
+  boot:
+    admin:
+      client:
+        instance:
+          name: 基础框架
+          prefer-ip: true
+        url: http://127.0.0.1:10110
+
+mybatis:
+  type-aliases-package: com.iakuil.dao.entity
+  mapper-locations: classpath*:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    default-enum-type-handler: com.iakuil.common.db.AutoEnumTypeHandler
+
+mapper:
+  mappers: com.iakuil.common.db.CrudMapper, com.iakuil.common.db.ReadOnlyMapper
+  not-empty: true
+  identity: mysql
+  use-simple-type: false
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+management:
+  health:
+    defaults:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+kaptcha:
+  height: 50
+  width: 200
+  content:
+    length: 4
+    source: abcdefghjklmnopqrstuvwxyz23456789
+    space: 2
+  font:
+    color: black
+    name: Arial
+    size: 40
+  background-color:
+    from: lightGray
+    to: white
+  border:
+    enabled: true
+    color: black
+    thickness: 1
+
+knife4j:
+  cors: true
+
+sentry:
+  dsn: http://localhost:10111/
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    com.iakuil.seed.dao: DEBUG
+  file: ./logs/baseframework.log
+
+jasypt:
+  encryptor:
+    password: Bda7bXaExAA
+    property:
+      prefix: "KaZ@["
+      suffix: "]"
