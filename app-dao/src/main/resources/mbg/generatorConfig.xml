@@ -11,7 +11,7 @@
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
         <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
-            <property name="mappers" value="com.iakuil.common.db.CrudMapper"/>
+            <property name="mappers" value="com.iakuil.bf.common.db.CrudMapper"/>
         </plugin>
 
         <commentGenerator>
@@ -36,7 +36,7 @@
                             targetProject="src/main/java/">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
-            <property name="rootClass" value="com.iakuil.common.BaseDomain"/>
+            <property name="rootClass" value="com.iakuil.bf.common.BaseDomain"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <!-- 生成mapper.xml文件 -->

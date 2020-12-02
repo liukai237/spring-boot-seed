@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iakuil.dao.DictMapper">
+<mapper namespace="com.iakuil.bf.dao.DictMapper">
 
-	<select id="get" resultType="com.iakuil.dao.entity.Dict">
+	<select id="get" resultType="com.iakuil.bf.dao.entity.Dict">
 		select
 		`id`,`name`,`value`,`type`,`description`,`sort`,`parent_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`
 		from sys_dict where id = #{value}
 	</select>
 
-	<select id="list" resultType="com.iakuil.dao.entity.Dict">
+	<select id="list" resultType="com.iakuil.bf.dao.entity.Dict">
 		select
 		`id`,`name`,`value`,`type`,`description`,`sort`,`parent_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`
 		from sys_dict
@@ -60,7 +60,7 @@
 		</where>
 	</select>
 
-	<insert id="save" parameterType="com.iakuil.dao.entity.Dict"
+	<insert id="save" parameterType="com.iakuil.bf.dao.entity.Dict"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into sys_dict
 		(
@@ -94,7 +94,7 @@
 		)
 	</insert>
 
-	<update id="update" parameterType="com.iakuil.dao.entity.Dict">
+	<update id="update" parameterType="com.iakuil.bf.dao.entity.Dict">
 		update sys_dict
 		<set>
 			<if test="name != null">`name` = #{name}, </if>
@@ -125,7 +125,7 @@
 		</foreach>
 	</delete>
 
-	<select id="listType" resultType="com.iakuil.dao.entity.Dict">
+	<select id="listType" resultType="com.iakuil.bf.dao.entity.Dict">
 		select distinct `type` , description from sys_dict
 	</select>
 

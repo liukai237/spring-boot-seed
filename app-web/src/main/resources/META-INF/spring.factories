@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.iakuil.midware.redis.config.RedisConfig,\
-  com.iakuil.dao.config.DbConfig,\
-  com.iakuil.service.config.KaptchaAutoConfiguration
+  com.iakuil.bf.redis.config.RedisConfig,\
+  com.iakuil.bf.dao.config.DbConfig,\
+  com.iakuil.bf.service.config.KaptchaAutoConfiguration

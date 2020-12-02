@@ -38,10 +38,10 @@ mybatis:
   mapper-locations: classpath*:mapper/**/*.xml
   configuration:
     map-underscore-to-camel-case: true
-    default-enum-type-handler: com.iakuil.common.db.AutoEnumTypeHandler
+    default-enum-type-handler: com.iakuil.bf.common.db.AutoEnumTypeHandler
 
 mapper:
-  mappers: com.iakuil.common.db.CrudMapper, com.iakuil.common.db.ReadOnlyMapper
+  mappers: com.iakuil.bf.common.db.CrudMapper, com.iakuil.bf.common.db.ReadOnlyMapper
   not-empty: true
   identity: mysql
   use-simple-type: false
@@ -93,7 +93,7 @@ logging:
   level:
     root: INFO
     org.springframework.web: INFO
-    com.iakuil.dao: DEBUG
+    com.iakuil.bf.dao: DEBUG
   file: ./logs/base-framework.log
 
 jasypt:
