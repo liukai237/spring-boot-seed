@@ -6,8 +6,8 @@ import com.iakuil.bf.common.tool.BeanMapUtils;
 import java.util.Map;
 
 /**
- * 数据库查询对象基类
- * <p>一般情况下不能够将Entity直接暴露为接口入参，也不建议使用Map，所以推荐所有查询参数均封装成JavaBean并且继承该类。</p><br/>
+ * 数据库分页查询对象基类
+ * <p>一般情况下不能够将Entity直接暴露为接口入参，也不建议使用Map，所以推荐所有<strong>分页查询参数</strong>均封装成JavaBean并且继承该类。</p><br/>
  * <p>当pagehelper.supportMethodsArguments配置为<strong>true</strong>时，可以实现自动分页排序。</p><br/>
  * <p>另外提供{@code asMap}方法，以Map形式获取子类所有属性。</p>
  */
