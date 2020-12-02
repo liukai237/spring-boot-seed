@@ -15,12 +15,13 @@
         <dependency>
             <groupId>com.iakuil</groupId>
             <artifactId>app-dao</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <groupId>com.iakuil</groupId>
+            <artifactId>redis-support</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

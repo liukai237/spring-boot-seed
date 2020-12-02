@@ -7,6 +7,8 @@
 * MySQL + Hikari数据库连接池
 * MapStruct
 * Swagger2
+* Sentinel限流
+* Spring Cloud Admin服务监控
  
 |名称|版本号|项目主页|简介|
 |---|---|---|---|
@@ -15,6 +17,8 @@
 |通用Mapper|2.1.5|https://mapperhelper.github.io||
 |Page Helper|5.1.8|https://github.com/pagehelper/pagehelper-spring-boot||
 |Sharding-JDBC|4.1.1|https://shardingsphere.apache.org/||
+|Sentinel|1.8.0|https://github.com/alibaba/Sentinel/releases||
+|Spring Boot Admin|2.2.3|https://github.com/codecentric/spring-boot-admin||
 
 ## 主要功能
 除了传统SSM框架提供的特性外，还集成如下功能：
@@ -33,8 +37,9 @@
 |app-biz|Service层+DTO|主要用于处理业务逻辑。|
 |app-dao|DAO层+Entity|主要用于与数据库交互。|
 |common|通用工具|包括工具类、枚举、各种POJO等|
-|monitor|Spring Cloud Admin|监控与日志|
-|sentinel|Alibaba Sentinel|限流|
+|midware|中间件|包括Redis、RabbitMQ等常用中间件（可选）|
+|monitor|Spring Boot Admin|监控与日志（可选）|
+|sentinel|Alibaba Sentinel|限流（可选）|
 
 ## 附录：名词解释
 |名词|说明|备注|
@@ -44,6 +49,6 @@
 |DTO|数据传输对象|存在于Service方法入口、出口，或者被Controller层Resp包裹后返回给前端。|
 |Query|查询对象|只能用于Controller方法入口，包裹QueryBase后可以作为分页查询场景查询条件传递到DAO层。|
 
-> `QueryBase`主要用于DAO层分页排序过滤查询而不是Service业务逻辑处理，如果Service方法需要业务参数，应该再封装一个出DTO来接收。
+> `QueryBase`主要用于DAO层分页排序过滤查询而不是Service业务逻辑处理，如果Service方法需要业务参数，应该再封装一个出DTO来接收，或者通过`JsonPathUtils`等工具反射获取。
 
 --- THE END ---
