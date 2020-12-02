@@ -9,7 +9,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   application:
-    name: baseframework
+    name: base-framework
   profiles:
     active: dev
   http:
@@ -94,7 +94,7 @@ logging:
     root: INFO
     org.springframework.web: INFO
     com.iakuil.seed.dao: DEBUG
-  file: ./logs/baseframework.log
+  file: ./logs/base-framework.log
 
 jasypt:
   encryptor:

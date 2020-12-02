@@ -54,3 +54,6 @@ logging:
     org.springframework.web: INFO
     com.iakuil.seed.dao: DEBUG
   file: ./logs/spring-boot-seed.log
+
+scheduling:
+  enabled: true

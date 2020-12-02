@@ -1,5 +1,5 @@
 # 基于Spring Boot 2.X的简易脚手架项目
-基于Jackson、通用Mapper与PageHelper的深度定制版本。
+基于SpringBoot、通用Mapper（tkMapper）与PageHelper的深度定制版本。
 
 ## 技术选型
 * String Boot 2.x
@@ -16,7 +16,7 @@
 |Page Helper|5.1.8|https://github.com/pagehelper/pagehelper-spring-boot||
 |Sharding-JDBC|4.1.1|https://shardingsphere.apache.org/||
 
-## 附加功能
+## 主要功能
 除了传统SSM框架提供的特性外，还集成如下功能：
 * 基于通用Mapper的MBG代码生成器
 * 基于Sharding-JDBC的ID发号器
@@ -24,279 +24,26 @@
 * MySQL JSON/枚举字段映射
 * 分页排序和日期参数处理
 * 统一返回结果格式及异常处理
+* saveOrModify、逻辑删除、乐观锁
 
-# 《开发约定》
-## 0x00 通用约定
-* 中心思想：约定重于配置；追求小而美，避免过度封装。
-* 业务与SQL分离，不推荐任何~~Criteria~~风格的高级语法糖。
-* 编程风格基本遵守《阿里巴巴Java编程规约》，部分微调：
-> * 领域对象采用贫血模型，只有两种POJO：Entity和DTO，前者不要有Swagger注解，后者不要有数据库相关注解。放到对应package即可，不强制要求加上类型后缀，比如数据库领域模型不需要加DO。
-> * 关于应用分层，最多只有三层。当Service和DAO层方法都可以使用时，优先调用Service层方法。
+## 应用分层
+|目录|说明|备注|
+|---|---|---|
+|app-web|Controller层+Query|MVC|
+|app-biz|Service层+DTO|主要用于处理业务逻辑。|
+|app-dao|DAO层+Entity|主要用于与数据库交互。|
+|common|通用工具|包括工具类、枚举、各种POJO等|
+|monitor|Spring Cloud Admin|监控与日志|
+|sentinel|Alibaba Sentinel|限流|
 
-## 0x01 Controller层开发约定
-Controller层应该越“薄”越好，主要用于DTO/Entity转换，提供详细的Swagger文档，并使用MockMvc进行单元测试。
+## 附录：名词解释
+|名词|说明|备注|
+|---|---|---|
+|Domain|领域模型|所有可以持久化/序列化的POJO类的泛称。|
+|Entity|实体对象|属性与数据库表字段一一对应，一般由MBG生成。整个框架内均可见，但是不允许直接传递给前端。|
+|DTO|数据传输对象|存在于Service方法入口、出口，或者被Controller层Resp包裹后返回给前端。|
+|Query|查询对象|只能用于Controller方法入口，包裹QueryBase后可以作为分页查询场景查询条件传递到DAO层。|
 
-### 1. 统一封装的响应结果
-* 返回Http Status统一为200。
-* 返回结果统一封装成code、msg、data三段式结构，以及冗余字段success（分页接口提供额外字段）。
-* Controller层继承BaseController，使用ok()、fail()或者done()方法返回结果。
-> 之所以不提供类似R.ok()的方法是为了防止滥用封装对象。`Resp`对象只应该出现在Controller层。
-* 所有的Controller都应该提供Swagger文档，尽量不要返回Resp<?>或者Map。
+> `QueryBase`主要用于DAO层分页排序过滤查询而不是Service业务逻辑处理，如果Service方法需要业务参数，应该再封装一个出DTO来接收。
 
-### 2. 参数校验
-* 注意区分***基础数据校验***和***业务数据校验***，比如“手机号码不能为空”属于前者，“手机号码尚未注册”属于后者。
-* 基础数据校验使用Hibernate Validator，通过JSR303注解进行校验。如果预设的错误码无法满足要求，可通过`@ErrorCode`注解重新定义错误码。
-* 业务数据校验一般通过代码逻辑进行判断，Controller层可通过fail()方法返回，Service层通过抛出`BusinessException`实现。
-
-### 3. 日期处理
-全局统一配置日期格式如下：
-
-|对象|Date|LocalDateTime|LocalDate|LocalTime|
-|---|---|---|---|---|
-|格式|yyyy-MM-dd HH:mm:ss|yyyy-MM-dd HH:mm:ss|yyyy-MM-dd|HH:mm:ss|
-
-#### 例1：
-```java
-@GetMapping(value = "/hello")
-public Date getTimestamp() {
-    return new Date();
-}
-```
-
-Response ：2020-02-21 12:15:45
-
-#### 例2：
-```java
-@GetMapping(value = "/hello/{someDate}")
-public LocalDateTime getTimestamp(@PathVariable LocalDateTime someDate) {
-    return someDate;
-}
-```
-Request：
-```jshelllanguage
-curl http://localhost:8080/hello/2020-02-21+12%3a15%3a45
-```
-Response：2020-02-21 12:15:45
-
-#### 例3：
-```java
-@GetMapping(value = "/hello/")
-public LocalDate getTimestamp(@RequestParam LocalDate someDate) {
-    return someDate;
-}
-```
-Request：
-```jshelllanguage
-curl http://localhost:8080/helloTime/?someDate=2020-02-21
-```
-Response ：2020-02-21
-
-#### 例4：
-```java
-@GetMapping(value = "/hello/")
-public Date getTimestamp(@DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam Date someDate) {
-    return someDate;
-}
-```
-Request：
-```jshelllanguage
-curl http://localhost:8080/helloTime/?someDate=2020-02-21
-```
-Response ：2020-02-21 00:00:00
-
-#### 例5：
-```java
-@Data
-public class Student {
-    private Long id;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date birthday;
-    
-    private LocalDateTime createTime;
-}
-```
-序列化后：
-```json
-{
-    "id": "9223372036804940651",
-    "birthday": "2009-03-08",
-    "createTime": "2019-07-10 13:40:06"
-}
-```
-注意：JSON序列化时，@DateTimeFormat注解换成了@JsonFormat。
-> BTW，id字段是Long类型，可能存在精度丢失，因此全局转为字符串。
-
-### 4. 开始日期和结束日期
-时间范围参数可以还可以使用自定义注释@StartDate和@EndDate，前者精确到00:00:00:000，后者精确到23:59:59:999。  
-比如：
-```java
-@ApiModel(value = "SomeQueryParam", description = "查询参数")
-public class SomeQueryParam {
-    @StartDate
-    @ApiModelProperty(name = "startDate", value = "开始日期，自动补齐00:00:00", example = "2019-02-21")
-    private Date startDate;
-    
-    @EndDate
-    @ApiModelProperty(name = "endDate", value = "结束日期，自动补齐23:59:59", example = "2019-02-21")
-    private Date endDate;
-}
-```
-> 当天示例：`{"startDate": "2018-11-07","endDate": "2018-11-07"}`，即表示：2018年11月7日零点到2018年11月7日23点59分59秒之间的时间段。
-
-再比如：
-```java
-  public void initData(@StartDate @RequestParam Date since, @EndDate @RequestParam Date until);
-```
-
-### 5. 排序
-* RESTful风格参数，支持a+b-c+和+a,-b,+c两种格式
-> e.g.
-> ```jshelllanguage
->  curl http://localhost:8080/users?sort=+createTime,-id
-> ```
-* Request Body方式，传入数组，支持多重排序
-> ```json 
-> {
->   “sorting”: [
->     {
->       "field": "createTime",
->       "order": "desc"
->     }
->   ]
-> }
-> ```
-* 排序字段统一使用驼峰风格，后端自动转换为下划线风格。
-> 注意：对于数据库表不存在的字段，需要在Service层，或者SQL语句中单独处理。
-
-### 6. 分页工具
-* 分页参数`pageNum`和`pageSize`，pageSize范围为0到500。
-* 使用PageHelper作为默认分页插件，自定义的`PageData`作为分页结果容器。
-* 关于Converter转换器，除分页场景，尽量只在Controller层使用。
-
-e.g.
-```java
-public Paged<UserDto> findUserWithPage(Integer pageNum, Integer pageSize) {
-    PageHelper.startPage(pageNum, pageSize, "update_time desc");
-    return new Paged<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
-}
-```
-此外还提供`QueryBase`分页方式。一般情况下优先选用这种方式。
-```java
-@Getter
-@Setter
-public class UserQueryParam extends QueryBase {
-    private Long userId;
-    private Gender gender;
-}
-
-public Resp<Paged<UserDetailDto>> queryUsers2(@RequestBody Req<UserQueryParam> req) {
-    return ok(userService.findByCondition(req.getQuery()));
-}
-
-@Transactional(readOnly = true)
-public Paged<UserDetailDto> findByCondition(QueryBase condition) {
-    return new Paged<>(userMapper.selectByCondition(condition), UserConverter.INSTANCE::toDto);
-}
-```
-> 注意：
-> * QueryBase中的属性是默认值，优先级低于参数列表中的值。
-> * QueryBase的orderBy属性一旦生效，则XML Mapper中排序语句将会被覆盖。
-> * 单次查询最大返回数量为500。
-
-### 7. 枚举处理
-* 枚举类一般继承`CodeEnum`，前端看到的是`code`和`desc`描述字段，其中code是小写的枚举name，而不是数据库中真实的code字段；
-* 接口调用时，使用`code`（不区分大小写）即可反序列化成对应枚举。
-
-### 8. 其他
-* 当参数名为复数时，值为数组。参数值为null或者不传表示***全部***，不要使用空字符串或者`ALL`。
-
-## 0x02 业务层开发约定
-主要业务逻辑都应该写在Service层，除分页方法外，应该尽量做到可复用。对于其它领域对象的引用，优先导入Service而不是Mapper。
-* 只读方法增加注解`@Transactional(readOnly = true)`，修改方法必须增加注释`@Transactional(rollbackFor = Exception.class)`。
-* 在Service层而不是Controller层打印业务日志。
-* 在Service层而不是DAO层实现saveOrModify。
-* 不要在循环中进行IO操作，比如文件和数据库读写。
-
-## 0x03 DAO层开发约定
-### 主键生成策略
-* ID尽量使用Long类型，反序列化成JSON时会自动转换为字符串，不会造成精度丢失。
-* 提供CommonSelfId和UUID两种主键生成策略。Long类型的ID默认使用前者，String类型默认后者。
-> 如果使用了其他的主键生成策略，默认的策略将不会生效。
-
-e.g.
-```java
-@Data
-@Table(name = "t_user")
-public class User extends BaseDomain {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "select replace(uuid(), '-', '')")
-    private Long userId;
-    private String username;
-}
-```
-
-### 枚举、对象映射
-* code字段应该设计成int类型，Java程序中映射成枚举，前端传递的是枚举的name（小写）和描述文字。
-* 枚举类型实现CodeEnum，即可自动完成Integer与Enum对象之间的映射。
-
-* JSON字段对应的Java对象需要手动创建，并继承实现`AbstractJsonTypeHandler`，例如：
-```java
-class Foo {
-    // ...
-}
-
-class FooJsonHandler<Foo> extends AbstractJsonTypeHandler {
-    // ...
-}
-```
-然后做如下配置：
-```java
-@ColumnType(typeHandler = FooJsonHandler.class)
-private Foo foo;
-```
-> 注意：如果存在XML Mapper，需要同步修改。
-
-### 自动填充字段
-使用`@CreatedDate`和`@LastModifiedDate`注解的字段，如果没有赋值，将会自动被填充系统时间。
-
-### 乐观锁和逻辑删除
-乐观锁使用`@Version`注解，支持的方法有：
-* delete
-* deleteByPrimaryKey
-* updateByPrimaryKey
-* updateByPrimaryKeySelective
-* updateByExample
-* updateByExampleSelective
-
-> 注意：无论修改还是删除，执行操作前必须先查询一次才能生效。
-
-逻辑删除使用`@LogicDelete`注解，支持的方法有：
-* int delete
-* deleteByExample
-* deleteByCondition
-* deleteByPrimaryKey
-
-## 0x04 其他开发约定
-
-### 异常处理
-* Controller层使用统一封装的ok()、fail()方法返回，而不是抛出异常。
-* 所有Checked Exception使用`BusinessException`重新封装，统一处理。
-> 比如Service层返回错误消息：“用户名重复!”。
-
-### 代码生成器
-提供基于tkMapper的代码生成器（MBG），只负责生成实体类、DAO和XML Mapper，并且实体类没有配置ID生成策略，需要自行配置。
-
-### Code Review
-* 代码评审前应该先进行静态代码检查，不要把时间和精力浪费在低级缺陷上。
-* 原则上所有Controller层暴露的API接口和MyBatis XML中的SQL语句都应该进行评审。
-
-## 0x05 写在最后
-* 此乃单机版本，并不适合直接改造成分布式。
-* 如果Controller和Service分开部署，Service层方法入参不应该是Map。
-* 安全框架后续再补上。
-* 为何不用MyBatis Plus？  
-***生活不止眼前的苟且，接口不止简单的CRUD~~***
-
---- END ---
+--- THE END ---

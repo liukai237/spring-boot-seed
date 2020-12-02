@@ -5,17 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.iakuil</groupId>
-        <artifactId>bf-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <artifactId>app-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>app-biz</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${project.version}</version>
 
     <dependencies>
         <dependency>
             <groupId>com.iakuil</groupId>
             <artifactId>app-dao</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
