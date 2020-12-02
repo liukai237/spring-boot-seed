@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.TimeUnit;
 
-@Api(value = "Token生成与校验", tags = {"Token生成与校验"})
+@Api(value = "TokenController", tags = {"Token生成与校验"})
 @Slf4j
 @RestController
 @RequestMapping("/api/token/")

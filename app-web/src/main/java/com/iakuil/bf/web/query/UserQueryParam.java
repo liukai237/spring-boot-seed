@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel(value = "UserQueryParam", description = "用户查询参数")
-public class UserPageQueryParam extends PageQuery {
+public class UserQueryParam extends PageQuery {
 
     @ApiModelProperty(name = "userId", value = "用户ID")
     private Long userId;

@@ -11,7 +11,7 @@ import com.iakuil.bf.service.converter.UserConverter;
 import com.iakuil.bf.service.dto.UserDetailDto;
 import com.iakuil.bf.web.query.UserAddParam;
 import com.iakuil.bf.web.query.UserEditParam;
-import com.iakuil.bf.web.query.UserPageQueryParam;
+import com.iakuil.bf.web.query.UserQueryParam;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.Arrays;
 
-@Api(value = "用户管理", tags = {"用户管理"})
+@Api(value = "UserController", tags = {"用户管理"})
 @RestController
 @RequestMapping("/api/user/")
 public class UserController extends BaseController {
@@ -51,7 +51,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表，复杂分页排序。")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<PageData<UserDetailDto>> queryUsersByCondition(@RequestBody Req<UserPageQueryParam> req) {
+    public Resp<PageData<UserDetailDto>> queryUsersByCondition(@RequestBody Req<UserQueryParam> req) {
         return ok(userService.findByCondition(req.getQuery()));
     }
 

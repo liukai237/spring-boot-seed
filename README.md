@@ -49,6 +49,4 @@
 |DTO|数据传输对象|存在于Service方法入口、出口，或者被Controller层Resp包裹后返回给前端。|
 |Query|查询对象|只能用于Controller方法入口，包裹`PageQuery`后可以作为分页查询场景查询条件传递到DAO层。|
 
-> `PageQuery`一般和`PageData`成对出现，主要用于DAO层分页排序过滤查询而不是Service业务逻辑处理，如果Service方法需要业务参数，可以通过`asMap`方法获取所有属性，再配合commons的`MapUtils`等工具做进一步处理。
-
 --- THE END ---
