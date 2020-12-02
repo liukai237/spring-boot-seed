@@ -1,5 +1,5 @@
 server:
-  port: 10010
+  port: 10240
   tomcat:
     uri-encoding: UTF-8
   compression:
@@ -93,7 +93,7 @@ logging:
   level:
     root: INFO
     org.springframework.web: INFO
-    com.iakuil.seed.dao: DEBUG
+    com.iakuil.dao: DEBUG
   file: ./logs/base-framework.log
 
 jasypt:

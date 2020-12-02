@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @ApiModel(value = "Req", description = "统一封装的请求体")
 @Getter
 @Setter
-public class Req<T extends QueryBase> {
+public class Req<T extends PageQuery> {
 
     @ApiModelProperty(name = "filtering", value = "过滤参数。")
     private T filter;
@@ -50,8 +50,8 @@ public class Req<T extends QueryBase> {
     }
 
     @JsonIgnore
-    public QueryBase getQuery() {
-        QueryBase query = BeanUtils.copy(this.filter, filter.getClass());
+    public PageQuery getQuery() {
+        PageQuery query = BeanUtils.copy(this.filter, filter.getClass());
         if (this.paging != null) {
             query.setPageSize(this.paging.getPageSize());
             query.setPageNum(this.paging.getPageNum());

@@ -1,6 +1,6 @@
 package com.iakuil.web.query;
 
-import com.iakuil.common.QueryBase;
+import com.iakuil.common.PageQuery;
 import com.iakuil.common.constant.Gender;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel(value = "UserQueryParam", description = "用户查询参数")
-public class UserQueryParam extends QueryBase {
+public class UserPageQueryParam extends PageQuery {
 
     @ApiModelProperty(name = "userId", value = "用户ID")
     private Long userId;

@@ -1,6 +1,6 @@
 package com.iakuil.dao;
 
-import com.iakuil.common.QueryBase;
+import com.iakuil.common.PageQuery;
 import com.iakuil.common.db.CrudMapper;
 import com.iakuil.dao.entity.User;
 import org.apache.ibatis.annotations.CacheNamespace;
@@ -17,5 +17,5 @@ public interface UserMapper extends CrudMapper<User> {
 
     User selectByIdentity(String identity);
 
-    List<User> selectByCondition(QueryBase condition);
+    List<User> selectByCondition(PageQuery condition);
 }

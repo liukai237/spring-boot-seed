@@ -4,17 +4,17 @@
 
 	<select id="selectByCondition" resultType="com.iakuil.dao.entity.User" parameterType="map">
 		select
-		  user_id, username, gender, birthday, passwd_hash, tel, avatar, province, nickname, email, address, create_time, update_time
+		  id, username, gender, birthday, passwd_hash, tel, avatar, province, nickname, email, address, create_time, update_time
 		from t_user
 		<where>
-			<if test="userId != null"> and user_id = #{userId} </if>
+			<if test="userId != null"> and id = #{userId} </if>
 			<if test="gender != null"> and gender = #{gender} </if>
 			<if test="tel != null and tel != ''"> and tel = #{tel} </if>
 		</where>
 	</select>
 
 	<select id="selectByIdentity" resultType="com.iakuil.dao.entity.User" parameterType="string">
-		select * from t_user where user_id = #{identity} || username = #{identity} || tel = #{identity} || email = #{identity}
+		select * from t_user where id = #{identity} || username = #{identity} || tel = #{identity} || email = #{identity}
 	</select>
 
 	<select id="selectByOpenId" resultType="com.iakuil.dao.entity.User" parameterType="string">

@@ -11,7 +11,7 @@ import com.iakuil.service.converter.UserConverter;
 import com.iakuil.service.dto.UserDetailDto;
 import com.iakuil.web.query.UserAddParam;
 import com.iakuil.web.query.UserEditParam;
-import com.iakuil.web.query.UserQueryParam;
+import com.iakuil.web.query.UserPageQueryParam;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -51,7 +51,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表，复杂分页排序。")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<PageData<UserDetailDto>> queryUsersByCondition(@RequestBody Req<UserQueryParam> req) {
+    public Resp<PageData<UserDetailDto>> queryUsersByCondition(@RequestBody Req<UserPageQueryParam> req) {
         return ok(userService.findByCondition(req.getQuery()));
     }
 

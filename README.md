@@ -47,8 +47,8 @@
 |Domain|领域模型|所有可以持久化/序列化的POJO类的泛称。|
 |Entity|实体对象|属性与数据库表字段一一对应，一般由MBG生成。整个框架内均可见，但是不允许直接传递给前端。|
 |DTO|数据传输对象|存在于Service方法入口、出口，或者被Controller层Resp包裹后返回给前端。|
-|Query|查询对象|只能用于Controller方法入口，包裹QueryBase后可以作为分页查询场景查询条件传递到DAO层。|
+|Query|查询对象|只能用于Controller方法入口，包裹`PageQuery`后可以作为分页查询场景查询条件传递到DAO层。|
 
-> `QueryBase`主要用于DAO层分页排序过滤查询而不是Service业务逻辑处理，如果Service方法需要业务参数，应该再封装一个出DTO来接收，或者通过`JsonPathUtils`等工具反射获取。
+> `PageQuery`一般和`PageData`成对出现，主要用于DAO层分页排序过滤查询而不是Service业务逻辑处理，如果Service方法需要业务参数，可以通过`asMap`方法获取所有属性，再配合commons的`MapUtils`等工具做进一步处理。
 
 --- THE END ---

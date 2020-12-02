@@ -6,7 +6,7 @@ create schema test default character set utf8mb4 collate utf8mb4_unicode_ci;
 drop table if exists `t_user`;
 create table t_user
 (
-  user_id     bigint       not null,
+  id     bigint       not null,
   username    varchar(10)  null,
   gender      tinyint      null,
   birthday    date         null,
