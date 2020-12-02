@@ -15,6 +15,8 @@
         <module>app-biz</module>
         <module>app-web</module>
         <module>midware/redis-support</module>
+        <module>midware/rabbitmq-support</module>
+        <module>midware/websocket-support</module>
         <module>monitor</module>
     </modules>
 
