@@ -1,4 +1,4 @@
-package com.iakuil.bf.common.db;
+package com.iakuil.bf.common;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.github.pagehelper.Page;
@@ -17,7 +17,8 @@ import java.util.stream.Collectors;
 
 /**
  * MyBatis分页结果容器
- * <p>功能同PageInfo，额外支持转换器参数</p><br/>
+ * <p>功能同PageInfo，额外支持转换器参数。</p><br/>
+ * <p>一般与{@link PageQuery}结对出现。</p>
  *
  * @param <T> Entity
  */
