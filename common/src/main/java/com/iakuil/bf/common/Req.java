@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * 复杂查询请求体
  *
- * <p>【强制】所有分页接口必须使用该组件作为唯一的入参（自动查询这种简单的接口除外）。</p><br/>
+ * <p>【强制】所有分页接口必须使用该组件作为唯一的入参（自动完成这种简单的接口除外）。</p><br/>
  * <p>【建议】使用Java Bean而不是Map作为filtering查询参数。</p><br/>
  * <p>除filtering、paging和sorting之外的属性统一放入other，不直接参与数据库查询逻辑。
  * 比如：某接口需要在业务层对比签名，又不想将它作为过滤条件，这时就可以单独传入该参数。
@@ -29,8 +29,6 @@ import java.util.stream.Collectors;
  * @param <T> 过滤条件
  */
 @ApiModel(value = "Req", description = "统一封装的请求体")
-@Getter
-@Setter
 public class Req<T extends PageQuery> {
 
     @ApiModelProperty(name = "filtering", value = "过滤参数。")
@@ -68,6 +66,30 @@ public class Req<T extends PageQuery> {
         }
 
         return query;
+    }
+
+    public T getFilter() {
+        return filter;
+    }
+
+    public void setFilter(T filter) {
+        this.filter = filter;
+    }
+
+    public void setPaging(Paging paging) {
+        this.paging = paging;
+    }
+
+    public void setSorting(Sorting[] sorting) {
+        this.sorting = sorting;
+    }
+
+    public Map<String, Object> getOther() {
+        return other;
+    }
+
+    public void setOther(Map<String, Object> other) {
+        this.other = other;
     }
 
     /**

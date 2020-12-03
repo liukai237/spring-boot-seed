@@ -39,19 +39,19 @@ public class DictController extends BaseController {
         return ok(dictConverter.toDtoList(dictService.listType()));
     }
 
-    @ApiOperation(value = "查询数据字典", notes = "根据ID查询数据字典。")
+    @ApiOperation(value = "查询单个数据字典", notes = "根据ID查询数据字典。")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<DictDto> list(@RequestParam Long id) {
         return ok(dictConverter.toDto(dictService.get(id)));
     }
 
-    @ApiOperation(value = "查询数据字典", notes = "查询所有数据字典数据（不分页）。")
+    @ApiOperation(value = "查询数据字典（不分页）", notes = "查询所有数据字典数据（不分页）。")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<List<DictDto>> list(@RequestBody DictDto dict) {
         return ok(dictConverter.toDtoList(dictService.list(dictConverter.toEntity(dict))));
     }
 
-    @ApiOperation(value = "查询数据字典", notes = "分页查询数据字典数据。")
+    @ApiOperation(value = "分页查询数据字典", notes = "分页查询数据字典数据。")
     @PostMapping(value = "/listWithPage", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<PageData<DictDto>> listWithPage(@RequestBody Req<DictQueryParam> param) {
         PageQuery query = param.getQuery();
