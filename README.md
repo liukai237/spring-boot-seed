@@ -1,3 +1,5 @@
+![xxx](https://repository-images.githubusercontent.com/168498776/44575b00-3555-11eb-8591-5f432aa8fcb2)
+
 # 基于Spring Boot 2.X的简易脚手架项目
 基于SpringBoot、通用Mapper（tkMapper）与PageHelper的深度定制版本。
 
@@ -7,8 +9,8 @@
 * MySQL + Hikari数据库连接池
 * MapStruct
 * Swagger2
-* Sentinel限流
-* Spring Cloud Admin服务监控
+* Sentinel限流（可选）
+* Spring Cloud Admin服务监控（可选）
  
 |名称|版本号|项目主页|简介|
 |---|---|---|---|
