@@ -17,8 +17,8 @@ import java.util.List;
 
 /**
  * 字典表接口
- * <p>演示原生SpringMVC + 原生MyBatis XML</p>
- * <p>仅用到PageHelper分页插件，没有使用到tkMapper。</p>
+ * <p>演示原生SpringMVC + 原生MyBatis XML</p><br/>
+ * <p>适用于某些开源或者项目的模块移植。</p>
  */
 @Api(value = "DictController", tags = {"数据字典"})
 @RestController
@@ -40,7 +40,7 @@ public class DictController extends BaseController {
     }
 
     @ApiOperation(value = "查询数据字典", notes = "根据ID查询数据字典。")
-    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<DictDto> list(@RequestParam Long id) {
         return ok(dictConverter.toDto(dictService.get(id)));
     }
@@ -65,7 +65,7 @@ public class DictController extends BaseController {
     }
 
     @ApiOperation(value = "修改数据字典", notes = "修改数据字典。")
-    @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/modify", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<?> modify(@RequestBody DictDto dict) {
         return done(dictService.update(dictConverter.toEntity(dict)) > 0);
     }

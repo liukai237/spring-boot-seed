@@ -36,9 +36,6 @@
 				order by id desc
 			</otherwise>
 		</choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
 	</select>
 
 	<select id="count" resultType="int">
@@ -60,10 +57,10 @@
 		</where>
 	</select>
 
-	<insert id="save" parameterType="com.iakuil.bf.dao.entity.Dict"
-		useGeneratedKeys="true" keyProperty="id">
+	<insert id="save" parameterType="com.iakuil.bf.dao.entity.Dict">
 		insert into sys_dict
 		(
+		`id`,
 		`name`,
 		`value`,
 		`type`,
@@ -79,6 +76,7 @@
 		)
 		values
 		(
+		#{id},
 		#{name},
 		#{value},
 		#{type},

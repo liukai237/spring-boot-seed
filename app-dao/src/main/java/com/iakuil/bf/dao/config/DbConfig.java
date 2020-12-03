@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Configuration
-@MapperScan(basePackages = "com.iakuil.dao")
+@MapperScan(basePackages = "com.iakuil.bf.dao")
 @EnableTransactionManagement
 public class DbConfig {
 

@@ -25,7 +25,7 @@ public class Swagger2Config {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.iakuil.web.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.iakuil.bf.web.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

@@ -1,5 +1,6 @@
 package com.iakuil.bf.service;
 
+import com.dangdang.ddframe.rdb.sharding.id.generator.IdGenerator;
 import com.github.pagehelper.PageHelper;
 import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.dao.DictMapper;
@@ -19,10 +20,12 @@ import java.util.Map;
 @Service
 public class DictService {
     private final DictMapper dictMapper;
+    private final IdGenerator idGenerator;
 
     @Autowired
-    public DictService(DictMapper dictMapper) {
+    public DictService(DictMapper dictMapper, IdGenerator idGenerator) {
         this.dictMapper = dictMapper;
+        this.idGenerator = idGenerator;
     }
 
     public Dict get(Long id) {
@@ -44,6 +47,7 @@ public class DictService {
 
     public int save(Dict dict) {
         Date now = new Date();
+        dict.setId(idGenerator.generateId().longValue());
         dict.setCreateDate(now);
         dict.setUpdateDate(now);
         return dictMapper.save(dict);
