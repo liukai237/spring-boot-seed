@@ -1,7 +1,7 @@
 package com.iakuil.bf.service;
 
 import com.github.pagehelper.PageHelper;
-import com.iakuil.bf.common.db.PageData;
+import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.dao.WxUserInfoMapper;
 import com.iakuil.bf.dao.entity.WxUserInfo;
 import lombok.extern.slf4j.Slf4j;

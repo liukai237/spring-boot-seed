@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.BaseService;
 import com.iakuil.bf.common.PageQuery;
-import com.iakuil.bf.common.db.PageData;
+import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.dao.*;
 import com.iakuil.bf.dao.entity.*;
 import com.iakuil.bf.service.converter.UserConverter;

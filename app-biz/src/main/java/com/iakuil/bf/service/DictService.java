@@ -1,6 +1,6 @@
 package com.iakuil.bf.service;
 
-import com.iakuil.bf.common.db.PageData;
+import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.dao.DictMapper;
 import com.iakuil.bf.dao.entity.Dict;
 import org.springframework.beans.factory.annotation.Autowired;
