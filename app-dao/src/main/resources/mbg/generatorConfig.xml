@@ -32,7 +32,7 @@
         </javaTypeResolver>
 
         <!-- 生成实体类 -->
-        <javaModelGenerator targetPackage="com.iakuil.seed.entity"
+        <javaModelGenerator targetPackage="com.iakuil.bf.dao.entity"
                             targetProject="src/main/java/">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
@@ -46,7 +46,7 @@
         </sqlMapGenerator>
         <!-- 生成mapper接口文件 -->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.iakuil.seed.dao"
+                             targetPackage="com.iakuil.bf.dao"
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>

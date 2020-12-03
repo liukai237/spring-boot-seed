@@ -37,7 +37,7 @@
 |app-biz|Service层+DTO|主要用于处理业务逻辑。|
 |app-dao|DAO层+Entity|主要用于与数据库交互。|
 |common|通用工具|包括工具类、枚举、各种POJO等|
-|midware|中间件|包括Redis、RabbitMQ等常用中间件（可选）|
+|midware|中间件|包括Redis（必选）、RabbitMQ等（可选）常用中间件|
 |monitor|Spring Boot Admin|监控与日志（可选）|
 |sentinel|Alibaba Sentinel|限流（可选）|
 

@@ -52,8 +52,8 @@ logging:
   level:
     root: DEBUG
     org.springframework.web: INFO
-    com.iakuil.seed.dao: DEBUG
-  file: ./logs/spring-boot-seed.log
+    com.iakuil.bf.dao: DEBUG
+  file: ./logs/base-framework.log
 
 scheduling:
   enabled: true
