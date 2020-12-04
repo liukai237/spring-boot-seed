@@ -14,8 +14,9 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "t_role_power")
 public class RolePower extends BaseDomain {
-    private Long roleId;
     @Id
+    private Long id;
+    private Long roleId;
     private Long powerId;
     private Date createTime;
 }

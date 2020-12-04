@@ -97,7 +97,7 @@ public class UserService extends BaseService {
         Set<Role> roles = this.findRolesByUserId(userId);
         Set<Power> powers = Sets.newHashSet();
         for (Role role : roles) {
-            powers.addAll(findPowersByRole(role.getRoleId()));
+            powers.addAll(findPowersByRole(role.getId()));
         }
 
         return powers;
@@ -112,7 +112,7 @@ public class UserService extends BaseService {
         Set<Power> powers = Sets.newHashSet();
         for (RolePower rolePower : rolePowers) {
             Power condition2 = new Power();
-            condition2.setPowerId(rolePower.getPowerId());
+            condition2.setId(rolePower.getPowerId());
             powers.addAll(powerMapper.select(condition2));
         }
 

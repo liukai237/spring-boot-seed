@@ -14,8 +14,9 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "t_user_role")
 public class UserRole extends BaseDomain {
-    private Long userId;
     @Id
+    private Long id;
+    private Long userId;
     private Long roleId;
     private Date createTime;
 }

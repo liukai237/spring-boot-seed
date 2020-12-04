@@ -7,15 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_role")
 public class Role extends BaseDomain {
     @Id
-    private Long roleId;
+    private Long id;
     private String roleName;
     private Date createTime;
 }

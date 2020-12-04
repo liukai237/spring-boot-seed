@@ -7,15 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_power")
 public class Power extends BaseDomain {
     @Id
-    private Long powerId;
+    private Long id;
     private String powerName;
     private Date createTime;
 }
