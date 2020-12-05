@@ -47,16 +47,16 @@ public enum Province implements CodeEnum {
     MO(820000, "澳门", "澳门特别行政区"),
     QT(999999, "其他", "其他");
 
-    private Integer code;
-    private String desc;
+    private Integer value;
+    private String name;
     private String fullName;
 
     private static final Map<Integer, Province> LOOKUP = Maps.uniqueIndex(
             Arrays.asList(Province.values()),
-            Province::getCode
+            Province::getValue
     );
 
-    public static Province fromCode(String code) {
+    public static Province fromCode(Integer code) {
         return LOOKUP.get(code);
     }
 }

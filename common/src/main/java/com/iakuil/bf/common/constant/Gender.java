@@ -6,11 +6,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Gender implements CodeEnum {
+public enum Gender implements CodeEnum<Integer> {
     MALE(0, "男"),
     FEMALE(1,  "女"),
     OTHER(-1, "未知");
 
-    private Integer code;
-    private String desc;
+    private Integer value;
+    private String name;
 }

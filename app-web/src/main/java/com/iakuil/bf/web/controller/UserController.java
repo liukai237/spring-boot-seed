@@ -1,9 +1,9 @@
 package com.iakuil.bf.web.controller;
 
 import com.iakuil.bf.common.BaseController;
+import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.common.Req;
 import com.iakuil.bf.common.Resp;
-import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.common.tool.BeanUtils;
 import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.UserService;
@@ -59,7 +59,10 @@ public class UserController extends BaseController {
     @PostMapping(value = "/reg", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody UserAddParam userInfo) {
-        return done(userService.add(BeanUtils.copy(userInfo, User.class)));
+        User user = new User();
+        user.setTel(userInfo.getTel());
+        user.setPasswdHash(userInfo.getPassword());
+        return done(userService.add(user));
     }
 
     @ApiOperation(value = "用户信息变更", notes = "修改用户信息")

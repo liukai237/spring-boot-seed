@@ -1,7 +1,12 @@
 package com.iakuil.bf.common;
 
-public interface CodeEnum{
-    Integer getCode();
+import com.fasterxml.jackson.annotation.JsonValue;
 
-    String getDesc();
+import java.io.Serializable;
+
+public interface CodeEnum<T extends Serializable> {
+    String getName();
+
+    @JsonValue
+    T getValue();
 }

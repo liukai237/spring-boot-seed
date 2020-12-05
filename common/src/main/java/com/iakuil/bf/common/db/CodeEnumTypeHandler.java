@@ -24,31 +24,31 @@ public class CodeEnumTypeHandler<E extends Enum<?> & CodeEnum> extends BaseTypeH
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, CodeEnum parameter, JdbcType jdbcType) throws SQLException {
-        ps.setInt(i, parameter.getCode());
+        ps.setObject(i, parameter.getValue());
     }
 
     @Override
     public E getNullableResult(ResultSet rs, String columnName) throws SQLException {
-        int code = rs.getInt(columnName);
-        return rs.wasNull() ? null : codeOf(code);
+        Object value = rs.getObject(columnName);
+        return rs.wasNull() ? null : codeOf(value);
     }
 
     @Override
     public E getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-        int code = rs.getInt(columnIndex);
-        return rs.wasNull() ? null : codeOf(code);
+        Object value = rs.getObject(columnIndex);
+        return rs.wasNull() ? null : codeOf(value);
     }
 
     @Override
     public E getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-        int code = cs.getInt(columnIndex);
-        return cs.wasNull() ? null : codeOf(code);
+        Object value = cs.getObject(columnIndex);
+        return cs.wasNull() ? null : codeOf(value);
     }
 
-    private E codeOf(int code) {
+    private E codeOf(Object value) {
         E[] enumConstants = type.getEnumConstants();
         for (E e : enumConstants) {
-            if (e.getCode() == code) {
+            if (value.equals(e.getValue())) {
                 return e;
             }
         }
