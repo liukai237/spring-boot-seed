@@ -145,13 +145,6 @@ public class UserService extends BaseService {
     }
 
     /**
-     * 解绑微信
-     */
-    public boolean unbindWx(String tel) {
-        return userMapper.deleteOpenId(tel) > 0;
-    }
-
-    /**
      * 根据多种ID获取系统用户
      */
     public User findUserByIdentity(String identity) {
