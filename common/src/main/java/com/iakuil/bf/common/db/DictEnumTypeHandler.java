@@ -1,6 +1,6 @@
 package com.iakuil.bf.common.db;
 
-import com.iakuil.bf.common.CodeEnum;
+import com.iakuil.bf.common.DictEnum;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -13,17 +13,17 @@ import java.util.Objects;
 /**
  * MyBatis字段转枚举
  */
-public class CodeEnumTypeHandler<E extends Enum<?> & CodeEnum> extends BaseTypeHandler<CodeEnum> {
+public class DictEnumTypeHandler<E extends Enum<?> & DictEnum> extends BaseTypeHandler<DictEnum> {
 
     private Class<E> type;
 
-    public CodeEnumTypeHandler(Class<E> type) {
+    public DictEnumTypeHandler(Class<E> type) {
         Objects.requireNonNull(type, "Type argument cannot be null");
         this.type = type;
     }
 
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, CodeEnum parameter, JdbcType jdbcType) throws SQLException {
+    public void setNonNullParameter(PreparedStatement ps, int i, DictEnum parameter, JdbcType jdbcType) throws SQLException {
         ps.setObject(i, parameter.getValue());
     }
 

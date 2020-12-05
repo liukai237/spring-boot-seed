@@ -1,6 +1,6 @@
 package com.iakuil.bf.common.db;
 
-import com.iakuil.bf.common.CodeEnum;
+import com.iakuil.bf.common.DictEnum;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.EnumTypeHandler;
 import org.apache.ibatis.type.JdbcType;
@@ -21,8 +21,8 @@ public class AutoEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E> {
         if (type == null) {
             throw new IllegalArgumentException("Type argument cannot be null");
         }
-        if (CodeEnum.class.isAssignableFrom(type)) {
-            typeHandler = new CodeEnumTypeHandler(type);
+        if (DictEnum.class.isAssignableFrom(type)) {
+            typeHandler = new DictEnumTypeHandler(type);
         } else {
             typeHandler = new EnumTypeHandler<>(type);
         }

@@ -28,6 +28,7 @@
 * 基于Sharding-JDBC的ID发号器
 * 创建/修改时间自动填充
 * MySQL JSON/枚举字段映射
+* 基于枚举和数据库的数据字典
 * 分页排序和日期参数处理
 * 统一返回结果格式及异常处理
 * saveOrModify、逻辑删除、乐观锁
@@ -50,5 +51,10 @@
 |Entity|实体对象|属性与数据库表字段一一对应，一般由MBG生成。整个框架内均可见，但是不允许直接传递给前端。|
 |DTO|数据传输对象|存在于Service方法入口、出口，或者被Controller层Resp包裹后返回给前端。|
 |Query|查询对象|只能用于Controller方法入口，包裹`PageQuery`后可以作为分页查询场景查询条件传递到DAO层。|
+
+## 致谢
+* 通用Mapper和PageHelper，有这么优秀的框架才能堆砌出这么简单易用的框架。
+* MyBatis Plus，提供了许多值得借鉴的想法。
+* jon-winters提供的[思路](https://github.com/jon-winters/auto-generate-enum-api-parent)，优雅地实现了数据字典。
 
 --- THE END ---

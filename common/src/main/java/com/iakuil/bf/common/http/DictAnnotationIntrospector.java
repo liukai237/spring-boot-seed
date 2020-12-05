@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ser.VirtualBeanPropertyWriter;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Annotations;
 import com.fasterxml.jackson.databind.util.SimpleBeanPropertyDefinition;
-import com.iakuil.bf.common.DictEnumPool;
+import com.iakuil.bf.common.DictPool;
 import com.iakuil.bf.common.annotation.DictType;
 import org.springframework.stereotype.Component;
 
@@ -71,7 +71,7 @@ public class DictAnnotationIntrospector extends JacksonAnnotationIntrospector {
                 if (dvam.dictField.getType().getRawClass() == List.class) {
                     List<String> values = (List) dvam.dictField.getValue(bean);
                     return values.stream().map(x -> {
-                        return DictEnumPool.getInstance().getDictName(dvam.dictCode, x.toString());
+                        return DictPool.getInstance().getDictName(dvam.dictCode, x.toString());
                     }).reduce(String::join).orElseGet(() -> {
                         return null;
                     });
@@ -80,10 +80,10 @@ public class DictAnnotationIntrospector extends JacksonAnnotationIntrospector {
                 if (key.contains(",")) {
                     return Arrays.stream(key.split(","))
                             .map(x -> {
-                                return DictEnumPool.getInstance().getDictName(dvam.dictCode, x);
+                                return DictPool.getInstance().getDictName(dvam.dictCode, x);
                             }).reduce(String::join);
                 }
-                return DictEnumPool.getInstance().getDictName(dvam.dictCode, key);
+                return DictPool.getInstance().getDictName(dvam.dictCode, key);
             }
             return null;
         }

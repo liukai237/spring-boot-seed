@@ -12,25 +12,25 @@ import java.util.stream.Collectors;
  * <p>包括枚举类型和数据字典表类型<p/>
  */
 @Slf4j
-public class DictEnumPool {
+public class DictPool {
 
-    private static final DictEnumPool INSTANCE = new DictEnumPool();
+    private static DictPool instance;
 
     public static Map<String, List<DictItem>> cache = new ConcurrentHashMap<>(128);
 
-    private DictEnumPool() {
+    private DictPool() {
         pushDictItems(collectDictEnums());
     }
 
-    public static DictEnumPool getInstance() {
-        return INSTANCE;
+    public static DictPool getInstance() {
+        return instance == null ? new DictPool() : instance;
     }
 
     /**
      * 批量添加字典内容
      */
     public void pushDictItems(List<DictItem> items) {
-        Map<String, List<DictItem>> dicts = items.stream().collect(Collectors.groupingBy(DictItem::getDictType));
+        Map<String, List<DictItem>> dicts = items.stream().collect(Collectors.groupingBy(DictItem::getType));
         cache.putAll(dicts);
     }
 
@@ -53,16 +53,16 @@ public class DictEnumPool {
     private List<DictItem> collectDictEnums() {
         List<DictItem> dictItems = new ArrayList<>();
         Reflections reflections = new Reflections(getClass().getPackage().getName());
-        Set<Class<? extends CodeEnum>> enumsClass = reflections.getSubTypesOf(CodeEnum.class);
-        for (Class<? extends CodeEnum> aClass : enumsClass) {
+        Set<Class<? extends DictEnum>> enumsClass = reflections.getSubTypesOf(DictEnum.class);
+        for (Class<? extends DictEnum> aClass : enumsClass) {
             if (!Enum.class.isAssignableFrom(aClass)) {
                 log.warn("only support Enum class, unexpected class : {}", aClass.getName());
                 continue;
             }
 
-            CodeEnum[] constants = aClass.getEnumConstants();
-            for (CodeEnum constant : constants) {
-                dictItems.add(new DictItem(aClass.getSimpleName(), (String) constant.getValue(), constant.getName()));
+            DictEnum[] constants = aClass.getEnumConstants();
+            for (DictEnum constant : constants) {
+                dictItems.add(new DictItem(aClass.getSimpleName(), constant.getValue().toString(), constant.getName()));
             }
         }
 

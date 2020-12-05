@@ -18,9 +18,9 @@ import java.util.List;
 public class WebAppConfig implements WebMvcConfigurer {
 
     @Autowired
-    private CodeEnumConvertFactory codeEnumConvertFactory;
+    private DictEnumConvertFactory dictEnumConvertFactory;
 
-    @Autowired(required = false)
+    @Autowired
     DictAnnotationIntrospector dictAnnotationIntrospector;
 
     /**
@@ -51,7 +51,7 @@ public class WebAppConfig implements WebMvcConfigurer {
      */
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverterFactory(codeEnumConvertFactory);
+        registry.addConverterFactory(dictEnumConvertFactory);
     }
 
     /**
