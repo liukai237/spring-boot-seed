@@ -7,20 +7,16 @@ import com.iakuil.bf.common.DictItem;
 import com.iakuil.bf.common.DictPool;
 import com.iakuil.bf.common.annotation.DictType;
 import com.iakuil.bf.web.job.DictRefreshingJob;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ModelPropertyBuilder;
-import springfox.documentation.schema.Annotations;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-import springfox.documentation.swagger.schema.ApiModelProperties;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,8 +24,9 @@ import java.util.stream.Collectors;
  * Swagger文档数据字典插件
  */
 @Slf4j
-@Component
+//@Component
 public class DictModelPropertyBuilderPlugin implements ModelPropertyBuilderPlugin {
+
     @Autowired
     private DictRefreshingJob dictRefreshingJob;
 
@@ -55,40 +52,17 @@ public class DictModelPropertyBuilderPlugin implements ModelPropertyBuilderPlugi
     }
 
     private void addDescForDict(ModelPropertyContext context, AnnotatedField field) {
-        List<DictItem> dictItems = new ArrayList<>();
-        Class<?> fieldType = field.getRawType();
         DictType dictType = field.getAnnotation(DictType.class);
         if (dictType != null) {
-            dictItems = DictPool.cache.get(dictType.value());
-        } else if (Enum.class.isAssignableFrom(fieldType)) {
-            Optional<ApiModelProperty> annotation = Optional.absent();
-            if (context.getAnnotatedElement().isPresent()) {
-                annotation = annotation.or(ApiModelProperties.findApiModePropertyAnnotation(context.getAnnotatedElement().get()));
+            List<DictItem> dictItems = DictPool.cache.get(dictType.value());
+            if (CollectionUtils.isNotEmpty(dictItems)) {
+                ModelPropertyBuilder builder = context.getBuilder();
+                String joinText = dictItems.get(0).getDescription() + "（" + (dictItems.stream()
+                        .map(item -> item.getValue() + "：" + item.getName()))
+                        .collect(Collectors.joining("；"))
+                        + "）";
+                builder.description(joinText).type(context.getResolver().resolve(Integer.class));
             }
-            if (context.getBeanPropertyDefinition().isPresent()) {
-                annotation = annotation.or(Annotations.findPropertyAnnotation(
-                        context.getBeanPropertyDefinition().get(),
-                        ApiModelProperty.class));
-                dictItems = DictPool.cache.get(fieldType.getSimpleName());
-                String typeDesc = (annotation.get()).value();
-                dictItems.forEach(item -> item.setDescription(typeDesc));
-            }
-
-            if (annotation.isPresent()) {
-
-            }
-        } else {
-            // 非数据字典直接忽略
-            return;
-        }
-
-        if (CollectionUtils.isNotEmpty(dictItems)) {
-            ModelPropertyBuilder builder = context.getBuilder();
-            String joinText = dictItems.get(0).getDescription() + "（" + (dictItems.stream()
-                    .map(item -> item.getValue() + "：" + item.getName()))
-                    .collect(Collectors.joining("；"))
-                    + "）";
-            builder.description(joinText).type(context.getResolver().resolve(Integer.class));
         }
     }
 }
