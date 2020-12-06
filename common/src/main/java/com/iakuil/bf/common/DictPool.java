@@ -23,7 +23,10 @@ public class DictPool {
     }
 
     public static DictPool getInstance() {
-        return instance == null ? new DictPool() : instance;
+        if (instance == null) {
+            instance = new DictPool();
+        }
+        return instance;
     }
 
     /**
