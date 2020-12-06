@@ -18,6 +18,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * 字典注解拦截器
+ */
 @Component
 public class DictAnnotationIntrospector extends JacksonAnnotationIntrospector {
 

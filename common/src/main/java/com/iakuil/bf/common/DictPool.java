@@ -65,7 +65,7 @@ public class DictPool {
 
             DictEnum[] constants = aClass.getEnumConstants();
             for (DictEnum constant : constants) {
-                dictItems.add(new DictItem(aClass.getSimpleName(), constant.getValue().toString(), constant.getName()));
+                dictItems.add(new DictItem(aClass.getSimpleName(), aClass.getSimpleName(), constant.getValue().toString(), constant.getName()));
             }
         }
 

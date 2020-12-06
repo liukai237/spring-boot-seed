@@ -37,7 +37,7 @@ public class DictRefreshingJob implements InitializingBean {
         dict.setDelFlag("0");
         List<Dict> dicts = dictService.list(dict);
         List<DictItem> items = dicts.stream()
-                .map(item -> new DictItem(item.getType(), item.getValue(), item.getName()))
+                .map(item -> new DictItem(item.getType(), item.getDescription(), item.getValue(), item.getName()))
                 .collect(Collectors.toList());
         log.debug("Current dict size in DB: {}", items.size());
         DictPool.getInstance().pushDictItems(items);
