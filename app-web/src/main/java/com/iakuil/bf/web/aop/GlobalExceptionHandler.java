@@ -1,4 +1,4 @@
-package com.iakuil.bf.web;
+package com.iakuil.bf.web.aop;
 
 import com.iakuil.bf.common.Resp;
 import com.iakuil.bf.common.annotation.ErrorCode;

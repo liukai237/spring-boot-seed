@@ -1,4 +1,4 @@
-package com.iakuil.bf.web;
+package com.iakuil.bf.web.aop;
 
 import com.iakuil.bf.common.DictItem;
 import com.iakuil.bf.common.DictPool;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * 全局JSON参数处理
  */
 @ControllerAdvice
-public class JsonBodyValidatorAdvice implements RequestBodyAdvice {
+public class RequestBodyHandler implements RequestBodyAdvice {
 
     private static final Class[] ANNOS = {
             RequestMapping.class,
@@ -81,10 +81,10 @@ public class JsonBodyValidatorAdvice implements RequestBodyAdvice {
 
         PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
         for (PropertyDescriptor property : propertyDescriptors) {
-            String key = property.getName();
+            String fieldName = property.getName();
 
             // 过滤class属性
-            if ("class" .equals(key)) {
+            if ("class" .equals(fieldName)) {
                 continue;
             }
 
@@ -93,62 +93,78 @@ public class JsonBodyValidatorAdvice implements RequestBodyAdvice {
             if (getter.getAnnotation(Transient.class) != null) {
                 continue; // 带Transient注解的不校验
             }
-            Object tmpValue;
+            Object fieldValue;
             try {
-                tmpValue = getter.invoke(obj);
+                fieldValue = getter.invoke(obj);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new IllegalStateException(e);
             }
 
-            if (tmpValue == null) {
+            if (fieldValue == null) {
                 continue;
             }
 
             // 校验非枚举类型数据字典
             Field field;
             try {
-                field = clazz.getDeclaredField(key);
+                field = clazz.getDeclaredField(fieldName);
             } catch (NoSuchFieldException e) {
                 throw new IllegalStateException(e); // it can't happen here
             }
             DictType dictType = AnnotationUtils.findAnnotation(field, DictType.class);
             if (dictType != null) {
-                String code = StringUtils.isBlank(dictType.value()) ? Strings.toUnderlineCase(key) : dictType.value();
-                List<DictItem> dictItems = DictPool.getInstance().getDict(code);
-                if (dictItems == null) {
-                    throw new BusinessException("Invalid dict type: " + code, RespCode.BAD_REQUEST.getCode());
-                }
-                String typeDesc = dictItems.get(0).getDescription();
-                List<String> allowValues = dictItems.stream().sorted(Comparator.comparing(DictItem::getSort)).map(DictItem::getValue).collect(Collectors.toList());
-                if (tmpValue instanceof String && !allowValues.contains(tmpValue.toString())) {
-                    throw new BusinessException("Invalid dict value: " + tmpValue + ", allowed values: " + StringUtils.join(allowValues, ","), RespCode.BAD_REQUEST.getCode());
-                }
-                if (tmpValue instanceof String[] && !allowValues.containsAll(Arrays.asList((String[]) tmpValue))) {
-                    throw new BusinessException("Invalid dict values for " + typeDesc + ": " + Arrays.asList((String[]) tmpValue) + ", allowed values: " + StringUtils.join(allowValues, ","), RespCode.BAD_REQUEST.getCode());
-                }
-                if (tmpValue instanceof Collection && !allowValues.containsAll((Collection) tmpValue)) {
-                    throw new BusinessException("Invalid dict values for " + typeDesc + ": " + tmpValue + ", allowed values: " + StringUtils.join(allowValues, ","), RespCode.BAD_REQUEST.getCode());
-                }
+                String type = StringUtils.isBlank(dictType.value()) ? Strings.toUnderlineCase(fieldName) : dictType.value();
+                checkDictValue(type, fieldValue);
             }
 
+            // 处理空字符串和数组中空白字符串成员
             Method setter = property.getWriteMethod();
             try {
-                // 处理空字符串
-                if (tmpValue instanceof String) {
-                    String v = (String) tmpValue;
+                if (fieldValue instanceof String) {
+                    String v = (String) fieldValue;
                     if (StringUtils.isBlank(v)) {
                         setter.invoke(obj, (Object) null);
                     }
                 }
 
-                // 过滤数组中空白字符串成员
-                if (tmpValue instanceof String[]) {
-                    String[] v = (String[]) tmpValue;
+                if (fieldValue instanceof String[]) {
+                    String[] v = (String[]) fieldValue;
                     String[] arr = Arrays.stream(v).filter(StringUtils::isNoneBlank).toArray(String[]::new);
                     setter.invoke(obj, (Object) arr);
                 }
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new IllegalStateException(e);
+            }
+        }
+    }
+
+    private void checkDictValue(String dictType, Object dictValue) {
+        List<DictItem> dictItems = DictPool.getInstance().getDict(dictType);
+        if (dictItems == null) {
+            throw new BusinessException("Invalid dict type: " + dictType, RespCode.BAD_REQUEST.getCode());
+        }
+
+        String typeDesc = dictItems.get(0).getDescription();
+        String errorTemplate = "Invalid dict value: [%s] for 【" + typeDesc + "】, allowed values: " + dictItems.stream()
+                .sorted(Comparator.comparing(DictItem::getSort))
+                .map(item -> item.getValue() + ":" + item.getName())
+                .collect(Collectors.joining(","));
+        List<String> allowValues = dictItems.stream().sorted(Comparator.comparing(DictItem::getSort)).map(DictItem::getValue).collect(Collectors.toList());
+        if (dictValue instanceof String && !allowValues.contains(dictValue.toString())) {
+            throw new BusinessException(String.format(errorTemplate, dictValue.toString()));
+        }
+        if (dictValue instanceof String[]) {
+            for (String item : (String[]) dictValue) {
+                if (!allowValues.contains(item)) {
+                    throw new BusinessException(String.format(errorTemplate, item));
+                }
+            }
+        }
+        if (dictValue instanceof Collection) {
+            for (String item : (Collection<String>) dictValue) {
+                if (!allowValues.contains(item)) {
+                    throw new BusinessException(String.format(errorTemplate, item));
+                }
             }
         }
     }
