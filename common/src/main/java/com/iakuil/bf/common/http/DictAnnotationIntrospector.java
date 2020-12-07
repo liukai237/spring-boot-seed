@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.util.Annotations;
 import com.fasterxml.jackson.databind.util.SimpleBeanPropertyDefinition;
 import com.iakuil.bf.common.DictPool;
 import com.iakuil.bf.common.annotation.DictType;
+import com.iakuil.bf.common.tool.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 
 /**
  * 字典注解拦截器
+ * <p>自动为{@link DictType}注解修饰的属性增加额外的名称属性。</p>
  */
 @Component
 public class DictAnnotationIntrospector extends JacksonAnnotationIntrospector {
@@ -54,7 +57,7 @@ public class DictAnnotationIntrospector extends JacksonAnnotationIntrospector {
             super(typeContext, String.class, field.getName() + "Name", TypeFactory.defaultInstance().constructType(String.class));
             this.dictField = field;
             this.dictField.fixAccess(true); //坑爹的可见性
-            this.dictCode = dictCode;
+            this.dictCode = StringUtils.isBlank(dictCode) ? Strings.toUnderlineCase(field.getName()) : dictCode;
         }
     }
 

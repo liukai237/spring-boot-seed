@@ -53,7 +53,7 @@
 |Query|查询对象|只能用于Controller方法入口，包裹`PageQuery`后可以作为分页查询场景查询条件传递到DAO层。|
 
 ## 致谢
-* 通用Mapper和PageHelper，有这么优秀的框架才能堆砌出这么简单易用的脚手架。
+* 通用Mapper和PageHelper，前人栽树，后人乘凉。
 * MyBatis Plus，提供了许多值得借鉴的想法。
 * jon-winters提供的[思路](https://github.com/jon-winters/auto-generate-enum-api-parent)，优雅地实现了数据字典。
 

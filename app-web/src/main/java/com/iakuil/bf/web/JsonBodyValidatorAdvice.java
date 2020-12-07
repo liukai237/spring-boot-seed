@@ -6,6 +6,7 @@ import com.iakuil.bf.common.Req;
 import com.iakuil.bf.common.annotation.DictType;
 import com.iakuil.bf.common.constant.RespCode;
 import com.iakuil.bf.common.exception.BusinessException;
+import com.iakuil.bf.common.tool.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +30,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class JsonBodyValidatorAdvice implements RequestBodyAdvice {
 
-    private static final Class[] annos = {
+    private static final Class[] ANNOS = {
             RequestMapping.class,
             GetMapping.class,
             PostMapping.class,
@@ -39,7 +41,7 @@ public class JsonBodyValidatorAdvice implements RequestBodyAdvice {
     @Override
     public boolean supports(MethodParameter methodParameter, Type type, Class<? extends HttpMessageConverter<?>> aClass) {
         AnnotatedElement element = methodParameter.getAnnotatedElement();
-        return Arrays.stream(annos).anyMatch(anno -> anno.isAnnotation() && element.isAnnotationPresent(anno));
+        return Arrays.stream(ANNOS).anyMatch(anno -> anno.isAnnotation() && element.isAnnotationPresent(anno));
     }
 
     @Override
@@ -103,21 +105,21 @@ public class JsonBodyValidatorAdvice implements RequestBodyAdvice {
             }
 
             // 校验非枚举类型数据字典
-            Field field = null;
+            Field field;
             try {
                 field = clazz.getDeclaredField(key);
             } catch (NoSuchFieldException e) {
-                e.printStackTrace();
+                throw new IllegalStateException(e); // it can't happen here
             }
             DictType dictType = AnnotationUtils.findAnnotation(field, DictType.class);
             if (dictType != null) {
-                String code = dictType.value();
+                String code = StringUtils.isBlank(dictType.value()) ? Strings.toUnderlineCase(key) : dictType.value();
                 List<DictItem> dictItems = DictPool.getInstance().getDict(code);
                 if (dictItems == null) {
                     throw new BusinessException("Invalid dict type: " + code, RespCode.BAD_REQUEST.getCode());
                 }
                 String typeDesc = dictItems.get(0).getDescription();
-                List<String> allowValues = dictItems.stream().map(DictItem::getValue).collect(Collectors.toList());
+                List<String> allowValues = dictItems.stream().sorted(Comparator.comparing(DictItem::getSort)).map(DictItem::getValue).collect(Collectors.toList());
                 if (tmpValue instanceof String && !allowValues.contains(tmpValue.toString())) {
                     throw new BusinessException("Invalid dict value: " + tmpValue + ", allowed values: " + StringUtils.join(allowValues, ","), RespCode.BAD_REQUEST.getCode());
                 }
