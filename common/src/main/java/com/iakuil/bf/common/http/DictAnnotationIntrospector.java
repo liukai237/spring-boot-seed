@@ -15,8 +15,9 @@ import com.iakuil.bf.common.annotation.DictType;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 字典注解拦截器
@@ -31,8 +32,7 @@ public class DictAnnotationIntrospector extends JacksonAnnotationIntrospector {
     @Override
     public void findAndAddVirtualProperties(MapperConfig<?> config, AnnotatedClass ac, List<BeanPropertyWriter> properties) {
         super.findAndAddVirtualProperties(config, ac, properties);
-        for (Iterator<AnnotatedField> iter = ac.fields().iterator(); iter.hasNext(); ) {
-            AnnotatedField field = iter.next();
+        for (AnnotatedField field : ac.fields()) {
             if (field.hasAnnotation(DictType.class)) {
                 DictType dict = field.getAnnotation(DictType.class);
                 VirtualBeanPropertyWriter vbpw = new DictNamePropertyWriter();
@@ -46,7 +46,7 @@ public class DictAnnotationIntrospector extends JacksonAnnotationIntrospector {
     /**
      * 封装被字典注解的字段信息
      */
-    public class DictVirtualAnnotatedMember extends VirtualAnnotatedMember {
+    public static class DictVirtualAnnotatedMember extends VirtualAnnotatedMember {
         protected AnnotatedField dictField;
         protected String dictCode;
 
@@ -58,7 +58,7 @@ public class DictAnnotationIntrospector extends JacksonAnnotationIntrospector {
         }
     }
 
-    public class DictNamePropertyWriter extends VirtualBeanPropertyWriter {
+    public static class DictNamePropertyWriter extends VirtualBeanPropertyWriter {
         public DictNamePropertyWriter() {
             super();
         }
@@ -71,20 +71,21 @@ public class DictAnnotationIntrospector extends JacksonAnnotationIntrospector {
         protected Object value(Object bean, JsonGenerator gen, SerializerProvider prov) throws Exception {
             if (this._member instanceof DictVirtualAnnotatedMember) {
                 DictVirtualAnnotatedMember dvam = (DictVirtualAnnotatedMember) this._member;
-                if (dvam.dictField.getType().getRawClass() == List.class) {
-                    List<String> values = (List) dvam.dictField.getValue(bean);
-                    return values.stream().map(x -> {
-                        return DictPool.getInstance().getDictName(dvam.dictCode, x.toString());
-                    }).reduce(String::join).orElseGet(() -> {
-                        return null;
-                    });
+                Object nodeValue = dvam.dictField.getValue(bean);
+                if (nodeValue == null) {
+                    return null;
+                }
+
+                JavaType type = dvam.dictField.getType();
+                Class<?> clazz = type.getRawClass();
+                if (nodeValue instanceof Collection || clazz == String[].class) {
+                    Collection<String> values = nodeValue instanceof Collection ? (Collection) nodeValue : Arrays.asList((String[]) nodeValue);
+                    return values.stream().map(x -> DictPool.getInstance().getDictName(dvam.dictCode, x)).collect(Collectors.joining(","));
                 }
                 String key = String.valueOf(dvam.dictField.getValue(bean));
                 if (key.contains(",")) {
                     return Arrays.stream(key.split(","))
-                            .map(x -> {
-                                return DictPool.getInstance().getDictName(dvam.dictCode, x);
-                            }).reduce(String::join);
+                            .map(x -> DictPool.getInstance().getDictName(dvam.dictCode, x)).collect(Collectors.joining(","));
                 }
                 return DictPool.getInstance().getDictName(dvam.dictCode, key);
             }

@@ -13,4 +13,9 @@ public enum Gender implements DictEnum<Integer> {
 
     private Integer value;
     private String name;
+
+    @Override
+    public String description() {
+        return "性别";
+    }
 }

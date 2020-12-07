@@ -59,4 +59,9 @@ public enum Province implements DictEnum {
     public static Province fromCode(Integer code) {
         return LOOKUP.get(code);
     }
+
+    @Override
+    public String description() {
+        return "省份";
+    }
 }

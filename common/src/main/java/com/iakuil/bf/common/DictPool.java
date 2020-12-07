@@ -1,6 +1,7 @@
 package com.iakuil.bf.common;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 
 import java.util.*;
@@ -38,6 +39,13 @@ public class DictPool {
     }
 
     /**
+     * 通过字典类型获取字典编码
+     */
+    public List<DictItem> getDict(String code) {
+        return cache.get(code);
+    }
+
+    /**
      * 通过字典编码,字典值取字典翻译名称
      */
     public String getDictName(String code, String value) {
@@ -47,7 +55,7 @@ public class DictPool {
                 return findDict.get().getName();
             }
         }
-        return "";
+        return null;
     }
 
     /**
@@ -65,7 +73,8 @@ public class DictPool {
 
             DictEnum[] constants = aClass.getEnumConstants();
             for (DictEnum constant : constants) {
-                dictItems.add(new DictItem(aClass.getSimpleName(), aClass.getSimpleName(), constant.getValue().toString(), constant.getName()));
+                String description = constant.description();
+                dictItems.add(new DictItem(aClass.getSimpleName(), StringUtils.isBlank(description) ? aClass.getSimpleName() : description, constant.getValue().toString(), constant.getName()));
             }
         }
 
