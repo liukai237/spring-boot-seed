@@ -20,7 +20,7 @@ public class ResolverBeanPostProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (beanName.equals("requestMappingHandlerAdapter")) {
+        if ("requestMappingHandlerAdapter".equals(beanName)) {
             RequestMappingHandlerAdapter adapter = (RequestMappingHandlerAdapter) bean;
             List<HandlerMethodArgumentResolver> argumentResolvers = adapter.getArgumentResolvers();
             argumentResolvers = addArgumentResolvers(argumentResolvers);

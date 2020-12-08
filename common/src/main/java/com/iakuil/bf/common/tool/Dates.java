@@ -15,7 +15,7 @@ public class Dates {
 
     public static final String ISO_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
-    private static String[] DEFAULT_PATTERNS = {ISO_PATTERN, "yyyy-MM-dd", "yyyyMMdd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM-dd M月d日HH:mm"};
+    private static final String[] DEFAULT_PATTERNS = {ISO_PATTERN, "yyyy-MM-dd", "yyyyMMdd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM-dd M月d日HH:mm"};
 
     public static Date parseDate(String dateStr) {
         Date parsed;

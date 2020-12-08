@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 基于Jackson的JSON工具类
+ */
 @UtilityClass
 public class JsonUtils {
     private static final ObjectMapper OBJECT_MAPPER;
@@ -58,6 +61,10 @@ public class JsonUtils {
         return result;
     }
 
+    /**
+     * 简单的类型转换
+     * <p>基于转换效率，应该优先考虑{@link BeanUtils}</p>
+     */
     public static <T> T transfer(Object obj, Class<T> clazz) {
         return OBJECT_MAPPER.convertValue(obj, clazz);
     }

@@ -86,7 +86,7 @@ public class DictAnnotationIntrospector extends JacksonAnnotationIntrospector {
                     return values.stream().map(x -> DictPool.getInstance().getDictName(dvam.dictCode, x)).collect(Collectors.joining(","));
                 }
                 String key = String.valueOf(dvam.dictField.getValue(bean));
-                if (key.contains(",")) {
+                if (key.contains(Strings.COMMA)) {
                     return Arrays.stream(key.split(","))
                             .map(x -> DictPool.getInstance().getDictName(dvam.dictCode, x)).collect(Collectors.joining(","));
                 }

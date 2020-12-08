@@ -29,9 +29,6 @@ public class PassWordValidator implements ConstraintValidator<Password, String> 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
         // 校验
-        if (StringUtils.isBlank(s) || !s.matches(regexp)) {
-            return false;
-        }
-        return true;
+        return !StringUtils.isBlank(s) && s.matches(regexp);
     }
 }
