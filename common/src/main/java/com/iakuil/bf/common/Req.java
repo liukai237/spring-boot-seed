@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -40,6 +41,7 @@ public class Req<T extends PageQuery> {
     @ApiModelProperty(value = "sorting", notes = "排序参数。")
     private Sorting[] sorting;
 
+    @ApiModelProperty(hidden = true)
     private Map<String, Object> other = new LinkedHashMap<>();
 
     @JsonAnySetter

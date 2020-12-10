@@ -24,7 +24,7 @@ public class DictDto {
     //父级编号
     private Long parentId;
     //备注信息
-    private String remarks;
+    private String remark;
 
     /**
      * 设置：编号
@@ -127,14 +127,14 @@ public class DictDto {
     /**
      * 设置：备注信息
      */
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
+    public void setRemarks(String remark) {
+        this.remark = remark;
     }
 
     /**
      * 获取：备注信息
      */
-    public String getRemarks() {
-        return remarks;
+    public String getRemark() {
+        return remark;
     }
 }

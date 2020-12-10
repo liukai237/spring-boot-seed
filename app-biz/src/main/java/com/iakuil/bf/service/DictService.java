@@ -10,9 +10,7 @@ import com.iakuil.bf.service.dto.DictDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 字典服务
@@ -20,51 +18,39 @@ import java.util.Map;
 @Service
 public class DictService {
     private final DictMapper dictMapper;
-    private final IdGenerator idGenerator;
 
     @Autowired
-    public DictService(DictMapper dictMapper, IdGenerator idGenerator) {
+    public DictService(DictMapper dictMapper) {
         this.dictMapper = dictMapper;
-        this.idGenerator = idGenerator;
     }
 
     public Dict get(Long id) {
-        return dictMapper.get(id);
+        return dictMapper.selectByPrimaryKey(id);
     }
 
     public List<Dict> list(Dict dict) {
-        return dictMapper.list(dict);
+        return dictMapper.select(dict);
     }
 
     public PageData<DictDto> listWithPage(Integer pageNum, Integer pageSize, Dict param) {
         PageHelper.startPage(pageNum, pageSize);
-        return new PageData<>(dictMapper.list(param), DictConverter.INSTANCE::toDto);
-    }
-
-    public int count(Map<String, Object> map) {
-        return dictMapper.count(map);
+        return new PageData<>(dictMapper.select(param), DictConverter.INSTANCE::toDto);
     }
 
     public int save(Dict dict) {
-        Date now = new Date();
-        dict.setId(idGenerator.generateId().longValue());
-        dict.setCreateDate(now);
-        dict.setUpdateDate(now);
-        return dictMapper.save(dict);
+        return dictMapper.insert(dict);
     }
 
     public int update(Dict dict) {
-        Date now = new Date();
-        dict.setUpdateDate(now);
-        return dictMapper.update(dict);
+        return dictMapper.updateByPrimaryKey(dict);
     }
 
     public int remove(Long id) {
-        return dictMapper.remove(id);
+        return dictMapper.deleteByPrimaryKey(id);
     }
 
-    public int batchRemove(Long[] ids) {
-        return dictMapper.batchRemove(ids);
+    public int batchRemove(String[] ids) {
+        return dictMapper.deleteByIds(String.join(",", ids));
     }
 
     public List<Dict> listType() {

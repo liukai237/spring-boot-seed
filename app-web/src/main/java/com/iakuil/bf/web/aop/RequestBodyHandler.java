@@ -90,7 +90,7 @@ public class RequestBodyHandler implements RequestBodyAdvice {
 
             // 得到property对应的getter方法
             Method getter = property.getReadMethod();
-            if (getter.getAnnotation(Transient.class) != null) {
+            if (getter == null || getter.getAnnotation(Transient.class) != null) {
                 continue; // 带Transient注解的不校验
             }
             Object fieldValue;
