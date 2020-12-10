@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iakuil.bf.common.constant.CommonConstant;
+import com.iakuil.bf.common.tool.BeanMapUtils;
 import com.iakuil.bf.common.tool.BeanUtils;
 import com.iakuil.bf.common.tool.Strings;
 import io.swagger.annotations.ApiModel;
@@ -11,7 +12,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -49,6 +49,9 @@ public class Req<T extends PageQuery> {
         this.other.put(key, value);
     }
 
+    /**
+     * 组装PageQuery对象
+     */
     @JsonIgnore
     public PageQuery getQuery() {
         PageQuery query = BeanUtils.copy(this.filter, filter.getClass());
@@ -67,6 +70,7 @@ public class Req<T extends PageQuery> {
                     .collect(Collectors.joining()));
         }
 
+        query.setParam(BeanMapUtils.beanToMap(query));
         return query;
     }
 

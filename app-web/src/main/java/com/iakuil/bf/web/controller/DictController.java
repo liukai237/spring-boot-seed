@@ -1,8 +1,9 @@
 package com.iakuil.bf.web.controller;
 
-import com.iakuil.bf.common.*;
-import com.iakuil.bf.common.tool.BeanUtils;
-import com.iakuil.bf.dao.entity.Dict;
+import com.iakuil.bf.common.BaseController;
+import com.iakuil.bf.common.PageData;
+import com.iakuil.bf.common.Req;
+import com.iakuil.bf.common.Resp;
 import com.iakuil.bf.service.DictService;
 import com.iakuil.bf.service.converter.DictConverter;
 import com.iakuil.bf.service.dto.DictDto;
@@ -54,8 +55,7 @@ public class DictController extends BaseController {
     @ApiOperation(value = "分页查询数据字典", notes = "分页查询数据字典数据。")
     @PostMapping(value = "/listWithPage", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<PageData<DictDto>> listWithPage(@RequestBody Req<DictQueryParam> param) {
-        PageQuery query = param.getQuery();
-        return ok(dictService.listWithPage(query.getPageNum(), query.getPageSize(), BeanUtils.copy(query, Dict.class)));
+        return ok(dictService.listWithPage(param.getQuery()));
     }
 
     @ApiOperation(value = "新增数据字典", notes = "新增数据字典。")

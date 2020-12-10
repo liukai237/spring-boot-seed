@@ -34,8 +34,6 @@ public class User extends BaseDomain {
     private Province province;
     private String nickname;
     private String email;
-    @Column(name = "openid")
-    private String openId;
     private String address;
     @CreatedDate
     @Column(updatable = false)

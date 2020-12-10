@@ -1,8 +1,7 @@
 package com.iakuil.bf.service;
 
-import com.dangdang.ddframe.rdb.sharding.id.generator.IdGenerator;
-import com.github.pagehelper.PageHelper;
 import com.iakuil.bf.common.PageData;
+import com.iakuil.bf.common.PageQuery;
 import com.iakuil.bf.dao.DictMapper;
 import com.iakuil.bf.dao.entity.Dict;
 import com.iakuil.bf.service.converter.DictConverter;
@@ -32,9 +31,8 @@ public class DictService {
         return dictMapper.select(dict);
     }
 
-    public PageData<DictDto> listWithPage(Integer pageNum, Integer pageSize, Dict param) {
-        PageHelper.startPage(pageNum, pageSize);
-        return new PageData<>(dictMapper.select(param), DictConverter.INSTANCE::toDto);
+    public PageData<DictDto> listWithPage(PageQuery param) {
+        return new PageData<>(dictMapper.selectPage(param), DictConverter.INSTANCE::toDto);
     }
 
     public int save(Dict dict) {

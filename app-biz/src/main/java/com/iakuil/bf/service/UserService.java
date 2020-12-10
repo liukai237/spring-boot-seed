@@ -4,8 +4,8 @@ import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.BaseService;
-import com.iakuil.bf.common.PageQuery;
 import com.iakuil.bf.common.PageData;
+import com.iakuil.bf.common.PageQuery;
 import com.iakuil.bf.dao.*;
 import com.iakuil.bf.dao.entity.*;
 import com.iakuil.bf.service.converter.UserConverter;
@@ -54,7 +54,7 @@ public class UserService extends BaseService {
 
     @Transactional(readOnly = true)
     public PageData<UserDetailDto> findByCondition(PageQuery condition) {
-        return new PageData<>(userMapper.selectByCondition(condition), UserConverter.INSTANCE::toDto);
+        return new PageData<>(userMapper.selectPage(condition), UserConverter.INSTANCE::toDto);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -135,13 +135,6 @@ public class UserService extends BaseService {
         }
 
         return Collections.emptySet();
-    }
-
-    /**
-     * 根据多种ID获取用户信息
-     */
-    public User findByOpenId(String openId) {
-        return userMapper.selectByOpenId(openId);
     }
 
     /**
