@@ -65,11 +65,11 @@ public class CustomSelectProvider extends MapperTemplate {
         for (EntityColumn column : columns) {
             sql.append("<if test=\"");
             if (column.getJavaType().equals(String.class)) {
-                sql.append("param." + column.getProperty() + " != null and param." + column.getProperty() + " != ''\">");
+                sql.append("condition." + column.getProperty() + " != null and condition." + column.getProperty() + " != ''\">");
             } else {
-                sql.append("param." + column.getProperty() + " != null\">");
+                sql.append("condition." + column.getProperty() + " != null\">");
             }
-            sql.append(column.getColumn() + " = #{param." + column.getProperty() + "} ");
+            sql.append(column.getColumn() + " = #{condition." + column.getProperty() + "} ");
             sql.append("</if>");
         }
 

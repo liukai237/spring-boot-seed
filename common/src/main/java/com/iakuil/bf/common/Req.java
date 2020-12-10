@@ -70,7 +70,7 @@ public class Req<T extends PageQuery> {
                     .collect(Collectors.joining()));
         }
 
-        query.setParam(BeanMapUtils.beanToMap(query));
+        query.setCondition(BeanMapUtils.beanToMap(query));
         return query;
     }
 

@@ -10,5 +10,5 @@ import tk.mybatis.mapper.common.ids.SelectByIdsMapper;
  *
  * @param <T> Entity
  */
-public interface ReadOnlyMapper<T> extends BaseSelectMapper<T>, SelectByIdsMapper<T> {
+public interface ReadOnlyMapper<T> extends BaseSelectMapper<T>, SelectByIdsMapper<T>, CustomMapper<T> {
 }

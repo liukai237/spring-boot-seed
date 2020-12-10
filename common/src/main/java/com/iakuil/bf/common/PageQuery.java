@@ -24,14 +24,14 @@ public abstract class PageQuery {
      * 以Map方式存放查询参数，以便MyBatis判空。
      */
     @JsonIgnore
-    private Map<String, Object> param;
+    private Map<String, Object> condition;
 
-    public Map<String, Object> getParam() {
-        return param;
+    public Map<String, Object> getCondition() {
+        return condition;
     }
 
-    public void setParam(Map<String, Object> param) {
-        this.param = param;
+    public void setCondition(Map<String, Object> condition) {
+        this.condition = condition;
     }
 
     public Integer getPageSize() {

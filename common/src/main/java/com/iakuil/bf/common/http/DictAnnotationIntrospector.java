@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 public class DictAnnotationIntrospector extends JacksonAnnotationIntrospector {
 
     public DictAnnotationIntrospector() {
-
     }
 
     @Override
