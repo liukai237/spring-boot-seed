@@ -18,6 +18,7 @@ import java.util.Set;
 
 /**
  * 使用Json Path的方式访问JSON
+ * <p>同样可以访问JavaBean和Map，注意Map中属性时无序的。</p>
  */
 @UtilityClass
 public class JsonPathUtils {

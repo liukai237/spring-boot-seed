@@ -42,6 +42,7 @@
         <hashids.version>1.0.3</hashids.version>
         <aspectjweaver.version>1.9.6</aspectjweaver.version>
         <kaptcha.version>2.3.2</kaptcha.version>
+        <reflections.version>0.9.12</reflections.version>
         <shedlock-spring.version>4.17.0</shedlock-spring.version>
 
         <mysql-connector-java.version>8.0.22</mysql-connector-java.version>
@@ -196,6 +197,12 @@
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>
                 <version>${aspectjweaver.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>${reflections.version}</version>
             </dependency>
 
             <dependency>

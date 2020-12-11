@@ -10,8 +10,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
 /**
- * 盐值生成工具
- * See http://blog.jobbole.com/61872/#java
+ * 密码工具
  */
 @UtilityClass
 public class PasswordHash {

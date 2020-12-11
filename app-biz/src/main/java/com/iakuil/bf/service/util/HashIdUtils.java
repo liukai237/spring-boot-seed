@@ -6,6 +6,9 @@ import org.hashids.Hashids;
 
 import java.util.Objects;
 
+/**
+ * Hash ID工具
+ */
 @UtilityClass
 public class HashIdUtils {
     private static final String DEFAULT_SALT = "itsADemo4Hash";
