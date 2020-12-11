@@ -1,4 +1,4 @@
-package com.iakuil.bf.service.util;
+package com.iakuil.bf.common.tool;
 
 import com.iakuil.bf.common.tool.JsonUtils;
 import com.jayway.jsonpath.Configuration;

@@ -21,7 +21,7 @@ public abstract class PageQuery {
     private String orderBy;
 
     /**
-     * 以Map方式存放查询参数，以便MyBatis判空。
+     * 以Map方式存放查询参数，方便MyBatis判空。
      */
     @JsonIgnore
     private Map<String, Object> condition;

@@ -14,6 +14,7 @@ import java.sql.SQLException;
  * MyBatis JSON字段处理器基类
  * <p>继承实现后在Entity中通过{@link tk.mybatis.mapper.annotation.ColumnType}注解引用</p>
  */
+@Deprecated
 public abstract class AbstractJsonTypeHandler<T> extends BaseTypeHandler<T> {
 
     @Override
