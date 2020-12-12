@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import lombok.experimental.UtilityClass;
 
@@ -50,6 +51,19 @@ public class JsonUtils {
 
     public static <T> List<T> json2List(String jsonStr, Class<T> clazz) {
         CollectionType listType = OBJECT_MAPPER.getTypeFactory().constructCollectionType(ArrayList.class, clazz);
+
+        List<T> result;
+        try {
+            result = OBJECT_MAPPER.readValue(jsonStr, listType);
+        } catch (IOException e) {
+            throw new IllegalStateException("Occurring an exception during json parsing!", e);
+        }
+
+        return result;
+    }
+
+    public static <T> List<T> json2Array(String jsonStr, Class<T> clazz) {
+        ArrayType listType = OBJECT_MAPPER.getTypeFactory().constructArrayType(clazz);
 
         List<T> result;
         try {
