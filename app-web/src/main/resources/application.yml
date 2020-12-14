@@ -45,6 +45,7 @@ mapper:
   not-empty: true
   identity: mysql
   use-simple-type: false
+  resolveClass: com.iakuil.bf.common.db.CustomEntityResolve
 
 pagehelper:
   helperDialect: mysql
