@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.TypeBase;
 import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -50,24 +52,21 @@ public class JsonUtils {
     }
 
     public static <T> List<T> json2List(String jsonStr, Class<T> clazz) {
-        CollectionType listType = OBJECT_MAPPER.getTypeFactory().constructCollectionType(ArrayList.class, clazz);
+        return readType(jsonStr, OBJECT_MAPPER.getTypeFactory().constructCollectionType(ArrayList.class, clazz));
+    }
 
-        List<T> result;
-        try {
-            result = OBJECT_MAPPER.readValue(jsonStr, listType);
-        } catch (IOException e) {
-            throw new IllegalStateException("Occurring an exception during json parsing!", e);
-        }
-
-        return result;
+    public static <T> List<T> json2Set(String jsonStr, Class<T> clazz) {
+        return readType(jsonStr, OBJECT_MAPPER.getTypeFactory().constructCollectionType(HashSet.class, clazz));
     }
 
     public static <T> List<T> json2Array(String jsonStr, Class<T> clazz) {
-        ArrayType listType = OBJECT_MAPPER.getTypeFactory().constructArrayType(clazz);
+        return readType(jsonStr, OBJECT_MAPPER.getTypeFactory().constructArrayType(clazz));
+    }
 
-        List<T> result;
+    private static <T> T readType(String jsonStr, TypeBase type) {
+        T result;
         try {
-            result = OBJECT_MAPPER.readValue(jsonStr, listType);
+            result = OBJECT_MAPPER.readValue(jsonStr, type);
         } catch (IOException e) {
             throw new IllegalStateException("Occurring an exception during json parsing!", e);
         }
