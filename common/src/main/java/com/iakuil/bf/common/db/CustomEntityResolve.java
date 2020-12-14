@@ -139,9 +139,7 @@ public class CustomEntityResolve extends DefaultEntityResolve {
             if (StringUtil.isEmpty(columnName) && StringUtil.isNotEmpty(jsonColumn.column())) {
                 columnName = jsonColumn.column();
             }
-            if (jsonColumn.typeHandler() != UnknownTypeHandler.class) {
-                entityColumn.setTypeHandler(jsonColumn.typeHandler());
-            }
+            entityColumn.setTypeHandler(JsonColumnTypeHandler.class);
         }
         //列名
         if (StringUtil.isEmpty(columnName)) {
