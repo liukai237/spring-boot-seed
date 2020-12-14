@@ -27,13 +27,13 @@ public class JsonColumnTypeHandler extends BaseTypeHandler<Object> {
             List list = (List) parameter;
             if (list.size() > 0) {
                 extInfo = "\"" + AGGREGATION_MODE + "\":\"" + AggregationMode.LIST.name() + "\","
-                        + "\"" + CLASS_HOLDER_FIELD + "\":\"" + (list).get(0).getClass() + "\",";
+                        + "\"" + CLASS_HOLDER_FIELD + "\":\"" + (list).get(0).getClass().getName() + "\",";
             }
         } else if (parameter instanceof Set) {
             Set set = (Set) parameter;
             if (set.size() > 0) {
                 extInfo = "\"" + AGGREGATION_MODE + "\":\"" + AggregationMode.SET.name() + "\","
-                        + "\"" + CLASS_HOLDER_FIELD + "\":\"" + ((Set) parameter).stream().findFirst().get().getClass() + "\",";
+                        + "\"" + CLASS_HOLDER_FIELD + "\":\"" + ((Set) parameter).stream().findFirst().get().getClass().getName() + "\",";
             }
         } else if (parameter.getClass().getName().startsWith("[L")) {
             extInfo = "\"" + AGGREGATION_MODE + "\":\"" + AggregationMode.ARRAY.name() + "\","

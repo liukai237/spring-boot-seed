@@ -28,8 +28,11 @@ public class JsonUtils {
     }
 
     public static String bean2Json(Object obj) {
-        String result;
+        if (obj == null) {
+            return null;
+        }
 
+        String result;
         try {
             result = OBJECT_MAPPER.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
@@ -40,6 +43,10 @@ public class JsonUtils {
     }
 
     public static <T> T json2bean(String jsonStr, Class<T> clazz) {
+        if (jsonStr == null || Strings.EMPTY.equals(jsonStr) || clazz == null) {
+            return null;
+        }
+
         T result;
 
         try {
@@ -64,6 +71,10 @@ public class JsonUtils {
     }
 
     private static <T> T readType(String jsonStr, TypeBase type) {
+        if (jsonStr == null || Strings.EMPTY.equals(jsonStr) || type == null) {
+            return null;
+        }
+
         T result;
         try {
             result = OBJECT_MAPPER.readValue(jsonStr, type);
