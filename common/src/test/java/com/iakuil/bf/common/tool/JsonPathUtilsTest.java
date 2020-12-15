@@ -13,21 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class JsonPathUtilsTest {
 
     @Test
-    void should_add_name_into_json() {
+    void should_add_object_to_json_array_suitably() {
         String json = "[{\"name\":\"Tom\"}]";
         String afterAdd = JsonPathUtils.add(json, "$", "{\"name\":\"Jack\"}");
         assertThat(afterAdd, containsString("Jack"));
     }
 
-//    @Test
-//    void should_get_null_when_path_is_invalid_during_adding() {
-//        String json = "[{\"name\":\"Tom\"}]";
-//        String foo = JsonPathUtils.add(json, "$", "foo");
-//        assertThat(foo, nullValue());
-//    }
-
     @Test
-    void should_append_property() {
+    void should_append_element_property() {
         String json = "{\"name\":\"Tom\"}";
         String afterPut = JsonPathUtils.put(json, "$", "age", 10);
         assertThat(afterPut, containsString("10"));

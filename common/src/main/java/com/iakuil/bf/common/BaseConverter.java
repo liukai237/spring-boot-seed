@@ -1,6 +1,8 @@
 package com.iakuil.bf.common;
 
 import com.iakuil.bf.common.tool.BeanUtils;
+import org.mapstruct.MapperConfig;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
@@ -13,6 +15,7 @@ import java.util.List;
  * @param <T> Entity
  * @param <K> DTO
  */
+@MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BaseConverter<T, K> {
     K toDto(T entity);
 

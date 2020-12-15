@@ -38,7 +38,7 @@
         <guava.version>30.0-jre</guava.version>
         <jasypt-spring-boot-starter.version>2.1.2</jasypt-spring-boot-starter.version>
         <bcprov-jdk16.version>1.46</bcprov-jdk16.version>
-        <json-path.version>2.4.0</json-path.version>
+        <json-path.version>2.5.0</json-path.version>
         <hashids.version>1.0.3</hashids.version>
         <aspectjweaver.version>1.9.6</aspectjweaver.version>
         <kaptcha.version>2.3.2</kaptcha.version>

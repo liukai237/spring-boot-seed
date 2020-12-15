@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.ArrayType;
-import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeBase;
 import lombok.experimental.UtilityClass;
 
@@ -83,13 +81,5 @@ public class JsonUtils {
         }
 
         return result;
-    }
-
-    /**
-     * 简单的类型转换
-     * <p>基于转换效率，应该优先考虑{@link BeanUtils}</p>
-     */
-    public static <T> T transfer(Object obj, Class<T> clazz) {
-        return OBJECT_MAPPER.convertValue(obj, clazz);
     }
 }
