@@ -28,6 +28,7 @@ import java.util.List;
 /**
  * 为通用Mapper增加自定义的注解
  */
+@Deprecated
 @Slf4j
 public class CustomEntityResolve extends DefaultEntityResolve {
 

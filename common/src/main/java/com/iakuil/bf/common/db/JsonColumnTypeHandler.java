@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
+@Deprecated
 @Slf4j
 public class JsonColumnTypeHandler extends BaseTypeHandler<Object> {
     private static final String AGGREGATION_MODE = "aggregationMode";
