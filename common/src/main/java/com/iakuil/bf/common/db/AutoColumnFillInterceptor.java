@@ -1,6 +1,7 @@
 package com.iakuil.bf.common.db;
 
 import com.dangdang.ddframe.rdb.sharding.id.generator.self.CommonSelfIdGenerator;
+import com.iakuil.bf.common.annotation.LogicDelete;
 import com.iakuil.bf.common.tool.ApplicationContextHolder;
 import com.iakuil.bf.common.tool.Strings;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ import java.util.Properties;
 
 /**
  * DB字段自动填充
- * <p>自动填充create_time，update_time等字段，支持批量操作，支持id回写。</p>
+ * <p>自动填充创建/修改时间以及逻辑删除等字段，支持批量操作，支持id回写。</p>
  */
 @Slf4j
 @Intercepts({@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})})
@@ -77,6 +78,20 @@ public class AutoColumnFillInterceptor implements Interceptor {
                 }
                 if (AnnotationUtils.getAnnotation(field, CreatedBy.class) != null) {
                     //TODO...
+                }
+            }
+        } else if (SqlCommandType.DELETE == sqlCommandType) {
+            for (Field field : fields) {
+                if (AnnotationUtils.getAnnotation(field, LogicDelete.class) != null) {
+                    field.setAccessible(true);
+                    if (field.getType().equals(String.class)) {
+                        field.set(parameter, "1");
+                    } else if (field.getType().equals(Long.class) || field.getType().equals(Integer.class)) {
+                        field.set(parameter, 1);
+                    } else {
+                        // do nothing
+                    }
+                    field.setAccessible(false);
                 }
             }
         } else {
