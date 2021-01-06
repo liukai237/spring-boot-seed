@@ -24,13 +24,14 @@
 
 ## 主要功能
 除了传统SSM框架提供的特性外，还集成如下功能：
+* 统一返回结果格式及异常处理
+* 分页排序和日期参数处理
 * 基于Sharding-JDBC的ID发号器
+* 逻辑删除、乐观锁
 * 创建/修改时间等字段自动填充
 * MySQL JSON/枚举字段自动映射
 * 基于***枚举***和***数据库表***的数据字典
-* 分页排序和日期参数处理
-* 统一返回结果格式及异常处理
-* 基于通用Mapper的MBG代码生成器、逻辑删除、乐观锁
+* 基于通用Mapper的MBG代码生成器
 * saveOrModify、selectMap、selectPage等
 
 ## 应用分层
@@ -52,9 +53,4 @@
 |DTO|数据传输对象|存在于Service方法入口、出口，或者被Controller层Resp包裹后返回给前端。|
 |Query|查询对象|只能用于Controller方法入口，包裹`PageQuery`后可以作为分页查询场景查询条件传递到DAO层。|
 
-## 致谢
-* 通用Mapper和PageHelper，前人栽树，后人乘凉。
-* MyBatis Plus，提供了许多值得借鉴的想法。
-* jon-winters提供的[思路](https://github.com/jon-winters/auto-generate-enum-api-parent)，优雅地实现了数据字典。
-
---- THE END ---
+<sub>Copyright (c) 2020 iakuil.com</sub>
