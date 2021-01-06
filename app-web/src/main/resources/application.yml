@@ -39,6 +39,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     default-enum-type-handler: com.iakuil.bf.common.db.AutoEnumTypeHandler
+  type-handlers-package: com.iakuil.bf.dao.json
 
 mapper:
   mappers: com.iakuil.bf.common.db.CrudMapper, com.iakuil.bf.common.db.ReadOnlyMapper

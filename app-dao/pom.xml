@@ -19,6 +19,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.iakuil</groupId>
+            <artifactId>ez-mapper-processor</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
         </dependency>
@@ -60,7 +65,7 @@
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
                 <version>${mybatis-generator.version}</version>
                 <configuration>
-                    <configurationFile>app-dao/src/main/resources/mbg/generatorConfig.xml</configurationFile>
+                    <configurationFile>src/main/resources/mbg/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <verbose>true</verbose>
                     <includeCompileDependencies>true</includeCompileDependencies>

@@ -3,12 +3,14 @@ package com.iakuil.bf.dao.entity;
 import com.iakuil.bf.common.BaseDomain;
 import com.iakuil.bf.common.constant.Gender;
 import com.iakuil.bf.common.constant.Province;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import tk.mybatis.mapper.annotation.LogicDelete;
-import tk.mybatis.mapper.annotation.Version;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -40,8 +42,7 @@ public class User extends BaseDomain {
     private Date createTime;
     @LastModifiedDate
     private Date updateTime;
-    @Version
-    private Integer version;
+    private Long version;
     @LogicDelete
     private Integer deleted;
     //private String salt;

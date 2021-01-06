@@ -156,6 +156,12 @@
                 <version>${sharding-jdbc-self-id-generator.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.iakuil</groupId>
+                <artifactId>ez-mapper-processor</artifactId>
+                <version>0.0.2-SNAPSHOT</version>
+            </dependency>
+
             <!--********** 3rd *********** -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -271,10 +277,28 @@
                                 <artifactId>mapstruct-processor</artifactId>
                                 <version>${mapstruct.version}</version>
                             </path>
+                            <path>
+                                <groupId>com.iakuil</groupId>
+                                <artifactId>ez-mapper-processor</artifactId>
+                                <version>0.0.2-SNAPSHOT</version>
+                            </path>
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>rdc-snapshots</id>
+            <name>Aliyun Release Repository</name>
+            <url>https://packages.aliyun.com/maven/repository/2056769-snapshot-vcBUfn/</url>
+        </repository>
+        <snapshotRepository>
+            <id>rdc-releases</id>
+            <name>Aliyun Snapshot Repository</name>
+            <url>https://packages.aliyun.com/maven/repository/2056769-release-JzmTMr/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

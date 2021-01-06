@@ -3,6 +3,7 @@ package com.iakuil.bf.dao.config;
 import com.dangdang.ddframe.rdb.sharding.id.generator.IdGenerator;
 import com.dangdang.ddframe.rdb.sharding.id.generator.self.CommonSelfIdGenerator;
 import com.iakuil.bf.common.db.AutoColumnFillInterceptor;
+import com.iakuil.bf.common.db.OptimisticLockerInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Properties;
 
 @Configuration
 @MapperScan(basePackages = "com.iakuil.bf.dao")
@@ -22,13 +24,21 @@ public class DbConfig {
     private List<SqlSessionFactory> sqlSessionFactoryList;
 
     /**
-     * 自动创建ID、create_time和update_time
+     * 自定义的拦截器
      */
     @PostConstruct
     public void addPageInterceptor() {
-        AutoColumnFillInterceptor interceptor = new AutoColumnFillInterceptor();
+        AutoColumnFillInterceptor autoFill = new AutoColumnFillInterceptor();
+
+        OptimisticLockerInterceptor locker = new OptimisticLockerInterceptor();
+        Properties props = new Properties();
+        props.setProperty("versionColumn", "version");
+        locker.setProperties(props);
+
         for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
-            sqlSessionFactory.getConfiguration().addInterceptor(interceptor);
+            org.apache.ibatis.session.Configuration configuration = sqlSessionFactory.getConfiguration();
+            configuration.addInterceptor(autoFill);
+            configuration.addInterceptor(locker);
         }
     }
 

@@ -16,7 +16,7 @@ import java.util.List;
 @UtilityClass
 public class BeanUtils {
 
-    private static MultiKeyMap cache = new MultiKeyMap();
+    private static MultiKeyMap<Class<?>, BeanCopier> cache = new MultiKeyMap<>();
 
     /**
      * 对象属性复制
@@ -62,13 +62,10 @@ public class BeanUtils {
     }
 
     private static BeanCopier getCopier(Class<?> from, Class<?> to) {
-        BeanCopier copier;
-        Object cached = cache.get(from, to);
-        if (cached == null) {
+        BeanCopier copier = cache.get(from, to);
+        if (copier == null) {
             copier = BeanCopier.create(from, to, false);
             cache.put(from, to, copier);
-        } else {
-            copier = ((BeanCopier) cached);
         }
 
         return copier;
