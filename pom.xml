@@ -47,6 +47,7 @@
 
         <mysql-connector-java.version>8.0.22</mysql-connector-java.version>
         <HikariCP.version>3.4.5</HikariCP.version>
+        <druid.version>1.2.4</druid.version>
         <mapper-spring-boot-starter.version>2.1.5</mapper-spring-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.3.0</pagehelper-spring-boot-starter.version>
         <mybatis-generator.version>1.3.7</mybatis-generator.version>
@@ -136,6 +137,12 @@
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
                 <version>${HikariCP.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>1.2.4</version>
             </dependency>
 
             <dependency>
