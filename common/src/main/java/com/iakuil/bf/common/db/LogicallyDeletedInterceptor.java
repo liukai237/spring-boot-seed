@@ -10,6 +10,7 @@ import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
+import java.util.Arrays;
 import java.util.Properties;
 
 /**
@@ -30,7 +31,7 @@ public class LogicallyDeletedInterceptor implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
-        {
+        if (Arrays.stream(mappedStatement.getResultMaps().get(0).getType().getDeclaredFields()).anyMatch(item -> item.getName().equals(logicDeleteField))) {
             LogicallyDeletedDynamicSqlSource deletedDynamicSqlSource = new LogicallyDeletedDynamicSqlSource(DbType.of(dbType), mappedStatement.getSqlSource(), logicDeleteField, logicDeleteValue, logicNotDeleteValue);
             PluginUtils.setFieldValue(mappedStatement, "sqlSource", deletedDynamicSqlSource);
         }
