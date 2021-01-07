@@ -1,26 +1,3 @@
-/**
- * The MIT License (MIT)
- * <p>
- * Copyright (c) 2016 342252328@qq.com
- * <p>
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * <p>
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * <p>
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
 package com.iakuil.bf.common.tool;
 
 import org.apache.ibatis.executor.parameter.ParameterHandler;
@@ -88,10 +65,8 @@ public final class PluginUtils {
             field.setAccessible(true);
             try {
                 result = field.get(obj);
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                log.error("[Occurring an exception during field value reading!]", e);
             }
         }
         return result;
@@ -111,7 +86,7 @@ public final class PluginUtils {
                 field = clazz.getDeclaredField(fieldName);
                 break;
             } catch (NoSuchFieldException e) {
-                // do nothing
+                log.error("There is no such Field: " + fieldName);
             }
         }
         return field;
@@ -130,8 +105,9 @@ public final class PluginUtils {
             try {
                 field.setAccessible(true);
                 field.set(obj, fieldValue);
+                field.setAccessible(false);
             } catch (IllegalArgumentException | IllegalAccessException e) {
-                e.printStackTrace();
+                log.error("[Occurring an exception during field value setting!]", e);
             }
         }
     }
@@ -140,19 +116,19 @@ public final class PluginUtils {
      * 调用对象方法返回
      *
      * @param obj        需要调用的对象
-     * @param methodNmae 方法名称
+     * @param methodName 方法名称
      * @return 调用方法返回的值
      */
-    public static Object transferMethod(Object obj, String methodNmae) {
+    public static Object transferMethod(Object obj, String methodName) {
         try {
-            Class<? extends Object> cls = obj.getClass();
+            Class<?> cls = obj.getClass();
             // 获得类的私有方法
-            Method method = cls.getDeclaredMethod(methodNmae, null);
+            Method method = cls.getDeclaredMethod(methodName, null);
             method.setAccessible(true);
             // 调用该方法
             return method.invoke(obj, null);
         } catch (Exception e) {
-            return new RuntimeException(e);
+            return new IllegalStateException("[Occurring an exception during method invoking!]", e);
         }
     }
 }

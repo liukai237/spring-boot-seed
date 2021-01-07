@@ -64,7 +64,7 @@ public class LogicallyDeletedDynamicSqlSource implements SqlSource {
     }
 
     /**
-     * 删除语句变更新字段语
+     * 删除语句变更新语句
      */
     private String deleteToUpdate(SQLDeleteStatement deleteStatement) {
         StringBuffer buf = new StringBuffer();
@@ -103,7 +103,7 @@ public class LogicallyDeletedDynamicSqlSource implements SqlSource {
     }
 
     /**
-     * 给Select加上删除where
+     * Select语句加上删除where
      */
     private String selectAddWhere(SQLSelectStatement sstmt) {
 
@@ -131,7 +131,7 @@ public class LogicallyDeletedDynamicSqlSource implements SqlSource {
     }
 
     /**
-     * 查询字段alias值，没有返回NUll
+     * 查询字段alias，没有返回NUll
      */
     private List<String> getFrom(SQLTableSource tableFrom) {
         StringBuffer buffer = new StringBuffer();

@@ -33,9 +33,6 @@ public class DbConfig {
      */
     @PostConstruct
     public void addPageInterceptor() {
-        // 自动填充字段
-        AutoColumnFillInterceptor autoFill = new AutoColumnFillInterceptor();
-
         // 乐观锁
         OptimisticLockerInterceptor locker = new OptimisticLockerInterceptor();
         Properties props = new Properties();
@@ -51,11 +48,14 @@ public class DbConfig {
         props2.setProperty("dbType", "mysql");
         deleted.setProperties(props2);
 
+        // 自动填充字段
+        AutoColumnFillInterceptor autoFill = new AutoColumnFillInterceptor();
+
         for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
             org.apache.ibatis.session.Configuration configuration = sqlSessionFactory.getConfiguration();
-            configuration.addInterceptor(autoFill);
             configuration.addInterceptor(locker);
             configuration.addInterceptor(deleted);
+            configuration.addInterceptor(autoFill);
         }
     }
 
