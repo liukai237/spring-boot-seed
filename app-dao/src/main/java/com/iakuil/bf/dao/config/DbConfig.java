@@ -15,6 +15,10 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * 数据库配置文件
+ * @author Kai
+ */
 @Configuration
 @MapperScan(basePackages = "com.iakuil.bf.dao")
 @EnableTransactionManagement
@@ -28,8 +32,10 @@ public class DbConfig {
      */
     @PostConstruct
     public void addPageInterceptor() {
+        // 自动填充字段 + 逻辑删除
         AutoColumnFillInterceptor autoFill = new AutoColumnFillInterceptor();
 
+        // 乐观锁
         OptimisticLockerInterceptor locker = new OptimisticLockerInterceptor();
         Properties props = new Properties();
         props.setProperty("versionColumn", "version");

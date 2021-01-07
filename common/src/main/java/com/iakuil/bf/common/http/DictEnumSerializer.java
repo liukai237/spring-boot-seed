@@ -10,6 +10,8 @@ import java.io.IOException;
 
 /**
  * 全局枚举转JSON
+ *
+ * @author Kai
  */
 @JsonComponent
 public class DictEnumSerializer extends JsonSerializer<DictEnum> {

@@ -19,6 +19,8 @@ import java.util.Collection;
 /**
  * 非泛型化的BaseService
  * <p>提供一些业务层常用的公用方法。</p>
+ *
+ * @author Kai
  */
 @Slf4j
 @Service

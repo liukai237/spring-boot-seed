@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
  * <p>一般与{@link PageQuery}结对出现。</p>
  *
  * @param <T> Entity
+ *
+ * @author Kai
  */
 @Getter
 @Setter

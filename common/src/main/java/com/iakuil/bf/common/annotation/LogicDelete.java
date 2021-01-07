@@ -7,6 +7,8 @@ import java.lang.annotation.Target;
 
 /**
  * 逻辑删除
+ *
+ * @author Kai
  */
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

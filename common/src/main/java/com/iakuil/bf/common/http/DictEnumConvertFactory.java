@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * 枚举/数据字典转换工厂
+ *
+ * @author Kai
  */
 @Component
 public class DictEnumConvertFactory implements ConverterFactory<String, DictEnum> {

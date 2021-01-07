@@ -12,6 +12,8 @@ import java.sql.SQLException;
 
 /**
  * MyBatis枚举处理
+ *
+ * @author Kai
  */
 public class AutoEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E> {
 

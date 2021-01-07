@@ -14,6 +14,8 @@ import java.util.List;
  *
  * @param <T> Entity
  * @param <K> DTO
+ *
+ * @author Kai
  */
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BaseConverter<T, K> {

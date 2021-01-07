@@ -11,6 +11,8 @@ import lombok.Setter;
  *
  * <p>用于封装Controller层返回结果，配合{@link RespCode}使用。
  * 其中success为冗余字段。</p>
+ *
+ * @author Kai
  */
 @Getter
 @Setter

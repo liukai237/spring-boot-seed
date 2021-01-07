@@ -9,6 +9,8 @@ import java.lang.annotation.*;
 /**
  * 开始时间时间
  * <p>用于URL参数或者JSON Body，精确到00:00:00:000</p>
+ *
+ * @author Kai
  */
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)

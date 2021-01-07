@@ -11,6 +11,8 @@ import java.util.Set;
 
 /**
  * 自定义的通用Mapper组件
+ *
+ * @author Kai
  */
 public class CustomSelectProvider extends MapperTemplate {
     public CustomSelectProvider(Class<?> mapperClass, MapperHelper mapperHelper) {

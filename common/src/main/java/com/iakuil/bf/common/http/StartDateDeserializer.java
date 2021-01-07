@@ -13,6 +13,11 @@ import com.iakuil.bf.common.tool.Dates;
 import java.io.IOException;
 import java.util.Date;
 
+/**
+ * JSON开始日期反序列化
+ *
+ * @author Kai
+ */
 @JacksonStdImpl
 public class StartDateDeserializer extends JsonDeserializer<Date> implements ContextualDeserializer {
 

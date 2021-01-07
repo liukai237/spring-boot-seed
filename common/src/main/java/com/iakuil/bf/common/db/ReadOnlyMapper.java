@@ -8,7 +8,7 @@ import tk.mybatis.mapper.common.ids.SelectByIdsMapper;
  *
  * <p>仅提供读取数据库方法。不建议使用代码生成器。</p><br/>
  *
- * @param <T> Entity
+ * @author Kai
  */
 public interface ReadOnlyMapper<T> extends BaseSelectMapper<T>, SelectByIdsMapper<T>, CustomMapper<T> {
 }

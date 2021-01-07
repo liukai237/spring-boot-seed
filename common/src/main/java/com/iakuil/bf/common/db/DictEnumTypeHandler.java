@@ -12,6 +12,8 @@ import java.util.Objects;
 
 /**
  * MyBatis字段转枚举
+ *
+ * @author Kai
  */
 public class DictEnumTypeHandler<E extends Enum<?> & DictEnum> extends BaseTypeHandler<DictEnum> {
 

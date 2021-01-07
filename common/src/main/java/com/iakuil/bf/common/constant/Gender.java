@@ -4,6 +4,12 @@ import com.iakuil.bf.common.DictEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * 性别枚举
+ *
+ * @author Kai
+ */
+
 @Getter
 @AllArgsConstructor
 public enum Gender implements DictEnum<Integer> {

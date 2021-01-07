@@ -32,11 +32,15 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 
 import java.lang.reflect.Proxy;
 
+/**
+ * MyBatis插件工具类
+ *
+ * @author Kai
+ */
 public final class PluginUtils {
 
     private static final Log log = LogFactory.getLog(PluginUtils.class);
 
-    // private constructor
     private PluginUtils() {
     }
 
@@ -46,7 +50,7 @@ public final class PluginUtils {
      * <p>
      * If integrate more than a plugin, maybe there are conflict in these plugins,
      * because plugin will proxy the object.<br>
-     * So, here get the orignal target object
+     * So, here get the original target object
      *
      * @param target proxy-object
      * @return original target object
@@ -58,14 +62,13 @@ public final class PluginUtils {
         }
 
         // must keep the result object is StatementHandler or ParameterHandler in
-        // Optimistic Loker plugin
+        // Optimistic Locker plugin
         if (!(target instanceof StatementHandler) && !(target instanceof ParameterHandler)) {
             if (log.isDebugEnabled()) {
-                log.error("Optimistic Loker plugin init faild.");
+                log.error("Optimistic Locker plugin init failed.");
             }
             throw new IllegalStateException("[Optimistic Locker Plugin Error] plugin init failed.");
         }
         return target;
     }
-
 }

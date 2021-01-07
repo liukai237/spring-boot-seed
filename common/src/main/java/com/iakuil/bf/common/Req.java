@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
  * 请不要滥用这种半公开的传参方式！</p>
  *
  * @param <T> 过滤条件
+ *
+ * @author Kai
  */
 @ApiModel(value = "Req", description = "统一封装的请求体")
 public class Req<T extends PageQuery> {

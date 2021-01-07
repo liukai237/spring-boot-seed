@@ -25,6 +25,8 @@ import java.util.Properties;
 /**
  * DB字段自动填充
  * <p>自动填充创建/修改时间以及逻辑删除等字段，支持批量操作，支持id回写。</p>
+ *
+ * @author Kai
  */
 @Slf4j
 @Intercepts({@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})})

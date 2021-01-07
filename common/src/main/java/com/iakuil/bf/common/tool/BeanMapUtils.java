@@ -12,6 +12,8 @@ import java.util.Map;
  * Java Bean与Map转换工具
  *
  * <p>封装了Spring框架自带{@link BeanMap}</p>
+ *
+ * @author Kai
  */
 @UtilityClass
 public class BeanMapUtils {

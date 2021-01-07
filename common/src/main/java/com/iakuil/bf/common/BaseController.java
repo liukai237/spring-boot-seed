@@ -5,6 +5,8 @@ import com.iakuil.bf.common.constant.RespCode;
 /**
  * 视图层基类
  * <p>所有RestController强制继承。</p>
+ *
+ * @author Kai
  */
 public abstract class BaseController {
 

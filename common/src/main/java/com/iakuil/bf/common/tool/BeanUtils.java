@@ -12,6 +12,8 @@ import java.util.List;
  * 对象属性复制工具
  * <p>性能略低于Mapstruct，适用于懒得创建{@link com.iakuil.bf.common.BaseConverter}方法的场景。</p><br/>
  * <p>注意：属性名称相同而类型不同的属性不会被拷贝。</p>
+ *
+ * @author Kai
  */
 @UtilityClass
 public class BeanUtils {

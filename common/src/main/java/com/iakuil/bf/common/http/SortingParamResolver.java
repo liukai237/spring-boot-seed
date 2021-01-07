@@ -13,7 +13,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  * 排序参数自动转换
  * <p>自动将a+b-c+或者+a,-b,+c格式的Request Param转换为SQL样式的排序方式。</p>
  *
- * @see Strings
+ * @author Kai
  */
 public class SortingParamResolver implements HandlerMethodArgumentResolver {
 

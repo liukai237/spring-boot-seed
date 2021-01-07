@@ -10,6 +10,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 自定义的URL参数处理器
+ *
+ * @author Kai
+ */
 public class ResolverBeanPostProcessor implements BeanPostProcessor {
 
     private HandlerMethodArgumentResolver[] specificResolvers;

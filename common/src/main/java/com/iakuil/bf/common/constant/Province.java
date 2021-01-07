@@ -8,6 +8,12 @@ import lombok.Getter;
 import java.util.Arrays;
 import java.util.Map;
 
+/**
+ * 省份枚举
+ *
+ * @author Kai
+ */
+
 @Getter
 @AllArgsConstructor
 public enum Province implements DictEnum {
