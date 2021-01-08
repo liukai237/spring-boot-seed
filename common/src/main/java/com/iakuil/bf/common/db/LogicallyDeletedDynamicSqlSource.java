@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 逻辑删除SqlSource
+ * 逻辑删除SQL语句处理
  *
  * @author Kai
  */
@@ -73,7 +73,7 @@ public class LogicallyDeletedDynamicSqlSource implements SqlSource {
         deleteStatement.getTableSource().output(buf);
         buf.append(" SET ");
         {
-            List<String> list = getFrom(deleteStatement.getTableSource());
+            List<String> list = getAlias(deleteStatement.getTableSource());
             if (list != null) {
                 for (int i = 0; i < list.size(); i++) {
                     if (i != 0) {
@@ -111,7 +111,7 @@ public class LogicallyDeletedDynamicSqlSource implements SqlSource {
         SQLSelectQueryBlock query = (SQLSelectQueryBlock) sqlselect.getQuery();
 
         if (query != null && query.getFrom() != null) {
-            List<String> list = getFrom(query.getFrom());
+            List<String> list = getAlias(query.getFrom());
             if (list != null) {
                 for (String as : list) {
                     StringBuffer whereSql = new StringBuffer();
@@ -131,9 +131,9 @@ public class LogicallyDeletedDynamicSqlSource implements SqlSource {
     }
 
     /**
-     * 查询字段alias，没有返回NUll
+     * 查询表alias，没有返回NUll
      */
-    private List<String> getFrom(SQLTableSource tableFrom) {
+    private List<String> getAlias(SQLTableSource tableFrom) {
         StringBuffer buffer = new StringBuffer();
         tableFrom.accept(new SQLASTOutputVisitor(buffer));
         String tables = buffer.toString();
