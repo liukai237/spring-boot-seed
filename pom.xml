@@ -53,6 +53,7 @@
         <mybatis-generator.version>1.3.7</mybatis-generator.version>
         <sharding-jdbc-spring-boot-starter.version>4.1.1</sharding-jdbc-spring-boot-starter.version>
         <sharding-jdbc-self-id-generator.version>1.4.2</sharding-jdbc-self-id-generator.version>
+        <ez-mapper.version>0.0.2-RELEASE</ez-mapper.version>
 
         <sentinel.version>2.2.3.RELEASE</sentinel.version>
         <spring-boot-admin-starter.version>2.2.3</spring-boot-admin-starter.version>
@@ -125,6 +126,12 @@
                 <groupId>tk.mybatis</groupId>
                 <artifactId>mapper-spring-boot-starter</artifactId>
                 <version>${mapper-spring-boot-starter.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>tk.mybatis</groupId>
+                        <artifactId>mapper-weekend</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -142,7 +149,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
-                <version>1.2.4</version>
+                <version>${druid.version}</version>
             </dependency>
 
             <dependency>
@@ -166,7 +173,7 @@
             <dependency>
                 <groupId>com.iakuil</groupId>
                 <artifactId>ez-mapper-processor</artifactId>
-                <version>0.0.2-RELEASE</version>
+                <version>${ez-mapper.version}</version>
             </dependency>
 
             <!--********** 3rd *********** -->
