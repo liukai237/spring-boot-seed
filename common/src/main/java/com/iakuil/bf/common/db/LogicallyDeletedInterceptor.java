@@ -11,13 +11,17 @@ import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Properties;
 
 /**
  * MyBatis逻辑删除插件
+ *
+ * <p>以下两种情况会触发本插件：</p>
+ * <ol>
+ * <li> 定义在CrudMapper中的通用方法，并且对应的Entity中有逻辑删除字段。
+ * <li> 定义在XML Mapper中的方法，ResultMap对应的Entity中有逻辑删除字段。
+ * </ol>
  *
  * @author Kai
  */
@@ -35,7 +39,7 @@ public class LogicallyDeletedInterceptor implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[MAPPED_STATEMENT_INDEX];
-        // 如果是通用方法，或者ResultSet中有逻辑删除字段
+        // 触发条件
         if (hasLogicDeleted(mappedStatement.getId())
                 || Arrays.stream(mappedStatement.getResultMaps().get(0).getType().getDeclaredFields()).anyMatch(item -> item.getName().equals(logicDeleteField))) {
             LogicallyDeletedDynamicSqlSource deletedDynamicSqlSource = new LogicallyDeletedDynamicSqlSource(DbType.of(dbType), mappedStatement.getSqlSource(), logicDeleteField, logicDeleteValue, logicNotDeleteValue);
@@ -58,29 +62,6 @@ public class LogicallyDeletedInterceptor implements Interceptor {
     }
 
     private boolean hasLogicDeleted(String id) {
-        return isFieldMapped(StringUtils.substringBeforeLast(id, "."), logicDeleteField);
-    }
-
-    private boolean isFieldMapped(String mapperName, String fieldName) {
-        Type[] types;
-        try {
-            types = Class.forName(mapperName).getGenericInterfaces();
-        } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Unknown class: " + mapperName);
-        }
-
-        for (Type type : types) {
-            ParameterizedType pt = (ParameterizedType) type;
-            if (pt.getRawType() instanceof CrudMapper) {
-                Type[] arguments = ((ParameterizedType) type).getActualTypeArguments();
-                for (Type argument : arguments) {
-                    if (PluginUtils.getField(argument.getClass(), fieldName) != null) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
+        return PluginUtils.isFieldMapped(StringUtils.substringBeforeLast(id, "."), logicDeleteField);
     }
 }

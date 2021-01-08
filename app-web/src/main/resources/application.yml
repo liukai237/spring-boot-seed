@@ -42,7 +42,7 @@ mybatis:
   type-handlers-package: com.iakuil.bf.dao.json
 
 mapper:
-  mappers: com.iakuil.bf.common.db.CrudMapper, com.iakuil.bf.common.db.ReadOnlyMapper
+  mappers: com.iakuil.bf.common.db.CrudMapper
   not-empty: true
   identity: mysql
   use-simple-type: false

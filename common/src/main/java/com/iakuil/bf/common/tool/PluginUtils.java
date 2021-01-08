@@ -1,5 +1,6 @@
 package com.iakuil.bf.common.tool;
 
+import com.iakuil.bf.common.db.CrudMapper;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.logging.Log;
@@ -7,9 +8,7 @@ import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
+import java.lang.reflect.*;
 
 /**
  * MyBatis插件工具类
@@ -141,5 +140,35 @@ public final class PluginUtils {
         } catch (Exception e) {
             return new IllegalStateException("[Occurring an exception during method invoking!]", e);
         }
+    }
+
+    /**
+     * 判断属性名是否已经被Mapper映射
+     *
+     * @param mapperName Mapper名称，带包名，不带后缀
+     * @param fieldName  属性名称
+     * @return 调用方法返回的值
+     */
+    public static boolean isFieldMapped(String mapperName, String fieldName) {
+        Type[] types;
+        try {
+            types = Class.forName(mapperName).getGenericInterfaces();
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException("Unknown class: " + mapperName);
+        }
+
+        for (Type type : types) {
+            ParameterizedType pt = (ParameterizedType) type;
+            if (pt.getRawType() instanceof CrudMapper) {
+                Type[] arguments = ((ParameterizedType) type).getActualTypeArguments();
+                for (Type argument : arguments) {
+                    if (getField(argument.getClass(), fieldName) != null) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }
