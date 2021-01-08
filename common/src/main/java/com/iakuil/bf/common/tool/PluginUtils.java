@@ -79,19 +79,8 @@ public final class PluginUtils {
      * @return 属性对象
      */
     public static Field getField(Object obj, String fieldName) {
-        return getField(obj.getClass(), fieldName);
-    }
-
-    /**
-     * 获取指定类里面的指定属性对象
-     *
-     * @param clz       目标类型
-     * @param fieldName 指定属性名称
-     * @return 属性对象
-     */
-    public static Field getField(Class<?> clz, String fieldName) {
         Field field = null;
-        for (Class<?> clazz = clz; clazz != Object.class; clazz = clazz.getSuperclass()) {
+        for (Class<?> clazz = obj.getClass() == Class.class ? (Class<?>) obj : obj.getClass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
             try {
                 field = clazz.getDeclaredField(fieldName);
                 break;
@@ -159,10 +148,10 @@ public final class PluginUtils {
 
         for (Type type : types) {
             ParameterizedType pt = (ParameterizedType) type;
-            if (pt.getRawType() instanceof CrudMapper) {
+            if (pt.getRawType() == CrudMapper.class) {
                 Type[] arguments = ((ParameterizedType) type).getActualTypeArguments();
                 for (Type argument : arguments) {
-                    if (getField(argument.getClass(), fieldName) != null) {
+                    if (getField(argument, fieldName) != null) {
                         return true;
                     }
                 }
