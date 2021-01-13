@@ -23,6 +23,8 @@ import java.util.Properties;
  * <li> 定义在XML Mapper中的方法，ResultMap对应的Entity中有逻辑删除字段。
  * </ol>
  *
+ * <p>试验功能</p>
+ *
  * @author Kai
  */
 @Intercepts({@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
