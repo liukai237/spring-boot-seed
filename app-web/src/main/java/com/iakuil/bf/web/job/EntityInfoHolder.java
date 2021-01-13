@@ -89,7 +89,7 @@ public class EntityInfoHolder implements InitializingBean {
 
                 String columnName = mapUnderscoreToCamelCase ? Strings.toUnderlineCase(fieldName) : fieldName;
                 Column columnAnnotation = AnnotationUtils.findAnnotation(field, Column.class);
-                if (StringUtils.isBlank(columnAnnotation.name())) {
+                if (columnAnnotation != null && StringUtils.isBlank(columnAnnotation.name())) {
                     columnName = columnAnnotation.name();
                 }
                 fieldAndColumns.put(fieldName, columnName);
