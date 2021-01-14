@@ -3,21 +3,21 @@ package com.iakuil.bf.common;
 import com.iakuil.bf.common.constant.RespCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
- * API响应体
+ * 通用API响应体
  *
  * <p>用于封装Controller层返回结果，配合{@link RespCode}使用。
  * 其中success为冗余字段。</p>
+ * <p>分页/排序请求请使用{@link PageResp}。</p>
  *
  * @author Kai
  */
-@Getter
-@Setter
 @ApiModel(value = "Resp", description = "统一API响应结果")
 public class Resp<T> {
+    public Resp() {
+    }
+
     @ApiModelProperty(value = "状态码")
     private int code;
     @ApiModelProperty(value = "描述信息")
@@ -43,5 +43,29 @@ public class Resp<T> {
 
     public boolean isSuccess() {
         return code == RespCode.SUCCESS.getCode();
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 }

@@ -1,14 +1,13 @@
 package com.iakuil.bf.web.query;
 
 
-import com.iakuil.bf.common.PageQuery;
 import io.swagger.annotations.ApiModel;
 
 import java.math.BigDecimal;
 
 
 @ApiModel(value = "DictQueryParam", description = "数据字典查询参数")
-public class DictQueryParam extends PageQuery {
+public class DictQueryParam {
 
     //编号
     private Long id;

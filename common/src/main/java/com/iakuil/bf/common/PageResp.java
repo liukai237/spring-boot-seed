@@ -1,38 +1,29 @@
 package com.iakuil.bf.common;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.github.pagehelper.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import springfox.documentation.annotations.ApiIgnore;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * MyBatis分页结果容器
- * <p>功能同PageInfo，额外支持转换器参数。</p><br/>
+ * 分页/排序请求响应结果
  * <p>一般与{@link PageQuery}结对出现。</p>
  *
  * @param <T> Entity
- *
  * @author Kai
  */
 @Getter
 @Setter
-@ApiModel(value = "PageData", description = "分页数据")
-@Deprecated
-public class PageData<T> implements Serializable {
+@ApiModel(value = "PageResp", description = "分页数据")
+public class PageResp<T> extends Resp<List<T>> {
     @ApiModelProperty(value = "总记录数")
     private long total;
-    @ApiModelProperty(value = "结果集")
-    private List<T> list;
     @ApiModelProperty(value = "第几页")
     private int pageNum;
     @ApiModelProperty(value = "每页记录数")
@@ -42,14 +33,7 @@ public class PageData<T> implements Serializable {
     @ApiModelProperty(value = "当前页的数量")
     private int size;
 
-    /**
-     * 额外返回的数据
-     * <p>比如：分页同时返回平均年龄</p>
-     * <p>PS. 为避免出现多层嵌套，该属性内字段会被扁平化，与total、pageSize等处于同一层级。</p><br/>
-     */
-    private Map<String, Object> extra;
-
-    public PageData(List<T> list) {
+    public PageResp(List<T> list) {
         Objects.requireNonNull(list, "data list should not be empty!");
 
         if (list instanceof Page) {
@@ -61,10 +45,10 @@ public class PageData<T> implements Serializable {
             this.size = page.size();
         }
 
-        this.list = list;
+        super.setData(list);
     }
 
-    public <R> PageData(List<R> data, Function<? super R, ? extends T> mapper) {
+    public <R> PageResp(List<R> data, Function<? super R, ? extends T> mapper) {
         Objects.requireNonNull(data, "data list should not be empty!");
 
         if (data instanceof Page) {
@@ -76,12 +60,6 @@ public class PageData<T> implements Serializable {
             this.size = page.size();
         }
 
-        this.list = data.stream().map(mapper).collect(Collectors.toList());
-    }
-
-    @ApiIgnore
-    @JsonAnyGetter
-    public Map<String, Object> getExtra() {
-        return extra;
+        this.setData(data.stream().map(mapper).collect(Collectors.toList()));
     }
 }

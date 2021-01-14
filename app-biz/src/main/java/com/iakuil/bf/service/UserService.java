@@ -4,8 +4,8 @@ import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.BaseService;
-import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.common.PageQuery;
+import com.iakuil.bf.common.PageResp;
 import com.iakuil.bf.dao.*;
 import com.iakuil.bf.dao.entity.*;
 import com.iakuil.bf.service.converter.UserConverter;
@@ -47,14 +47,14 @@ public class UserService extends BaseService {
     }
 
     @Transactional(readOnly = true)
-    public PageData<UserDetailDto> findWithPage(Integer pageNum, Integer pageSize, String orderBy) {
+    public PageResp<UserDetailDto> findWithPage(Integer pageNum, Integer pageSize, String orderBy) {
         PageHelper.startPage(pageNum, pageSize, orderBy);
-        return new PageData<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
+        return new PageResp<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
     }
 
     @Transactional(readOnly = true)
-    public PageData<UserDetailDto> findByCondition(PageQuery query) {
-        return new PageData<>(userMapper.selectPage(query), UserConverter.INSTANCE::toDto);
+    public PageResp<UserDetailDto> findByCondition(PageQuery query) {
+        return new PageResp<>(userMapper.selectPage(query), UserConverter.INSTANCE::toDto);
     }
 
     @Transactional(rollbackFor = Exception.class)
