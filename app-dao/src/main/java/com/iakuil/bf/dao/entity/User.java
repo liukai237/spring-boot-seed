@@ -1,6 +1,6 @@
 package com.iakuil.bf.dao.entity;
 
-import com.iakuil.bf.common.BaseDomain;
+import com.iakuil.bf.common.BaseEntity;
 import com.iakuil.bf.common.constant.Gender;
 import com.iakuil.bf.common.constant.Province;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "t_user")
-public class User extends BaseDomain {
+public class User extends BaseEntity {
 
     @Id
     private Long id;

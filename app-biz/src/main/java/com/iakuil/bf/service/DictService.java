@@ -31,8 +31,8 @@ public class DictService {
         return dictMapper.select(dict);
     }
 
-    public PageData<DictDto> listWithPage(PageQuery query) {
-        return new PageData<>(dictMapper.selectPage(query), DictConverter.INSTANCE::toDto);
+    public PageData<DictDto> listWithPage(Dict query) {
+        return new PageData<>(dictMapper.select(query), DictConverter.INSTANCE::toDto);
     }
 
     public int save(Dict dict) {

@@ -13,5 +13,5 @@ import tk.mybatis.mapper.common.IdsMapper;
  *
  * @author Kai
  */
-public interface CrudMapper<T> extends BaseMapper<T>, IdsMapper<T>, InsertListMapper<T>, CustomMapper<T> {
+public interface CrudMapper<T> extends BaseMapper<T>, IdsMapper<T>, InsertListMapper<T>, SelectMapMapper<T> {
 }
