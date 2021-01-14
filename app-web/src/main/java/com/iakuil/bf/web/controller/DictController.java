@@ -1,6 +1,7 @@
 package com.iakuil.bf.web.controller;
 
 import com.iakuil.bf.common.BaseController;
+import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.common.PageQuery;
 import com.iakuil.bf.common.Resp;
 import com.iakuil.bf.service.DictService;

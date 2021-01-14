@@ -43,8 +43,8 @@ public class UserController extends BaseController {
     })
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<UserDetailDto> queryAllUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                                          @RequestParam(required = false, defaultValue = "0") Integer pageSize,
-                                          @RequestParam(required = false, defaultValue = "createTime-") String sort) {
+                                             @RequestParam(required = false, defaultValue = "0") Integer pageSize,
+                                             @RequestParam(required = false, defaultValue = "createTime-") String sort) {
         return ok(userService.findWithPage(pageNum, pageSize, sort));
     }
 

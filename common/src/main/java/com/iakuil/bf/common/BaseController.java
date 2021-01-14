@@ -11,7 +11,7 @@ import com.iakuil.bf.common.constant.RespCode;
 public abstract class BaseController {
 
     public <T> Resp<T> ok() {
-        return ok(null);
+        return new Resp<>(RespCode.SUCCESS.getCode(), RespCode.SUCCESS.getMessage(), null);
     }
 
     public <T> Resp<T> ok(T data) {
@@ -21,7 +21,7 @@ public abstract class BaseController {
     public <T> Resp<T> ok(PageData<T> data) {
         data.setCode(RespCode.SUCCESS.getCode());
         data.setMessage(RespCode.SUCCESS.getMessage());
-        return (Resp<T>) data;
+        return (Resp) data;
     }
 
     public <T> Resp<T> fail() {
