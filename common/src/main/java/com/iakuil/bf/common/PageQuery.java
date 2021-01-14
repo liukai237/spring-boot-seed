@@ -36,6 +36,7 @@ public class PageQuery<T> {
 
     /**
      * 组装Entity查询对象
+     * <p>可以配合任何入参为Entity的通用方法使用。</p>
      */
     @JsonIgnore
     public <R extends BaseEntity> R toEntity(Class<R> clazz) {
@@ -56,6 +57,32 @@ public class PageQuery<T> {
         }
 
         return entity;
+    }
+
+    /**
+     * 组装Map查询对象
+     * <p>可以配合selectMap通用方法使用。</p>
+     */
+    @JsonIgnore
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = BeanMapUtils.beanToMap(this.filter);
+        if (this.paging != null) {
+            map.put("pageSize", this.paging.getPageSize());
+            map.put("pageNum", this.paging.getPageNum());
+        } else {
+            // zero means no paging
+            map.put("pageSize", 0);
+            map.put("pageNum", 1);
+        }
+
+        if (this.sorting != null) {
+            map.put("orderBy", Arrays.stream(sorting)
+                    .filter(item -> StringUtils.isNoneBlank(item.getField()))
+                    .map(item -> Strings.toUnderlineCase(item.getField()) + " " + item.getOrder().toString())
+                    .collect(Collectors.joining()));
+        }
+
+        return map;
     }
 
     public T getFilter() {
