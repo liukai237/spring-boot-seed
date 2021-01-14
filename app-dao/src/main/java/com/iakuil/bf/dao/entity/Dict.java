@@ -1,7 +1,7 @@
 package com.iakuil.bf.dao.entity;
 
 
-import com.iakuil.bf.common.BaseDomain;
+import com.iakuil.bf.common.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,7 +17,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "sys_dict")
-public class Dict extends BaseDomain {
+public class Dict extends BaseEntity {
 
     /**
      * 编号

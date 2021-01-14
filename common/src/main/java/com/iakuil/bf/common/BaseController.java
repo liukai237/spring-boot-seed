@@ -11,17 +11,11 @@ import com.iakuil.bf.common.constant.RespCode;
 public abstract class BaseController {
 
     public <T> Resp<T> ok() {
-        return new Resp<>(RespCode.SUCCESS.getCode(), RespCode.SUCCESS.getMessage(), null);
+        return ok(null);
     }
 
     public <T> Resp<T> ok(T data) {
         return new Resp<>(RespCode.SUCCESS.getCode(), RespCode.SUCCESS.getMessage(), data);
-    }
-
-    public <T> Resp<T> ok(PageData<T> data) {
-        data.setCode(RespCode.SUCCESS.getCode());
-        data.setMessage(RespCode.SUCCESS.getMessage());
-        return (Resp) data;
     }
 
     public <T> Resp<T> fail() {

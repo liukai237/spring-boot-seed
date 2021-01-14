@@ -1,6 +1,7 @@
 package com.iakuil.bf.web.controller;
 
 import com.iakuil.bf.common.BaseController;
+import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.common.PageQuery;
 import com.iakuil.bf.common.Resp;
 import com.iakuil.bf.common.tool.BeanUtils;
@@ -42,15 +43,15 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "sort", value = "排序规则", defaultValue = "createTime-", dataType = "string", paramType = "query"),
     })
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<UserDetailDto> queryAllUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                                             @RequestParam(required = false, defaultValue = "0") Integer pageSize,
-                                             @RequestParam(required = false, defaultValue = "createTime-") String sort) {
+    public Resp<PageData<UserDetailDto>> queryAllUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                                                       @RequestParam(required = false, defaultValue = "0") Integer pageSize,
+                                                       @RequestParam(required = false, defaultValue = "createTime-") String sort) {
         return ok(userService.findWithPage(pageNum, pageSize, sort));
     }
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表，演示复杂分页排序。")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<UserDetailDto> queryUsersByCondition(@RequestBody PageQuery<UserQueryParam> req) {
+    public Resp<PageData<UserDetailDto>> queryUsersByCondition(@RequestBody PageQuery<UserQueryParam> req) {
         return ok(userService.findByCondition(req));
     }
 

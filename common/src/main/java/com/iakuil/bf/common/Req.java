@@ -1,22 +1,15 @@
 package com.iakuil.bf.common;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iakuil.bf.common.constant.CommonConstant;
-import com.iakuil.bf.common.tool.BeanUtils;
-import com.iakuil.bf.common.tool.Strings;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 复杂查询请求体
@@ -32,7 +25,7 @@ import java.util.stream.Collectors;
  */
 @Deprecated
 @ApiModel(value = "Req", description = "统一封装的分页/排序请求体")
-public class Req<T extends PageQuery> {
+public class Req<T> {
 
     @ApiModelProperty(name = "filtering", value = "过滤参数。")
     private T filter;
@@ -49,35 +42,6 @@ public class Req<T extends PageQuery> {
     @JsonAnySetter
     public void setOther(String key, Object value) {
         this.other.put(key, value);
-    }
-
-    /**
-     * 组装PageQuery对象
-     */
-    @JsonIgnore
-    public PageQuery getQuery() {
-        T query = BeanUtils.copy(this.filter, getRealType());
-        if (this.paging != null) {
-            query.setPageSize(this.paging.getPageSize());
-            query.setPageNum(this.paging.getPageNum());
-        } else {
-            query.setPageSize(0); // zero means no paging
-            query.setPageNum(1);
-        }
-
-        if (this.sorting != null) {
-            query.setOrderBy(Arrays.stream(sorting)
-                    .filter(item -> StringUtils.isNoneBlank(item.getField()))
-                    .map(item -> Strings.toUnderlineCase(item.getField()) + " " + item.getOrder().toString())
-                    .collect(Collectors.joining()));
-        }
-
-        return query;
-    }
-
-    private Class<T> getRealType() {
-        ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
-        return (Class<T>) pt.getActualTypeArguments()[0];
     }
 
     public T getFilter() {

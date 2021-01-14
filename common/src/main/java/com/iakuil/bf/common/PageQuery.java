@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iakuil.bf.common.constant.CommonConstant;
 import com.iakuil.bf.common.tool.BeanMapUtils;
+import com.iakuil.bf.common.tool.BeanUtils;
 import com.iakuil.bf.common.tool.Strings;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,12 +17,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 数据库分页/排序查询请求体
+ * 数据库分页排序查询请求体
  * <p>当pagehelper.supportMethodsArguments配置为<strong>true</strong>时，可以实现自动分页排序。</p>
  *
  * @author Kai
  */
-@ApiModel(value = "Req", description = "统一封装的分页/排序请求体")
+@ApiModel(value = "PageQuery", description = "统一封装的分页排序请求体")
 public class PageQuery<T> {
 
     @ApiModelProperty(name = "filtering", value = "过滤参数。")
@@ -33,36 +34,28 @@ public class PageQuery<T> {
     @ApiModelProperty(value = "sorting", notes = "排序参数。")
     private Sorting[] sorting;
 
-    @JsonIgnore
-    private Integer pageSize;
-
-    @JsonIgnore
-    private Integer pageNum;
-
-    @JsonIgnore
-    private String orderBy;
-
     /**
-     * 组装PageQuery对象
+     * 组装Entity查询对象
      */
     @JsonIgnore
-    public Map<String, Object> getCondition() {
+    public <R extends BaseEntity> R toEntity(Class<R> clazz) {
+        R entity = BeanUtils.copy(this.filter, clazz);
         if (this.paging != null) {
-            this.setPageSize(this.paging.getPageSize());
-            this.setPageNum(this.paging.getPageNum());
+            entity.setPageSize(this.paging.getPageSize());
+            entity.setPageNum(this.paging.getPageNum());
         } else {
-            this.setPageSize(0); // zero means no paging
-            this.setPageNum(1);
+            entity.setPageSize(0); // zero means no paging
+            entity.setPageNum(1);
         }
 
         if (this.sorting != null) {
-            this.setOrderBy(Arrays.stream(sorting)
+            entity.setOrderBy(Arrays.stream(sorting)
                     .filter(item -> StringUtils.isNoneBlank(item.getField()))
                     .map(item -> Strings.toUnderlineCase(item.getField()) + " " + item.getOrder().toString())
                     .collect(Collectors.joining()));
         }
 
-        return BeanMapUtils.beanToMap(this.filter);
+        return entity;
     }
 
     public T getFilter() {
@@ -79,30 +72,6 @@ public class PageQuery<T> {
 
     public void setSorting(Sorting[] sorting) {
         this.sorting = sorting;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public Integer getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public String getOrderBy() {
-        return orderBy;
-    }
-
-    public void setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
     }
 
     /**
