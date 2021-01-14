@@ -1,7 +1,7 @@
 package com.iakuil.bf.service;
 
 import com.iakuil.bf.common.PageQuery;
-import com.iakuil.bf.common.PageResp;
+import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.dao.DictMapper;
 import com.iakuil.bf.dao.entity.Dict;
 import com.iakuil.bf.service.converter.DictConverter;
@@ -31,8 +31,8 @@ public class DictService {
         return dictMapper.select(dict);
     }
 
-    public PageResp<DictDto> listWithPage(PageQuery query) {
-        return new PageResp<>(dictMapper.selectPage(query), DictConverter.INSTANCE::toDto);
+    public PageData<DictDto> listWithPage(PageQuery query) {
+        return new PageData<>(dictMapper.selectPage(query), DictConverter.INSTANCE::toDto);
     }
 
     public int save(Dict dict) {

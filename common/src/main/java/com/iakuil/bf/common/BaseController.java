@@ -18,7 +18,7 @@ public abstract class BaseController {
         return new Resp<>(RespCode.SUCCESS.getCode(), RespCode.SUCCESS.getMessage(), data);
     }
 
-    public <T> Resp<T> ok(PageResp<T> data) {
+    public <T> Resp<T> ok(PageData<T> data) {
         data.setCode(RespCode.SUCCESS.getCode());
         data.setMessage(RespCode.SUCCESS.getMessage());
         return (Resp<T>) data;

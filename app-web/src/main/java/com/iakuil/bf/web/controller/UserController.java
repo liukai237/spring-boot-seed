@@ -4,7 +4,6 @@ import com.iakuil.bf.common.BaseController;
 import com.iakuil.bf.common.PageQuery;
 import com.iakuil.bf.common.Resp;
 import com.iakuil.bf.common.tool.BeanUtils;
-import com.iakuil.bf.dao.JsonColTestMapper;
 import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.UserService;
 import com.iakuil.bf.service.converter.UserConverter;
@@ -19,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.Arrays;
 
@@ -28,33 +26,29 @@ import java.util.Arrays;
 @RestController
 @RequestMapping("/api/user/")
 public class UserController extends BaseController {
+    private final UserService userService;
 
     private final UserConverter userConverter;
 
-    private final JsonColTestMapper jsonColTestMapper;
-
-    @Resource
-    private UserService userService;
-
-    public UserController(UserConverter userConverter, JsonColTestMapper jsonColTestMapper) {
+    public UserController(UserService userService, UserConverter userConverter) {
+        this.userService = userService;
         this.userConverter = userConverter;
-        this.jsonColTestMapper = jsonColTestMapper;
     }
 
-    @ApiOperation(value = "查询用户列表", notes = "查询用户列表，简单分页排序。")
+    @ApiOperation(value = "查询用户列表", notes = "查询用户列表，演示简单分页排序。")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1", dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "pageSize", value = "每页显示数量", defaultValue = "0", dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "sort", value = "排序规则", defaultValue = "createTime-", dataType = "string", paramType = "query"),
     })
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<UserDetailDto> queryUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
+    public Resp<UserDetailDto> queryAllUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
                                           @RequestParam(required = false, defaultValue = "0") Integer pageSize,
                                           @RequestParam(required = false, defaultValue = "createTime-") String sort) {
         return ok(userService.findWithPage(pageNum, pageSize, sort));
     }
 
-    @ApiOperation(value = "查询用户列表", notes = "查询用户列表，复杂分页排序。")
+    @ApiOperation(value = "查询用户列表", notes = "查询用户列表，演示复杂分页排序。")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<UserDetailDto> queryUsersByCondition(@RequestBody PageQuery<UserQueryParam> req) {
         return ok(userService.findByCondition(req));

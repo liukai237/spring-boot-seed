@@ -17,6 +17,6 @@ public class UserQueryParam {
     @ApiModelProperty(name = "tel", value = "手机号码。", example = "13400000000")
     private String tel;
 
-    @ApiModelProperty(name = "gender", value = "性别", example = "male")
+    @ApiModelProperty(name = "gender", value = "性别", example = "1")
     private Gender gender;
 }
