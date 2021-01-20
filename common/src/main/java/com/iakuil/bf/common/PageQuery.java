@@ -3,9 +3,9 @@ package com.iakuil.bf.common;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iakuil.bf.common.constant.CommonConstant;
-import com.iakuil.bf.common.tool.BeanMapUtils;
-import com.iakuil.bf.common.tool.BeanUtils;
 import com.iakuil.bf.common.tool.Strings;
+import com.iakuil.toolkit.BeanMapUtils;
+import com.iakuil.toolkit.BeanUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -35,8 +35,9 @@ public class PageQuery<T> {
     private Sorting[] sorting;
 
     /**
-     * 组装Entity查询对象
+     * 组装Entity实现单表分页查询
      * <p>可以配合任何入参为Entity的通用方法使用。</p>
+     * <p>多表分页请使用{@code toMap()}，或者自行处理分页参数。</p>
      */
     @JsonIgnore
     public <R extends BaseEntity> R toEntity(Class<R> clazz) {
@@ -60,8 +61,9 @@ public class PageQuery<T> {
     }
 
     /**
-     * 组装Map查询对象
+     * 组装Map查询参数
      * <p>可以配合selectMap通用方法使用。</p>
+     * <p>用于遗留接口分页查询，单表、多表皆可使用。</p>
      */
     @JsonIgnore
     public Map<String, Object> toMap() {

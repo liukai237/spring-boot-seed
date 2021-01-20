@@ -9,7 +9,6 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>app-dao</artifactId>
-    <version>${project.version}</version>
 
     <dependencies>
         <dependency>

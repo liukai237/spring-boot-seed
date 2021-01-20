@@ -10,7 +10,6 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>rabbitmq-support</artifactId>
-    <version>${project.version}</version>
 
     <dependencies>
         <dependency>

@@ -10,7 +10,6 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>websocket-support</artifactId>
-    <version>${project.version}</version>
 
     <dependencies>
         <dependency>

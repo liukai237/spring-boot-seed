@@ -5,7 +5,7 @@ import javax.persistence.Transient;
 /**
  * Entity基类
  * <p>【强制】所有Table必须设计ID字段。</p><br/>
- * <p>pageSize、pageNum和orderBy三个属性仅用来配合PageHelp实现分页排序，没有其他业务含义。</p>
+ * <p>pageSize、pageNum和orderBy三个属性仅用来配合PageHelper实现分页排序，没有其他业务含义。</p>
  *
  * @author Kai
  */

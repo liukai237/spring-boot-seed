@@ -1,6 +1,6 @@
 package com.iakuil.bf.common;
 
-import com.iakuil.bf.common.tool.BeanUtils;
+import com.iakuil.toolkit.BeanUtils;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.ReportingPolicy;
 

@@ -49,8 +49,9 @@
 |名词|说明|备注|
 |---|---|---|
 |Domain|领域模型|所有可以持久化/序列化的POJO类的泛称。|
-|Entity|实体对象|属性与数据库表字段一一对应，一般由MBG生成。整个框架内均可见，但是不允许直接传递给前端。|
-|DTO|数据传输对象|存在于Service方法入口、出口，或者被Controller层Resp包裹后返回给前端。|
-|Query|查询对象|只能用于Controller方法入口，包裹`PageQuery`后可以作为分页查询场景查询条件传递到DAO层。|
+|Entity|实体对象|在DAO层定义，属性与数据库表字段一一对应，一般由MBG生成。整个框架内均可见，但是不允许直接传递给前端。|
+|DTO|数据传输对象|在业务层定义，存在于Service方法入口、出口，或者被Controller层Resp包裹后返回给前端。|
+|Query|查询对象|在Web层定义，只能用于Controller方法入口，包裹`PageQuery`后，其参数可以传递到DAO层。|
+> 微服务场景建议直接使用Entity作为API参数，API。。。。。。。。。。。
 
 <sub>Copyright (c) 2020 iakuil.com</sub>

@@ -9,9 +9,13 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>common</artifactId>
-    <version>${project.version}</version>
 
     <dependencies>
+        <dependency>
+            <groupId>com.iakuil</groupId>
+            <artifactId>ez-toolkit</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -23,18 +27,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
         </dependency>
 
         <dependency>
@@ -46,13 +40,6 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.1</version>
             <scope>compile</scope>
         </dependency>
 
