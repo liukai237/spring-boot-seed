@@ -6,7 +6,9 @@ import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
- * 分页
+ * 分页排序参数基类
+ *
+ * <p>pageSize、pageNum和orderBy三个属性仅用来配合PageHelper实现分页排序，没有其他业务含义。
  *
  * @author Kai
  */

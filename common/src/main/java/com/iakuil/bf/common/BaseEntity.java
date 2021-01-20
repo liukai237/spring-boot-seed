@@ -1,46 +1,24 @@
 package com.iakuil.bf.common;
 
-import javax.persistence.Transient;
+import javax.persistence.Id;
 
 /**
  * Entity基类
- * <p>【强制】所有Table必须设计ID字段。</p><br/>
- * <p>pageSize、pageNum和orderBy三个属性仅用来配合PageHelper实现分页排序，没有其他业务含义。</p>
+ * <p>【强制】所有Table必须设计ID字段。
+ * <p>所有的Entity都可以作为分页排序的参数对象。
  *
  * @author Kai
  */
-public class BaseEntity extends BaseDomain {
+public class BaseEntity extends Pageable {
 
-    @Transient
-    private Integer pageSize;
+    @Id
+    private Long id;
 
-    @Transient
-    private Integer pageNum;
-
-    @Transient
-    private String orderBy;
-
-    public Integer getPageSize() {
-        return pageSize;
+    public Long getId() {
+        return id;
     }
 
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public Integer getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public String getOrderBy() {
-        return orderBy;
-    }
-
-    public void setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

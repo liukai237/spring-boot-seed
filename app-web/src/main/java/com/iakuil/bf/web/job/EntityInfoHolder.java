@@ -76,7 +76,7 @@ public class EntityInfoHolder implements InitializingBean {
                 String fieldName = property.getName();
 
                 // 过滤class属性
-                if ("class".equals(fieldName) || "pageSize".equals(fieldName) || "pageNum".equals(fieldName) || "orderBy".equals(fieldName)) {
+                if ("class".equals(fieldName) || "id".equals(fieldName) || "pageSize".equals(fieldName) || "pageNum".equals(fieldName) || "orderBy".equals(fieldName)) {
                     continue;
                 }
 

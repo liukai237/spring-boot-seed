@@ -1,6 +1,7 @@
 package com.iakuil.bf.service.util;
 
 
+import com.iakuil.toolkit.PasswordHash;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.not;

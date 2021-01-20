@@ -1,4 +1,4 @@
-package com.iakuil.bf.web.query;
+package com.iakuil.bf.web.dto;
 
 
 import io.swagger.annotations.ApiModel;

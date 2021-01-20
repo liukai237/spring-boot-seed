@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-public class DictItem extends BaseDomain {
+public class DictItem extends BaseEntity {
     /**
      * 字典类型编码
      */

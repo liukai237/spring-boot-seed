@@ -8,10 +8,10 @@ import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.UserService;
 import com.iakuil.bf.service.converter.UserConverter;
 import com.iakuil.bf.service.dto.UserDetailDto;
-import com.iakuil.bf.web.query.UserAddParam;
-import com.iakuil.bf.web.query.UserEditParam;
-import com.iakuil.bf.web.query.UserQueryParam;
-import com.iakuil.em.util.BeanUtils;
+import com.iakuil.bf.web.dto.UserAddParam;
+import com.iakuil.bf.web.dto.UserEditParam;
+import com.iakuil.bf.web.dto.UserQueryParam;
+import com.iakuil.toolkit.BeanUtils;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -52,7 +52,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表，演示复杂分页排序。")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<PageData<UserDetailDto>> queryUsersByCondition(@RequestBody PageQuery<UserQueryParam> req) {
-        return ok(userService.findByCondition(req.toEntity(User.class)));
+        return ok(userService.findByCondition(req.toPage(User.class)));
     }
 
     @ApiOperation(value = "用户注册", notes = "新增用户")

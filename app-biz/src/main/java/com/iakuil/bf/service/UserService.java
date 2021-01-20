@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class UserService extends BaseService {
+public class UserService extends BaseService<User> {
 
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
@@ -77,18 +77,6 @@ public class UserService extends BaseService {
         User entity = userMapper.selectByPrimaryKey(user.getId());
         user.setVersion(entity.getVersion());
         return userMapper.updateByPrimaryKeySelective(user) > 0;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteById(Long uid) {
-        userMapper.deleteByPrimaryKey(uid);
-        log.info("users {} were deleted!", uid);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByIds(String... ids) {
-        int count = userMapper.deleteByIds(String.join(",", ids));
-        log.info("{} users were deleted!", count);
     }
 
     @Transactional(readOnly = true)

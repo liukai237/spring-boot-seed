@@ -1,57 +1,105 @@
 package com.iakuil.bf.common;
 
 import com.iakuil.bf.common.db.CrudMapper;
-import com.iakuil.bf.common.tool.ApplicationContextHolder;
-import com.iakuil.bf.common.tool.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ClassUtils;
 import tk.mybatis.mapper.annotation.Version;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.List;
 
 /**
- * 非泛型化的BaseService
- * <p>提供一些业务层常用的公用方法。</p>
+ * 泛型化的BaseService
+ * <p>提供一些业务层常用的公用方法。
+ * <p>不与Entity对应的Service无需继承此类。
  *
  * @author Kai
  */
 @Slf4j
 @Service
-public abstract class BaseService {
+public abstract class BaseService<T extends BaseEntity> {
+
+    @Autowired
+    private CrudMapper<T> mapper;
+
+    @Transactional(readOnly = true)
+    public List<T> query(T entity) {
+        return mapper.select(entity);
+    }
+
+    @Transactional(readOnly = true)
+    public PageData<T> queryPage(T entity) {
+        return new PageData<>(mapper.select(entity));
+    }
+
+    @Transactional(readOnly = true)
+    public T queryById(Long id) {
+        return mapper.selectByPrimaryKey(id);
+    }
+
+    @Transactional(readOnly = true)
+    public T queryOne(T entity) {
+        return mapper.selectOne(entity);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean delete(T entity) {
+        return mapper.delete(entity) > 0;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteById(Long id) {
+        log.info("users {} were deleted!", id);
+        return mapper.deleteByPrimaryKey(id) > 0;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteByIds(String... ids) {
+        int count = mapper.deleteByIds(String.join(",", ids));
+        log.info("{} users were deleted!", count);
+        return count > 0;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean save(T entity) {
+        return mapper.insertSelective(entity) > 0;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean saveBatch(List<T> entities) {
+        return mapper.insertList(entities) == entities.size();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean update(T entity) {
+        //TODO 判空
+        return mapper.updateByPrimaryKeySelective(entity) > 0;
+    }
 
     /**
      * 新增或者修改Entity
-     * <p>Entity必须创建对应的xxxMapper。</p>
      */
-    @SuppressWarnings("unchecked")
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveOrUpdate(Object entity) {
+    public boolean saveOrUpdate(T entity) {
         boolean succ = false;
-        if (hasAnnotation(entity, Table.class)) {
-            String mapperName = Strings.toLowerCaseFirstLetter(ClassUtils.getShortName(entity.getClass())) + "Mapper";
-            log.debug("mapper name: [{}]", mapperName);
-            final CrudMapper mapper = ApplicationContextHolder.getBean(mapperName);
-            Object id = getValueByAnnotation(entity, Id.class);
-
-            if (id == null) {
-                succ = mapper.insert(entity) > 0;
+        Long id = entity.getId();
+        if (id != null) {
+            succ = mapper.insert(entity) > 0;
+        } else {
+            T before = mapper.selectByPrimaryKey(id);
+            if (before == null) {
+                throw new IllegalStateException("无效的ID！");
             } else {
-                Object before = mapper.selectByPrimaryKey(id);
-                if (before == null) {
-                    throw new IllegalStateException("无效的ID！");
-                } else {
-                    if (hasAnnotation(entity, Version.class)) { // 处理乐观锁
-                        setValueByAnnotation(entity, ObjectUtils.defaultIfNull(getValueByAnnotation(before, Version.class), 1), Version.class);
-                    }
-                    succ = mapper.updateByPrimaryKeySelective(entity) > 0;
+                //TODO 测试下注解是否生效，有用就删掉这几行
+                if (hasAnnotation(entity, Version.class)) { // 处理乐观锁
+                    setValueByAnnotation(entity, ObjectUtils.defaultIfNull(getValueByAnnotation(before, Version.class), 1), Version.class);
                 }
+                succ = mapper.updateByPrimaryKeySelective(entity) > 0;
             }
         }
 
@@ -60,11 +108,11 @@ public abstract class BaseService {
 
     /**
      * 批量新增或者修改Entity
-     * <p>一次操作失败则全部回滚。</p>
+     * <p>一次操作失败则全部回滚。
      */
     @Transactional(rollbackFor = Exception.class)
-    public void saveOrUpdateBatch(Collection<Object> entityList) {
-        for (Object obj : entityList) {
+    public void saveOrUpdateBatch(Collection<T> entityList) {
+        for (T obj : entityList) {
             if (!saveOrUpdate(obj)) {
                 throw new IllegalStateException("saveOrUpdatePatch fail!");
             }

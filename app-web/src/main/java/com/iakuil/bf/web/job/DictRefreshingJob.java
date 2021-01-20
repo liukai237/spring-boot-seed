@@ -35,7 +35,7 @@ public class DictRefreshingJob implements InitializingBean {
     private void collectDictItems() {
         Dict dict = new Dict();
         dict.setDelFlag("0");
-        List<Dict> dicts = dictService.list(dict);
+        List<Dict> dicts = dictService.query(dict);
         List<DictItem> items = dicts.stream()
                 .map(item -> new DictItem(item.getType(), item.getDescription(), item.getValue(), item.getName(), item.getSort().intValue()))
                 .collect(Collectors.toList());

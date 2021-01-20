@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
+import tk.mybatis.mapper.annotation.Version;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -23,8 +24,6 @@ import java.util.Date;
 @Table(name = "t_user")
 public class User extends BaseEntity {
 
-    @Id
-    private Long id;
     private String username;
     private Gender gender;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -41,6 +40,7 @@ public class User extends BaseEntity {
     private Date createTime;
     @LastModifiedDate
     private Date updateTime;
+    @Version
     private Long version;
     private Integer deleted;
     //private String salt;

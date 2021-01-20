@@ -1,4 +1,4 @@
-package com.iakuil.bf.web.query;
+package com.iakuil.bf.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iakuil.bf.common.constant.Gender;

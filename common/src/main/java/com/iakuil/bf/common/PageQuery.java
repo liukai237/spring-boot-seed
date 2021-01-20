@@ -6,6 +6,7 @@ import com.iakuil.bf.common.constant.CommonConstant;
 import com.iakuil.bf.common.tool.Strings;
 import com.iakuil.toolkit.BeanMapUtils;
 import com.iakuil.toolkit.BeanUtils;
+import com.sun.javafx.collections.MappingChange;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -35,12 +36,12 @@ public class PageQuery<T> {
     private Sorting[] sorting;
 
     /**
-     * 组装Entity实现单表分页查询
-     * <p>可以配合任何入参为Entity的通用方法使用。</p>
-     * <p>多表分页请使用{@code toMap()}，或者自行处理分页参数。</p>
+     * 组装Pageable实现分页查询
+     * <p>可以配合任何入参为Entity的通用方法实现单表分页查询。
+     * <p>多表或者复杂的分页排序请在sevice层重新定义DTO继承Pageable。
      */
     @JsonIgnore
-    public <R extends BaseEntity> R toEntity(Class<R> clazz) {
+    public <R extends Pageable> R toPage(Class<R> clazz) {
         R entity = BeanUtils.copy(this.filter, clazz);
         if (this.paging != null) {
             entity.setPageSize(this.paging.getPageSize());
@@ -62,8 +63,8 @@ public class PageQuery<T> {
 
     /**
      * 组装Map查询参数
-     * <p>可以配合selectMap通用方法使用。</p>
-     * <p>用于遗留接口分页查询，单表、多表皆可使用。</p>
+     * <p>可以配合selectMap通用方法使用。
+     * <p>用于遗留接口分页查询，单表、多表皆可使用。
      */
     @JsonIgnore
     public Map<String, Object> toMap() {

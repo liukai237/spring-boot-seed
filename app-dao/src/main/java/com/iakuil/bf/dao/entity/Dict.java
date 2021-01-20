@@ -20,11 +20,6 @@ import java.util.Date;
 public class Dict extends BaseEntity {
 
     /**
-     * 编号
-     */
-    @Id
-    private Long id;
-    /**
      * 标签名
      */
     private String name;

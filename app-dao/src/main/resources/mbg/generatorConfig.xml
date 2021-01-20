@@ -36,7 +36,7 @@
                             targetProject="src/main/java/">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
-            <property name="rootClass" value="com.iakuil.bf.common.BaseDomain"/>
+            <property name="rootClass" value="com.iakuil.bf.common.BaseEntity"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <!-- 生成mapper.xml文件 -->
