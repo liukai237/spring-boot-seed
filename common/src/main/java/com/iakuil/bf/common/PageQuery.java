@@ -2,11 +2,10 @@ package com.iakuil.bf.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.iakuil.bf.common.constant.CommonConstant;
+import com.iakuil.bf.common.constant.SysConstant;
 import com.iakuil.bf.common.tool.Strings;
 import com.iakuil.toolkit.BeanMapUtils;
 import com.iakuil.toolkit.BeanUtils;
-import com.sun.javafx.collections.MappingChange;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -19,8 +18,8 @@ import java.util.stream.Collectors;
 
 /**
  * 数据库分页排序查询请求体
- * <p>当pagehelper.supportMethodsArguments配置为<strong>true</strong>时，可以实现自动分页排序。</p>
  *
+ * @param <T> 查询参数对象类型
  * @author Kai
  */
 @ApiModel(value = "PageQuery", description = "统一封装的分页排序请求体")
@@ -38,7 +37,7 @@ public class PageQuery<T> {
     /**
      * 组装Pageable实现分页查询
      * <p>可以配合任何入参为Entity的通用方法实现单表分页查询。
-     * <p>多表或者复杂的分页排序请在sevice层重新定义DTO继承Pageable。
+     * <p>多表或者复杂的分页排序请在service层重新定义DTO继承Pageable。
      */
     @JsonIgnore
     public <R extends Pageable> R toPage(Class<R> clazz) {
@@ -46,20 +45,15 @@ public class PageQuery<T> {
         if (this.paging != null) {
             entity.setPageSize(this.paging.getPageSize());
             entity.setPageNum(this.paging.getPageNum());
-        } else {
-            entity.setPageSize(0); // zero means no paging
-            entity.setPageNum(1);
         }
 
         if (this.sorting != null) {
-            entity.setOrderBy(Arrays.stream(sorting)
-                    .filter(item -> StringUtils.isNoneBlank(item.getField()))
-                    .map(item -> Strings.toUnderlineCase(item.getField()) + " " + item.getOrder().toString())
-                    .collect(Collectors.joining()));
+            entity.setOrderBy(processSort());
         }
 
         return entity;
     }
+
 
     /**
      * 组装Map查询参数
@@ -72,20 +66,20 @@ public class PageQuery<T> {
         if (this.paging != null) {
             map.put("pageSize", this.paging.getPageSize());
             map.put("pageNum", this.paging.getPageNum());
-        } else {
-            // zero means no paging
-            map.put("pageSize", 0);
-            map.put("pageNum", 1);
         }
 
         if (this.sorting != null) {
-            map.put("orderBy", Arrays.stream(sorting)
-                    .filter(item -> StringUtils.isNoneBlank(item.getField()))
-                    .map(item -> Strings.toUnderlineCase(item.getField()) + " " + item.getOrder().toString())
-                    .collect(Collectors.joining()));
+            map.put("orderBy", processSort());
         }
 
         return map;
+    }
+
+    private String processSort() {
+        return Arrays.stream(sorting)
+                .filter(item -> StringUtils.isNoneBlank(item.getField()))
+                .map(item -> Strings.toUnderlineCase(item.getField()) + Strings.SPACE + item.getOrder().toString())
+                .collect(Collectors.joining(Strings.COMMA));
     }
 
     public T getFilter() {
@@ -106,18 +100,22 @@ public class PageQuery<T> {
 
     /**
      * 分页参数
-     * <p>合法pageSize范围：0到500</p>
+     * <p>合法pageSize范围：10到500
      */
     @Getter
     @Setter
     @ApiModel(value = "Paging", description = "分页参数")
     public static class Paging {
-        @ApiModelProperty(name = CommonConstant.DEFAULT_PAGE_NUM_FIELD, value = "分页页码", example = "1")
-        @JsonProperty(CommonConstant.DEFAULT_PAGE_NUM_FIELD)
+        @ApiModelProperty(name = SysConstant.DEFAULT_PAGE_NUM_FIELD, value = "分页页码", example = "1")
+        @JsonProperty(SysConstant.DEFAULT_PAGE_NUM_FIELD)
         private Integer pageNum;
-        @ApiModelProperty(name = CommonConstant.DEFAULT_PAGE_SIZE_FIELD, value = "分页尺寸", example = "10")
-        @JsonProperty(CommonConstant.DEFAULT_PAGE_SIZE_FIELD)
+        @ApiModelProperty(name = SysConstant.DEFAULT_PAGE_SIZE_FIELD, value = "分页尺寸", example = "10")
+        @JsonProperty(SysConstant.DEFAULT_PAGE_SIZE_FIELD)
         private Integer pageSize;
+
+        public Integer getPageSize() {
+            return (pageSize == null || pageSize < 10) ? SysConstant.DEFAULT_PAGE_SIZE : (pageSize > SysConstant.MAX_PAGE_SIZE ? SysConstant.MAX_PAGE_SIZE : pageSize);
+        }
     }
 
     /**

@@ -2,7 +2,7 @@ package com.iakuil.bf.web.aop;
 
 import com.iakuil.bf.common.DictItem;
 import com.iakuil.bf.common.DictPool;
-import com.iakuil.bf.common.Req;
+import com.iakuil.bf.common.PageQuery;
 import com.iakuil.bf.common.annotation.DictType;
 import com.iakuil.bf.common.constant.RespCode;
 import com.iakuil.bf.common.exception.BusinessException;
@@ -51,8 +51,8 @@ public class RequestBodyHandler implements RequestBodyAdvice {
 
     @Override
     public Object afterBodyRead(Object o, HttpInputMessage httpInputMessage, MethodParameter methodParameter, Type type, Class<? extends HttpMessageConverter<?>> aClass) {
-        if (o instanceof Req) {
-            Object params = ((Req) o).getFilter();
+        if (o instanceof PageQuery) {
+            Object params = ((PageQuery) o).getFilter();
             handleParamsInBody(params);
         } else {
             handleParamsInBody(o);
@@ -84,7 +84,7 @@ public class RequestBodyHandler implements RequestBodyAdvice {
             String fieldName = property.getName();
 
             // 过滤class属性
-            if ("class" .equals(fieldName)) {
+            if ("class".equals(fieldName)) {
                 continue;
             }
 

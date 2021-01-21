@@ -17,13 +17,13 @@ import java.util.Properties;
 /**
  * MyBatis逻辑删除插件
  *
- * <p>以下两种情况会触发本插件：</p>
+ * <p>以下两种情况会触发本插件：
  * <ol>
  * <li> 定义在CrudMapper中的通用方法，并且对应的Entity中有逻辑删除字段。
  * <li> 定义在XML Mapper中的方法，ResultMap对应的Entity中有逻辑删除字段。
  * </ol>
  *
- * <p>试验功能</p>
+ * <p>试验功能
  *
  * @author Kai
  */

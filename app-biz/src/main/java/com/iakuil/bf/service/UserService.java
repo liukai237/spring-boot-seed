@@ -72,13 +72,6 @@ public class UserService extends BaseService<User> {
         return userMapper.insertSelective(user) > 0;
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public Boolean modify(User user) {
-        User entity = userMapper.selectByPrimaryKey(user.getId());
-        user.setVersion(entity.getVersion());
-        return userMapper.updateByPrimaryKeySelective(user) > 0;
-    }
-
     @Transactional(readOnly = true)
     public Set<Power> findPowersByUserId(Long userId) {
         Set<Role> roles = this.findRolesByUserId(userId);

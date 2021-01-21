@@ -54,7 +54,7 @@ public class DbConfig {
         for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
             org.apache.ibatis.session.Configuration configuration = sqlSessionFactory.getConfiguration();
             configuration.addInterceptor(locker);
-            configuration.addInterceptor(deleted);
+//            configuration.addInterceptor(deleted);
             configuration.addInterceptor(autoFill);
         }
     }

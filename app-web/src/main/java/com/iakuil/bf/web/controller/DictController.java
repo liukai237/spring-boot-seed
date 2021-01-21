@@ -68,7 +68,7 @@ public class DictController extends BaseController {
     @ApiOperation(value = "修改数据字典", notes = "修改数据字典。")
     @PostMapping(value = "/modify", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<?> modify(@RequestBody DictDto dict) {
-        return done(dictService.update(dictConverter.toEntity(dict)));
+        return done(dictService.modify(dictConverter.toEntity(dict)));
     }
 
     @ApiOperation(value = "删除数据字典", notes = "批量删除数据字典。")

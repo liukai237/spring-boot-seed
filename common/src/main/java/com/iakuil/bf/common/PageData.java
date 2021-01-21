@@ -17,8 +17,9 @@ import java.util.stream.Collectors;
 
 /**
  * MyBatis分页结果容器
- * <p>功能同PageInfo，额外支持转换器参数。</p><br/>
- * <p>一般与{@link PageQuery}结对出现。</p>
+ *
+ * <p>功能同PageInfo，额外支持转换器参数。
+ * <p>一般与{@link PageQuery}结对出现。
  *
  * @param <T> Entity
  *
@@ -43,8 +44,8 @@ public class PageData<T> implements Serializable {
 
     /**
      * 额外返回的数据
-     * <p>比如：分页同时返回平均年龄</p>
-     * <p>PS. 为避免出现多层嵌套，该属性内字段会被扁平化，与total、pageSize等处于同一层级。</p><br/>
+     * <p>比如：分页同时返回平均年龄。
+     * <p>PS. 为避免出现多层嵌套，该属性内字段会被扁平化，与total、pageSize等处于同一层级。
      */
     private Map<String, Object> extra;
 

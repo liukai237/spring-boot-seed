@@ -5,7 +5,8 @@ import lombok.experimental.Accessors;
 
 /**
  * 字典项
- * <p>用于统一缓存所有的数据字典。</p>
+ *
+ * <p>用于统一缓存所有的数据字典。
  *
  * @author Kai
  */

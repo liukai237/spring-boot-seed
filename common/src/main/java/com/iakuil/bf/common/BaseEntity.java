@@ -4,6 +4,7 @@ import javax.persistence.Id;
 
 /**
  * Entity基类
+ *
  * <p>【强制】所有Table必须设计ID字段。
  * <p>所有的Entity都可以作为分页排序的参数对象。
  *

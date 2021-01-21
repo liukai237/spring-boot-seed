@@ -8,8 +8,8 @@ import io.swagger.annotations.ApiModelProperty;
  * 通用API响应体
  *
  * <p>用于封装Controller层返回结果，配合{@link RespCode}使用。
- * 其中success为冗余字段。</p>
- * <p>分页/排序请求请使用{@link PageData}。</p>
+ * 其中success为冗余字段。
+ * <p>分页/排序请求请使用{@link PageData}。
  *
  * @author Kai
  */

@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 
 /**
  * 数据字典池
- * <p>包括枚举类型和数据字典表类型<p/>
+ *
+ * <p>包括枚举类型和数据字典表类型
  *
  * @author Kai
  */

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 自定义的数据库操作方法
+ * 通过Map进行查询
  *
  * @author Kai
  */
@@ -16,7 +16,8 @@ public interface SelectMapMapper<T> {
 
     /**
      * Map作为过滤参数进行查询
-     * 如果存在pageSize/pageNum的key则自动分页排序
+     *
+     * <p>如果存在pageSize/pageNum的key则自动分页排序
      */
     @SelectProvider(
             type = SelectMapProvider.class,

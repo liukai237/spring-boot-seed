@@ -2,7 +2,7 @@ package com.iakuil.bf.common;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.iakuil.bf.common.constant.CommonConstant;
+import com.iakuil.bf.common.constant.SysConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -76,11 +76,11 @@ public class Req<T> {
     @Setter
     @ApiModel(value = "Paging", description = "分页参数")
     public static class Paging {
-        @ApiModelProperty(name = CommonConstant.DEFAULT_PAGE_NUM_FIELD, value = "分页页码", example = "1")
-        @JsonProperty(CommonConstant.DEFAULT_PAGE_NUM_FIELD)
+        @ApiModelProperty(name = SysConstant.DEFAULT_PAGE_NUM_FIELD, value = "分页页码", example = "1")
+        @JsonProperty(SysConstant.DEFAULT_PAGE_NUM_FIELD)
         private Integer pageNum;
-        @ApiModelProperty(name = CommonConstant.DEFAULT_PAGE_SIZE_FIELD, value = "分页尺寸", example = "10")
-        @JsonProperty(CommonConstant.DEFAULT_PAGE_SIZE_FIELD)
+        @ApiModelProperty(name = SysConstant.DEFAULT_PAGE_SIZE_FIELD, value = "分页尺寸", example = "10")
+        @JsonProperty(SysConstant.DEFAULT_PAGE_SIZE_FIELD)
         private Integer pageSize;
     }
 

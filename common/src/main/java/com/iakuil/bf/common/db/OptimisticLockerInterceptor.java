@@ -23,8 +23,8 @@
  */
 package com.iakuil.bf.common.db;
 
-import com.iakuil.bf.common.tool.JsonUtils;
 import com.iakuil.bf.common.tool.PluginUtils;
+import com.iakuil.toolkit.JsonUtils;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
