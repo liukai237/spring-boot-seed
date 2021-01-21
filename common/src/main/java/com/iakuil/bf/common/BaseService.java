@@ -1,12 +1,13 @@
 package com.iakuil.bf.common;
 
 import com.iakuil.bf.common.db.CrudMapper;
+import com.iakuil.bf.common.tool.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.annotation.Version;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -46,7 +47,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * <p>可分页，不返回分页信息
      *
      * @param entity    实体类对象
-     * @param converter 转换器
+     * @param converter Entity/DTO转换器
      * @return DTO列表
      */
     @Transactional(readOnly = true)
@@ -73,7 +74,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * <p>同时返回分页信息
      *
      * @param entity    实体类对象
-     * @param converter 转换器
+     * @param converter Entity/DTO转换器
      * @return 带分页信息的DTO集合
      */
     @Transactional(readOnly = true)
@@ -156,6 +157,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * 批量保存
      *
      * <p>null字段将会被忽略
+     * <p>注意避免长事务
      *
      * @param entities 实体类对象列表
      * @return 保存结果
@@ -166,7 +168,7 @@ public abstract class BaseService<T extends BaseEntity> {
     }
 
     /**
-     * 修改实体类
+     * 修改实体
      *
      * <p>null字段将会被忽略
      *
@@ -175,9 +177,23 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean modify(T entity) {
-        if (entity.getId() == null) {
+        Long id = entity.getId();
+        if (id == null) {
             throw new IllegalArgumentException("Id should not be empty!");
         }
+
+        T before = this.findById(id);
+        if (before == null) {
+            throw new IllegalArgumentException("Invalid id " + id + "!");
+        }
+
+        // 处理乐观锁
+        if (ReflectUtils.hasAnnotation(entity, Version.class)
+                && ReflectUtils.getValueByAnnotation(entity, Version.class) == null) {
+            Object version = ReflectUtils.getValueByAnnotation(before, Version.class);
+            ReflectUtils.setValueByAnnotation(entity, version, Version.class);
+        }
+
         return mapper.updateByPrimaryKeySelective(entity) > 0;
     }
 
@@ -191,34 +207,6 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean addOrModify(T entity) {
-        boolean succ;
-        Long id = entity.getId();
-        if (id != null) {
-            succ = mapper.insert(entity) > 0;
-        } else {
-            T before = mapper.selectByPrimaryKey(id);
-            if (before == null) {
-                throw new IllegalStateException("无效的ID！");
-            } else {
-                succ = mapper.updateByPrimaryKeySelective(entity) > 0;
-            }
-        }
-
-        return succ;
-    }
-
-    /**
-     * 批量新增或者修改Entity
-     * <p>一次操作失败则全部回滚。
-     *
-     * @param entities 实体类对象列表
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public void addOrModifyAll(Collection<T> entities) {
-        for (T entity : entities) {
-            if (!addOrModify(entity)) {
-                throw new IllegalStateException("addOrModifyAll fail!");
-            }
-        }
+        return entity.getId() == null ? add(entity) : modify(entity);
     }
 }

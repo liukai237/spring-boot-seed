@@ -10,10 +10,10 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
+import tk.mybatis.mapper.annotation.LogicDelete;
 import tk.mybatis.mapper.annotation.Version;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -42,6 +42,7 @@ public class User extends BaseEntity {
     private Date updateTime;
     @Version
     private Long version;
+    @LogicDelete
     private Integer deleted;
     //private String salt;
     //private Boolean locked;

@@ -1,53 +1,55 @@
 package com.iakuil.bf.common.tool;
 
-import com.iakuil.bf.common.db.CrudMapper;
-import org.apache.ibatis.executor.parameter.ParameterHandler;
-import org.apache.ibatis.executor.statement.StatementHandler;
-import org.apache.ibatis.logging.Log;
-import org.apache.ibatis.logging.LogFactory;
-import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.reflection.SystemMetaObject;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.AnnotationUtils;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
-/**
- * MyBatis插件工具类
- *
- * @author Kai
- */
-public final class PluginUtils {
+@Slf4j
+public class ReflectUtils {
+    public static boolean hasAnnotation(Object entity, Class annotation) {
+        Field[] fields = entity.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            if (AnnotationUtils.getAnnotation(field, annotation) != null) {
+                return true;
+            }
+        }
 
-    private static final Log log = LogFactory.getLog(PluginUtils.class);
-
-    private PluginUtils() {
+        return false;
     }
 
-    /**
-     * <p>
-     * Recursive get the original target object.
-     * <p>
-     * If integrate more than a plugin, maybe there are conflict in these plugins,
-     * because plugin will proxy the object.<br>
-     * So, here get the original target object
-     *
-     * @param target proxy-object
-     * @return original target object
-     */
-    public static Object processTarget(Object target) {
-        if (Proxy.isProxyClass(target.getClass())) {
-            MetaObject mo = SystemMetaObject.forObject(target);
-            return processTarget(mo.getValue("h.target"));
+    public static Object getValueByAnnotation(Object entity, Class annotation) {
+        Object value = null;
+        Field[] fields = entity.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            if (AnnotationUtils.getAnnotation(field, annotation) != null) {
+                field.setAccessible(true);
+                try {
+                    value = field.get(entity);
+                } catch (IllegalAccessException e) {
+                    throw new IllegalStateException(e);
+                }
+                field.setAccessible(false);
+            }
         }
 
-        // must keep the result object is StatementHandler or ParameterHandler in
-        // Optimistic Locker plugin
-        if (!(target instanceof StatementHandler) && !(target instanceof ParameterHandler)) {
-            if (log.isDebugEnabled()) {
-                log.error("Optimistic Locker plugin init failed.");
+        return value;
+    }
+
+    public static void setValueByAnnotation(Object entity, Object value, Class annotation) {
+        Field[] fields = entity.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            if (AnnotationUtils.getAnnotation(field, annotation) != null) {
+                field.setAccessible(true);
+                try {
+                    field.set(entity, value);
+                } catch (IllegalAccessException e) {
+                    throw new IllegalStateException(e);
+                }
+                field.setAccessible(false);
             }
-            throw new IllegalStateException("[Optimistic Locker Plugin Error] plugin init failed.");
         }
-        return target;
     }
 
     /**
@@ -129,35 +131,5 @@ public final class PluginUtils {
         } catch (Exception e) {
             return new IllegalStateException("[Occurring an exception during method invoking!]", e);
         }
-    }
-
-    /**
-     * 判断属性名是否已经被Mapper映射
-     *
-     * @param mapperName Mapper名称，带包名，不带后缀
-     * @param fieldName  属性名称
-     * @return 调用方法返回的值
-     */
-    public static boolean isFieldMapped(String mapperName, String fieldName) {
-        Type[] types;
-        try {
-            types = Class.forName(mapperName).getGenericInterfaces();
-        } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Unknown class: " + mapperName);
-        }
-
-        for (Type type : types) {
-            ParameterizedType pt = (ParameterizedType) type;
-            if (pt.getRawType() == CrudMapper.class) {
-                Type[] arguments = ((ParameterizedType) type).getActualTypeArguments();
-                for (Type argument : arguments) {
-                    if (getField(argument, fieldName) != null) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 }
