@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * 字典表接口
- * <p>演示原生SpringMVC + 原生MyBatis XML</p><br/>
- * <p>适用于某些开源或者项目的模块移植。</p>
  */
 @Api(value = "DictController", tags = {"数据字典"})
 @RestController
@@ -42,27 +40,27 @@ public class DictController extends BaseController {
     }
 
     @ApiOperation(value = "查询单个数据字典", notes = "根据ID查询数据字典。")
-    @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<DictDto> list(@RequestParam Long id) {
-        return ok(dictConverter.toDto(dictService.queryById(id)));
+        return ok(dictConverter.toDto(dictService.findById(id)));
     }
 
     @ApiOperation(value = "查询数据字典（不分页）", notes = "查询所有数据字典数据（不分页）。")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<List<DictDto>> list(@RequestBody DictDto dict) {
-        return ok(dictConverter.toDtoList(dictService.query(dictConverter.toEntity(dict))));
+        return ok(dictConverter.toDtoList(dictService.list(dictConverter.toEntity(dict))));
     }
 
     @ApiOperation(value = "分页查询数据字典", notes = "分页查询数据字典数据。")
     @PostMapping(value = "/listWithPage", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<PageData<DictDto>> listWithPage(@RequestBody PageQuery<DictQueryParam> param) {
-        return ok(dictService.listWithPage(param.toPage(Dict.class)));
+        return ok(dictService.page(param.toPage(Dict.class), DictConverter.INSTANCE::toDto));
     }
 
     @ApiOperation(value = "新增数据字典", notes = "新增数据字典。")
-    @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<?> add(@RequestBody DictDto dict) {
-        return done(dictService.save(dictConverter.toEntity(dict)));
+        return done(dictService.add(dictConverter.toEntity(dict)));
     }
 
     @ApiOperation(value = "修改数据字典", notes = "修改数据字典。")
@@ -74,6 +72,6 @@ public class DictController extends BaseController {
     @ApiOperation(value = "删除数据字典", notes = "批量删除数据字典。")
     @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<?> remove(@RequestParam String[] ids) {
-        return done(dictService.deleteByIds(ids));
+        return done(dictService.removeByIds(ids));
     }
 }

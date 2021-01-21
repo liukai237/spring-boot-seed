@@ -23,10 +23,6 @@ public class DictService extends BaseService<Dict> {
         this.dictMapper = dictMapper;
     }
 
-    public PageData<DictDto> listWithPage(Dict query) {
-        return new PageData<>(dictMapper.select(query), DictConverter.INSTANCE::toDto);
-    }
-
     public List<Dict> listType() {
         return dictMapper.listType();
     }

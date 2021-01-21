@@ -66,7 +66,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "用户信息变更", notes = "修改用户信息")
-    @PostMapping(value = "/modify", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<?> doChange(@ApiParam(value = "用户信息", required = true) @Valid @RequestBody UserEditParam basicInfo) {
         return done(userService.modify(BeanUtils.copy(basicInfo, User.class)));
     }
@@ -77,7 +77,7 @@ public class UserController extends BaseController {
     })
     @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<?> doRemove(@RequestParam Long id) {
-        userService.deleteById(id);
+        userService.removeById(id);
         return ok();
     }
 
@@ -97,7 +97,7 @@ public class UserController extends BaseController {
             return fail("Invalid id list!");
         }
 
-        userService.deleteByIds(ids);
+        userService.removeByIds(ids);
         return ok();
     }
 

@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 泛型化的Service基类
@@ -16,7 +18,6 @@ import java.util.List;
  * <p>不与Entity对应的Service无需继承此类。
  *
  * @param <T> 实体类型
- *
  * @author Kai
  */
 @Slf4j
@@ -32,24 +33,52 @@ public abstract class BaseService<T extends BaseEntity> {
      * <p>可分页，不返回分页信息
      *
      * @param entity 实体类对象
-     * @return 查询结果
+     * @return 实体列表
      */
     @Transactional(readOnly = true)
-    public List<T> query(T entity) {
+    public List<T> list(T entity) {
         return mapper.select(entity);
     }
 
     /**
      * 将实体类作为查询条件进行查询
      *
-     * <p>可分页，同时返回分页信息
+     * <p>可分页，不返回分页信息
+     *
+     * @param entity    实体类对象
+     * @param converter 转换器
+     * @return DTO列表
+     */
+    @Transactional(readOnly = true)
+    public <R> List<R> list(T entity, Function<? super T, ? extends R> converter) {
+        return mapper.select(entity).stream().map(converter).collect(Collectors.toList());
+    }
+
+    /**
+     * 将实体类作为查询条件进行分页查询
+     *
+     * <p>同时返回分页信息
      *
      * @param entity 实体类对象
      * @return 带分页信息的实体类集合
      */
     @Transactional(readOnly = true)
-    public PageData<T> queryPage(T entity) {
+    public PageData<T> page(T entity) {
         return new PageData<>(mapper.select(entity));
+    }
+
+    /**
+     * 将实体类作为查询条件进行分页查询
+     *
+     * <p>同时返回分页信息
+     *
+     * @param entity    实体类对象
+     * @param converter 转换器
+     * @return 带分页信息的DTO集合
+     */
+    @Transactional(readOnly = true)
+    public <R> PageData<R> page(T entity, Function<? super T, ? extends R> converter) {
+        return new PageData<>(mapper.select(entity), converter);
     }
 
     /**
@@ -59,7 +88,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 实体类对象
      */
     @Transactional(readOnly = true)
-    public T queryById(Long id) {
+    public T findById(Long id) {
         return mapper.selectByPrimaryKey(id);
     }
 
@@ -70,7 +99,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 唯一的实体类对象
      */
     @Transactional(readOnly = true)
-    public T queryOne(T entity) {
+    public T findOne(T entity) {
         return mapper.selectOne(entity);
     }
 
@@ -81,7 +110,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 删除结果
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean delete(T entity) {
+    public boolean remove(T entity) {
         return mapper.delete(entity) > 0;
     }
 
@@ -92,7 +121,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 删除结果
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteById(Long id) {
+    public boolean removeById(Long id) {
         log.info("users {} were deleted!", id);
         return mapper.deleteByPrimaryKey(id) > 0;
     }
@@ -104,7 +133,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 删除结果
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteByIds(String... ids) {
+    public boolean removeByIds(String... ids) {
         int count = mapper.deleteByIds(String.join(",", ids));
         log.info("{} users were deleted!", count);
         return count > 0;
@@ -119,7 +148,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 保存结果
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean save(T entity) {
+    public boolean add(T entity) {
         return mapper.insertSelective(entity) > 0;
     }
 
@@ -132,7 +161,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 保存结果
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveBatch(List<T> entities) {
+    public boolean addAll(List<T> entities) {
         return mapper.insertList(entities) == entities.size();
     }
 
@@ -147,14 +176,13 @@ public abstract class BaseService<T extends BaseEntity> {
     @Transactional(rollbackFor = Exception.class)
     public boolean modify(T entity) {
         if (entity.getId() == null) {
-            log.error("Id should not be empty!");
-            return false;
+            throw new IllegalArgumentException("Id should not be empty!");
         }
         return mapper.updateByPrimaryKeySelective(entity) > 0;
     }
 
     /**
-     * 新增或修改实体类
+     * 新增或修改Entity
      *
      * <p>null字段将会被忽略
      *
@@ -162,8 +190,8 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 新增/修改结果
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveOrUpdate(T entity) {
-        boolean succ = false;
+    public boolean addOrModify(T entity) {
+        boolean succ;
         Long id = entity.getId();
         if (id != null) {
             succ = mapper.insert(entity) > 0;
@@ -183,13 +211,13 @@ public abstract class BaseService<T extends BaseEntity> {
      * 批量新增或者修改Entity
      * <p>一次操作失败则全部回滚。
      *
-     * @param entityList 实体类对象列表
+     * @param entities 实体类对象列表
      */
     @Transactional(rollbackFor = Exception.class)
-    public void saveOrUpdateBatch(Collection<T> entityList) {
-        for (T obj : entityList) {
-            if (!saveOrUpdate(obj)) {
-                throw new IllegalStateException("saveOrUpdatePatch fail!");
+    public void addOrModifyAll(Collection<T> entities) {
+        for (T entity : entities) {
+            if (!addOrModify(entity)) {
+                throw new IllegalStateException("addOrModifyAll fail!");
             }
         }
     }

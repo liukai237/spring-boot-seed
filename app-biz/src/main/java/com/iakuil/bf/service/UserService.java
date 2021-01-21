@@ -41,12 +41,8 @@ public class UserService extends BaseService<User> {
     }
 
     @Transactional(readOnly = true)
-    public User findById(Long userId) {
-        return userMapper.selectByPrimaryKey(userId);
-    }
-
-    @Transactional(readOnly = true)
     public PageData<UserDetailDto> findWithPage(Integer pageNum, Integer pageSize, String orderBy) {
+        // 经典的PageHelper分页方式仍然可以使用。
         PageHelper.startPage(pageNum, pageSize, orderBy);
         return new PageData<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
     }
@@ -56,8 +52,9 @@ public class UserService extends BaseService<User> {
         return new PageData<>(userMapper.select(query), UserConverter.INSTANCE::toDto);
     }
 
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean add(User user) {
+    public boolean add(User user) {
         String username = user.getUsername();
         user.setUsername(StringUtils.defaultString(username, HashIdUtils.encrypt(System.currentTimeMillis()))); // 使用HashIds生成唯一username
 
