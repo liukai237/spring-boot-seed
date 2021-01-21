@@ -35,12 +35,12 @@ public class PageQuery<T> {
     private Sorting[] sorting;
 
     /**
-     * 组装Pageable实现分页查询
+     * 组装Query对象实现分页查询
      * <p>可以配合任何入参为Entity的通用方法实现单表分页查询。
      * <p>多表或者复杂的分页排序请在service层重新定义DTO继承Pageable。
      */
     @JsonIgnore
-    public <R extends Pageable> R toPage(Class<R> clazz) {
+    public <R extends Pageable> R toQuery(Class<R> clazz) {
         R entity = BeanUtils.copy(this.filter, clazz);
         if (this.paging != null) {
             entity.setPageSize(this.paging.getPageSize());

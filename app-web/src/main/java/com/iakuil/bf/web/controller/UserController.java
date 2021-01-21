@@ -52,7 +52,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表，演示复杂分页排序。")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<PageData<UserDetailDto>> queryUsersByCondition(@RequestBody PageQuery<UserQueryParam> req) {
-        return ok(userService.findByCondition(req.toPage(User.class)));
+        return ok(userService.page(req.toQuery(User.class), UserConverter.INSTANCE::toDto));
     }
 
     @ApiOperation(value = "用户注册", notes = "新增用户")

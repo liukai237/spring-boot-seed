@@ -47,11 +47,6 @@ public class UserService extends BaseService<User> {
         return new PageData<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
     }
 
-    @Transactional(readOnly = true)
-    public PageData<UserDetailDto> findByCondition(User query) {
-        return new PageData<>(userMapper.select(query), UserConverter.INSTANCE::toDto);
-    }
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean add(User user) {
