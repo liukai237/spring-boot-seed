@@ -39,12 +39,12 @@ public class UserController extends BaseController {
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表，演示简单分页排序。")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1", dataType = "Long", paramType = "query"),
-            @ApiImplicitParam(name = "pageSize", value = "每页显示数量", defaultValue = "0", dataType = "Long", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示数量", defaultValue = "10", dataType = "Long", paramType = "query", example = "10"),
             @ApiImplicitParam(name = "sort", value = "排序规则", defaultValue = "createTime-", dataType = "string", paramType = "query"),
     })
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<PageData<UserDetailDto>> queryAllUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                                                       @RequestParam(required = false, defaultValue = "0") Integer pageSize,
+                                                       @RequestParam(required = false, defaultValue = "10") Integer pageSize,
                                                        @RequestParam(required = false, defaultValue = "createTime-") String sort) {
         return ok(userService.findWithPage(pageNum, pageSize, sort));
     }

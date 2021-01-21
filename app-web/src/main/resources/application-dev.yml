@@ -26,8 +26,11 @@ spring:
         dashboard: localhost:10111
       eager: false
 
-scheduling:
-  enabled: false
+bf:
+  security:
+    enabled: false
+  scheduling:
+    enabled: false
 
 knife4j:
   enable: true

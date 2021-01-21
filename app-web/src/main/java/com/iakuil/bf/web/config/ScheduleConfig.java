@@ -16,7 +16,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 @Slf4j
 @Configuration
 @EnableScheduling
-@ConditionalOnProperty(prefix = "scheduling", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "bf.scheduling", name = "enabled", havingValue = "true")
 public class ScheduleConfig implements SchedulingConfigurer {
 
     @Override

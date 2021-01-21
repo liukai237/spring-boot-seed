@@ -55,5 +55,8 @@ logging:
     com.iakuil.bf.dao: DEBUG
   file: ./logs/base-framework.log
 
-scheduling:
-  enabled: true
+bf:
+  security:
+    enabled: true
+  scheduling:
+    enabled: true
