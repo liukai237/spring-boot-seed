@@ -1,9 +1,14 @@
 package com.iakuil.bf.common;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -11,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * 数据字典池
  *
- * <p>包括枚举类型和数据字典表类型
+ * <p>数据字典包括枚举类型和数据库表类型
  *
  * @author Kai
  */
@@ -85,5 +90,43 @@ public class DictPool {
         }
 
         return dictItems;
+    }
+
+    /**
+     * 字典项
+     *
+     * <p>用于统一缓存所有的数据字典。
+     *
+     * @author Kai
+     */
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DictItem implements Serializable {
+        /**
+         * 字典类型编码
+         */
+        private String type;
+
+        /**
+         * 字典类型描述
+         */
+        private String description;
+
+        /**
+         * 字段的value值
+         */
+        private String value;
+
+        /**
+         * 字段的翻译值
+         */
+        private String name;
+
+        /**
+         * 排序
+         */
+        private Integer sort;
     }
 }

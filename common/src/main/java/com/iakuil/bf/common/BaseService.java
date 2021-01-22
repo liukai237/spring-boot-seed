@@ -13,10 +13,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * 泛型化的Service基类
+ * 泛型化的通用Service基类
  *
- * <p>提供一些业务层常用的公用方法，主要针对单表操作。
+ * <p>提供一些业务层常用的公用方法，以及乐观锁、saveOrUpdate等，主要针对单表操作。
  * <p>不与Entity对应的Service无需继承此类。
+ * <p>默认忽略所有null值，如有需要，请自行实现。
  *
  * @param <T> 实体类型
  * @author Kai
@@ -170,28 +171,57 @@ public abstract class BaseService<T extends BaseEntity> {
     /**
      * 修改实体
      *
-     * <p>null字段将会被忽略
+     * <p>默认不处理乐观锁哦
      *
      * @param entity 实体类对象
      * @return 修改结果
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean modify(T entity) {
+        return this.modify(entity, false);
+    }
+
+    /**
+     * 修改实体
+     *
+     * <p>同时处理乐观锁哦
+     *
+     * @param entity 实体类对象
+     * @return 修改结果
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean modifyWithVersion(T entity) {
+        return this.modify(entity, true);
+    }
+
+    /**
+     * 修改实体
+     *
+     * <p>null字段将会被忽略
+     *
+     * @param entity     实体类对象
+     * @param hasVersion 是否有乐观锁
+     * @return 修改结果
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean modify(T entity, boolean hasVersion) {
         Long id = entity.getId();
         if (id == null) {
             throw new IllegalArgumentException("Id should not be empty!");
         }
 
-        T before = this.findById(id);
-        if (before == null) {
-            throw new IllegalArgumentException("Invalid id " + id + "!");
-        }
+        if (hasVersion) {
+            T before = this.findById(id);
+            if (before == null) {
+                throw new IllegalArgumentException("Invalid id " + id + "!");
+            }
 
-        // 处理乐观锁
-        if (ReflectUtils.hasAnnotation(entity, Version.class)
-                && ReflectUtils.getValueByAnnotation(entity, Version.class) == null) {
-            Object version = ReflectUtils.getValueByAnnotation(before, Version.class);
-            ReflectUtils.setValueByAnnotation(entity, version, Version.class);
+            // 处理乐观锁
+            if (ReflectUtils.hasAnnotation(entity, Version.class)
+                    && ReflectUtils.getValueByAnnotation(entity, Version.class) == null) {
+                Object version = ReflectUtils.getValueByAnnotation(before, Version.class);
+                ReflectUtils.setValueByAnnotation(entity, version, Version.class);
+            }
         }
 
         return mapper.updateByPrimaryKeySelective(entity) > 0;
@@ -206,7 +236,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 新增/修改结果
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean addOrModify(T entity) {
-        return entity.getId() == null ? add(entity) : modify(entity);
+    public boolean addOrModify(T entity, boolean hasVersion) {
+        return entity.getId() == null ? add(entity) : modify(entity, hasVersion);
     }
 }

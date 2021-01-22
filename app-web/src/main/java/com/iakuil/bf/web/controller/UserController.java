@@ -51,7 +51,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表，演示复杂分页排序。")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<PageData<UserDetailDto>> queryUsersByCondition(@RequestBody PageQuery<UserQueryParam> req) {
+    public Resp<PageData<UserDetailDto>> queryUsersWithPage(@RequestBody PageQuery<UserQueryParam> req) {
         return ok(userService.page(req.toQuery(User.class), UserConverter.INSTANCE::toDto));
     }
 
@@ -68,7 +68,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "用户信息变更", notes = "修改用户信息")
     @PostMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<?> doChange(@ApiParam(value = "用户信息", required = true) @Valid @RequestBody UserEditParam basicInfo) {
-        return done(userService.modify(BeanUtils.copy(basicInfo, User.class)));
+        return done(userService.modifyWithVersion(BeanUtils.copy(basicInfo, User.class)));
     }
 
     @ApiOperation(value = "用户删除", notes = "删除用户")

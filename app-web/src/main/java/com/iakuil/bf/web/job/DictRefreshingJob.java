@@ -1,6 +1,5 @@
 package com.iakuil.bf.web.job;
 
-import com.iakuil.bf.common.DictItem;
 import com.iakuil.bf.common.DictPool;
 import com.iakuil.bf.dao.entity.Dict;
 import com.iakuil.bf.service.DictService;
@@ -36,8 +35,8 @@ public class DictRefreshingJob implements InitializingBean {
         Dict dict = new Dict();
         dict.setDelFlag("0");
         List<Dict> dicts = dictService.list(dict);
-        List<DictItem> items = dicts.stream()
-                .map(item -> new DictItem(item.getType(), item.getDescription(), item.getValue(), item.getName(), item.getSort().intValue()))
+        List<DictPool.DictItem> items = dicts.stream()
+                .map(item -> new DictPool.DictItem(item.getType(), item.getDescription(), item.getValue(), item.getName(), item.getSort().intValue()))
                 .collect(Collectors.toList());
         log.debug("Current dict size in DB: {}", items.size());
         DictPool.getInstance().pushDictItems(items);

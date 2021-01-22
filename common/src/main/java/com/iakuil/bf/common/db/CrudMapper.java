@@ -2,7 +2,7 @@ package com.iakuil.bf.common.db;
 
 import tk.mybatis.mapper.additional.insert.InsertListMapper;
 import tk.mybatis.mapper.common.BaseMapper;
-import tk.mybatis.mapper.common.IdsMapper;
+import tk.mybatis.mapper.common.ids.SelectByIdsMapper;
 
 /**
  * CRUD Mapper基类
@@ -13,5 +13,5 @@ import tk.mybatis.mapper.common.IdsMapper;
  *
  * @author Kai
  */
-public interface CrudMapper<T> extends BaseMapper<T>, IdsMapper<T>, InsertListMapper<T>, SelectMapMapper<T> {
+public interface CrudMapper<T> extends BaseMapper<T>, DeleteByIdsMapper<T>, SelectByIdsMapper<T>, InsertListMapper<T>, SelectMapMapper<T> {
 }
