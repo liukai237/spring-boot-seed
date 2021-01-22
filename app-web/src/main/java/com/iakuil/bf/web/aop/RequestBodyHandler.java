@@ -1,7 +1,7 @@
 package com.iakuil.bf.web.aop;
 
 import com.iakuil.bf.common.DictPool;
-import com.iakuil.bf.common.PageQuery;
+import com.iakuil.bf.common.PageRequest;
 import com.iakuil.bf.common.annotation.DictType;
 import com.iakuil.bf.common.constant.RespCode;
 import com.iakuil.bf.common.exception.BusinessException;
@@ -50,8 +50,8 @@ public class RequestBodyHandler implements RequestBodyAdvice {
 
     @Override
     public Object afterBodyRead(Object o, HttpInputMessage httpInputMessage, MethodParameter methodParameter, Type type, Class<? extends HttpMessageConverter<?>> aClass) {
-        if (o instanceof PageQuery) {
-            Object params = ((PageQuery) o).getFilter();
+        if (o instanceof PageRequest) {
+            Object params = ((PageRequest) o).getFilter();
             handleParamsInBody(params);
         } else {
             handleParamsInBody(o);
