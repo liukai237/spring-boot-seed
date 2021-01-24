@@ -2,7 +2,6 @@ package com.iakuil.bf.common.db;
 
 import com.dangdang.ddframe.rdb.sharding.id.generator.self.CommonSelfIdGenerator;
 import com.iakuil.bf.common.tool.ApplicationContextHolder;
-import com.iakuil.bf.common.tool.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -13,10 +12,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import tk.mybatis.mapper.annotation.KeySql;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Properties;
@@ -52,22 +48,13 @@ public class AutoColumnFillInterceptor implements Interceptor {
             }
         } else if (SqlCommandType.INSERT == sqlCommandType) {
             for (Field field : fields) {
-                if (AnnotationUtils.getAnnotation(field, Id.class) != null
-                        && AnnotationUtils.getAnnotation(field, GeneratedValue.class) == null
-                        && AnnotationUtils.getAnnotation(field, KeySql.class) == null) {
-                    field.setAccessible(true);
-                    if (field.get(parameter) == null) {
-                        if (field.getType().equals(String.class)) {
-                            field.set(parameter, Strings.getUuidStr());
-                        } else if (field.getType().equals(Long.class)) {
-                            field.set(parameter, ApplicationContextHolder.getBean(CommonSelfIdGenerator.class).generateId());
-                        } else {
-                            throw new IllegalArgumentException("Unsupported ID type " + field.getType().getName() + "!");
-                        }
-                    }
-
-                    field.setAccessible(false);
+                Field id = parameter.getClass().getSuperclass().getDeclaredField("id");
+                if (id.get(parameter) == null) {
+                    id.setAccessible(true);
+                    id.set(parameter, ApplicationContextHolder.getBean(CommonSelfIdGenerator.class).generateId());
+                    id.setAccessible(false);
                 }
+
                 if (AnnotationUtils.getAnnotation(field, CreatedDate.class) != null) {
                     field.setAccessible(true);
                     field.set(parameter, currentDate);
