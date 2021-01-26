@@ -2,6 +2,7 @@ package com.iakuil.bf.shiro.config;
 
 import com.iakuil.bf.shiro.CustomShiroFilter;
 import com.iakuil.bf.shiro.JdbcRealm;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.mgt.SecurityManager;
@@ -16,9 +17,7 @@ import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
-import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisManager;
-import org.crazycake.shiro.RedisSessionDAO;
+import org.crazycake.shiro.*;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
@@ -39,14 +38,17 @@ import java.util.*;
 @ConditionalOnProperty(prefix = "bf.security", name = "enabled", havingValue = "true")
 public class ShiroConfig {
 
-    @Value("${spring.redis.host}")
+    @Value("${spring.redis.host:127.0.0.1}")
     private String host;
 
-    @Value("${spring.redis.port}")
+    @Value("${spring.redis.port:6379}")
     private String port;
 
-    @Value("${spring.redis.password}")
+    @Value("${spring.redis.password:#{null}}")
     private String password;
+
+    @Value("${spring.redis.cluster:#{null}}")
+    private String[] cluster;
 
     /**
      * 自定义Realm
@@ -149,14 +151,21 @@ public class ShiroConfig {
     }
 
     /**
-     * Reids缓存管理器，使用crazycake实现
+     * Redis缓存管理器，使用crazycake实现
      */
     @Bean
-    public RedisManager redisManager() {
-        RedisManager redisManager = new RedisManager();
-        redisManager.setHost(host + ":" + port);
-        redisManager.setPassword(password);
-        return redisManager;
+    public IRedisManager redisManager() {
+        if (cluster == null) {
+            RedisManager manager = new RedisManager();
+            manager.setHost(host + ":" + port);
+            manager.setPassword(password);
+            return manager;
+        } else {
+            RedisClusterManager manager = new RedisClusterManager();
+            manager.setHost(StringUtils.join(cluster, ","));
+            manager.setPassword(password);
+            return manager;
+        }
     }
 
     @Bean
