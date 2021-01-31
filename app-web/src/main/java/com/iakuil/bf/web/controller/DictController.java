@@ -72,7 +72,7 @@ public class DictController extends BaseController {
 
     @ApiOperation(value = "删除数据字典", notes = "批量删除数据字典。")
     @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<?> remove(@RequestParam String[] ids) {
+    public Resp<?> remove(@RequestParam Long[] ids) {
         return done(dictService.removeByIds(ids));
     }
 }

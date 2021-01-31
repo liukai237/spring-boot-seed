@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * MyBatis分页结果容器
  *
  * <p>功能同PageInfo，额外支持转换器参数。
- * <p>一般与{@link PageRequest}结对出现。
+ * <p>一般与{@link Pageable}结对出现。
  *
  * @param <T> Entity
  *

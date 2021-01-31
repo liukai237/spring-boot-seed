@@ -87,10 +87,8 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "ids", value = "用户ID，多个以逗号分隔", required = true, dataType = "String", paramType = "query")
     })
     @PostMapping(value = "/batchRemove", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<?> doBatchRemove(@RequestParam String[] ids) {
+    public Resp<?> doBatchRemove(@RequestParam Long[] ids) {
         String[] userIds = Arrays.stream(ids)
-                .filter(StringUtils::isNoneBlank)
-                .map(StringUtils::trim)
                 .distinct()
                 .toArray(String[]::new);
 

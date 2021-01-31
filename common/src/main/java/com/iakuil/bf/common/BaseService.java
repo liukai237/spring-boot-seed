@@ -3,11 +3,13 @@ package com.iakuil.bf.common;
 import com.iakuil.bf.common.db.CrudMapper;
 import com.iakuil.bf.common.tool.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.annotation.Version;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -95,6 +97,17 @@ public abstract class BaseService<T extends BaseEntity> {
     }
 
     /**
+     * 根据ID查询实体类
+     *
+     * @param ids 实体ID列表
+     * @return 实体类对象
+     */
+    @Transactional(readOnly = true)
+    public List<T> findByIds(Long... ids) {
+        return mapper.selectByIds(Arrays.stream(ids).map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    /**
      * 将实体类作为查询条件进行查询
      *
      * @param entity 实体类对象
@@ -104,6 +117,30 @@ public abstract class BaseService<T extends BaseEntity> {
     public T findOne(T entity) {
         return mapper.selectOne(entity);
     }
+
+    /**
+     * 返回全部
+     *
+     * <p>出于性能考虑，请谨慎使用此方法。
+     *
+     * @return 全部实体类对象
+     */
+    @Transactional(readOnly = true)
+    public List<T> findAll() {
+        return mapper.selectAll();
+    }
+
+    /**
+     * 将实体类作为查询条件进行统计
+     *
+     * @param entity 实体类对象
+     * @return 查询统计结果
+     */
+    @Transactional(readOnly = true)
+    public int count(T entity) {
+        return mapper.selectCount(entity);
+    }
+
 
     /**
      * 将实体类作为条件进行删除
@@ -135,8 +172,8 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 删除结果
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean removeByIds(String... ids) {
-        int count = mapper.deleteByIds(String.join(",", ids));
+    public boolean removeByIds(Long... ids) {
+        int count = mapper.deleteByIds(Arrays.stream(ids).map(String::valueOf).collect(Collectors.joining(",")));
         log.info("{} users were deleted!", count);
         return count > 0;
     }
@@ -171,8 +208,6 @@ public abstract class BaseService<T extends BaseEntity> {
     /**
      * 修改实体
      *
-     * <p>默认不处理乐观锁哦
-     *
      * @param entity 实体类对象
      * @return 修改结果
      */
@@ -184,7 +219,7 @@ public abstract class BaseService<T extends BaseEntity> {
     /**
      * 修改实体
      *
-     * <p>同时处理乐观锁哦
+     * <p>同时处理乐观锁
      *
      * @param entity 实体类对象
      * @return 修改结果
@@ -203,23 +238,21 @@ public abstract class BaseService<T extends BaseEntity> {
      * @param hasVersion 是否有乐观锁
      * @return 修改结果
      */
-    @Transactional(rollbackFor = Exception.class)
-    public boolean modify(T entity, boolean hasVersion) {
+    private boolean modify(T entity, boolean hasVersion) {
         Long id = entity.getId();
         if (id == null) {
             throw new IllegalArgumentException("Id should not be empty!");
         }
 
+        // 处理乐观锁
         if (hasVersion) {
-            T before = this.findById(id);
-            if (before == null) {
-                throw new IllegalArgumentException("Invalid id " + id + "!");
-            }
+            if (ReflectUtils.getValueByAnnotation(entity, Version.class) == null) {
+                T before = this.findById(id);
+                if (before == null) {
+                    throw new IllegalArgumentException("Invalid id " + id + "!");
+                }
 
-            // 处理乐观锁
-            if (ReflectUtils.hasAnnotation(entity, Version.class)
-                    && ReflectUtils.getValueByAnnotation(entity, Version.class) == null) {
-                Object version = ReflectUtils.getValueByAnnotation(before, Version.class);
+                Object version = ObjectUtils.defaultIfNull(ReflectUtils.getValueByAnnotation(before, Version.class), 1);
                 ReflectUtils.setValueByAnnotation(entity, version, Version.class);
             }
         }
@@ -230,13 +263,37 @@ public abstract class BaseService<T extends BaseEntity> {
     /**
      * 新增或修改Entity
      *
-     * <p>null字段将会被忽略
+     * @param entity 实体类对象
+     * @return 新增/修改结果
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean addOrModify(T entity) {
+        return entity.getId() == null ? add(entity) : modify(entity, false);
+    }
+
+    /**
+     * 新增或修改Entity
+     *
+     * <p>同时处理乐观锁
      *
      * @param entity 实体类对象
      * @return 新增/修改结果
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean addOrModify(T entity, boolean hasVersion) {
+    public boolean addOrModifyWithVersion(T entity) {
+        return entity.getId() == null ? add(entity) : modify(entity, true);
+    }
+
+    /**
+     * 新增或修改Entity
+     *
+     * <p>null字段将会被忽略
+     *
+     * @param entity     实体类对象
+     * @param hasVersion 是否有乐观锁
+     * @return 新增/修改结果
+     */
+    private boolean addOrModify(T entity, boolean hasVersion) {
         return entity.getId() == null ? add(entity) : modify(entity, hasVersion);
     }
 }
