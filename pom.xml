@@ -42,6 +42,7 @@
         <kaptcha.version>2.3.2</kaptcha.version>
         <reflections.version>0.9.12</reflections.version>
         <shedlock-spring.version>4.17.0</shedlock-spring.version>
+        <protostuff.version>1.7.2</protostuff.version>
 
         <shiro-spring.version>1.7.0</shiro-spring.version>
         <shiro-redis.version>3.3.1</shiro-redis.version>
@@ -251,20 +252,25 @@
             </dependency>
 
             <dependency>
-                <groupId>org.bouncycastle</groupId>
-                <artifactId>bcprov-jdk16</artifactId>
-                <version>${bcprov-jdk16.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>net.javacrumbs.shedlock</groupId>
                 <artifactId>shedlock-spring</artifactId>
                 <version>${shedlock-spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.javacrumbs.shedlock</groupId>
-                <artifactId>shedlock-provider-jdbc-template</artifactId>
+                <artifactId>shedlock-provider-redis-spring</artifactId>
                 <version>${shedlock-spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.protostuff</groupId>
+                <artifactId>protostuff-core</artifactId>
+                <version>${protostuff.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.protostuff</groupId>
+                <artifactId>protostuff-runtime</artifactId>
+                <version>${protostuff.version}</version>
             </dependency>
 
         </dependencies>
