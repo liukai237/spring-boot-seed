@@ -7,6 +7,11 @@ import com.iakuil.bf.common.constant.RespCode;
  *
  * <p>所有RestController强制继承。
  *
+ * <p>关于数据校验：
+ * <p>基础数据校验使用JSR 303注解自动完成，通过{@link com.iakuil.bf.common.annotation.ErrorCode}注解可以返回指定错误码；
+ * <p>Controller业务逻辑校验结果应该通过`fail()`方法尽早返回；
+ * <p>Service层的校验错误直接抛出`BusinessException`即可。
+ *
  * @author Kai
  */
 public abstract class BaseController {

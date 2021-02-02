@@ -11,8 +11,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -34,22 +34,22 @@ public class CreateAndUpdateTimeInterceptor implements Interceptor {
         if (SqlCommandType.UPDATE == sqlCommandType) {
             // 如果是批量操作
             if (parameter instanceof DefaultSqlSession.StrictMap) {
-                List dataList = (List) ((DefaultSqlSession.StrictMap) parameter).get("list");
+                Collection dataList = (Collection) ((DefaultSqlSession.StrictMap) parameter).get("collection");
                 for (Object obj : dataList) {
-                    handlCreateTime(obj);
+                    handleCreateTime(obj);
                 }
             } else {
-                handlCreateTime(parameter);
+                handleCreateTime(parameter);
             }
         } else if (SqlCommandType.INSERT == sqlCommandType) {
             if (parameter instanceof DefaultSqlSession.StrictMap) {
-                List dataList = (List) ((DefaultSqlSession.StrictMap) parameter).get("list");
+                Collection dataList = (Collection) ((DefaultSqlSession.StrictMap) parameter).get("collection");
                 for (Object obj : dataList) {
-                    handlCreateTime(obj);
+                    handleCreateTime(obj);
                     handlUpdateTime(obj);
                 }
             } else {
-                handlCreateTime(parameter);
+                handleCreateTime(parameter);
                 handlUpdateTime(parameter);
             }
         } else {
@@ -58,7 +58,7 @@ public class CreateAndUpdateTimeInterceptor implements Interceptor {
         return invocation.proceed();
     }
 
-    private void handlCreateTime(Object obj) throws IllegalAccessException {
+    private void handleCreateTime(Object obj) throws IllegalAccessException {
         Date currentDate = new Date();
         Field[] fields = obj.getClass().getDeclaredFields();
         for (Field field : fields) {

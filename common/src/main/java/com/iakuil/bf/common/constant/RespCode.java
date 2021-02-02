@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 响应码枚举
  *
- * <p>参考HTTP状态码的语义，可自行扩展</p>
+ * <p>参考HTTP状态码的语义，可自行扩展
  *
  * @author Kai
  */

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 /**
- * MyBatis字段转枚举
+ * MyBatis字典枚举处理器
  *
  * @author Kai
  */

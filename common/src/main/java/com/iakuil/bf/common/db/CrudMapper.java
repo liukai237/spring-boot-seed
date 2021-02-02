@@ -8,8 +8,8 @@ import tk.mybatis.mapper.common.ids.SelectByIdsMapper;
  * CRUD Mapper基类
  *
  * <p>参考JPA实现基本的CRUD和批量插入方法。
- * <p>复杂的查询建议使用MyBatis原生的XML，以实现SQL与业务代码分离。
- * <p>PS. MBG生成的代码不建议使用{@code Example}等对象查询。
+ * <p>复杂的查询建议在MyBatis原生的XML Mapper中手写SQL，以实现SQL与业务代码分离。
+ * <p>PS. 不建议使用{@code Example}等对象查询。
  *
  * @author Kai
  */

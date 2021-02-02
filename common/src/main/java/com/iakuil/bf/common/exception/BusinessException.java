@@ -7,7 +7,7 @@ import org.springframework.core.NestedExceptionUtils;
  * 业务异常
  *
  * <p>自定义异常，用于封装业务层所有Checked Exception。
- * 可传递错误码，会被{@code GlobalExceptionHandler}捕获。</p>
+ * <p>可传递错误码，会被{@code GlobalExceptionHandler}捕获并做统一处理。
  *
  * @author Kai
  */

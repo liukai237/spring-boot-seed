@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 /**
  * 字符串工具类
- * <p>部分工具类参考自hutool</p>
+ * <p>部分工具类参考自hutool
  *
  * @author Kai
  */

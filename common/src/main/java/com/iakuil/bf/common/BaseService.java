@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * 泛型化的通用Service基类
  *
- * <p>提供一些业务层常用的公用方法，以及乐观锁、saveOrUpdate等，主要针对单表操作。
+ * <p>提供一些业务层常用的公用方法，统一处理乐观锁、逻辑删除、saveOrUpdate等，主要针对单表操作。
  * <p>不与Entity对应的Service无需继承此类。
  * <p>默认忽略所有null值，如有需要，请自行实现。
  *

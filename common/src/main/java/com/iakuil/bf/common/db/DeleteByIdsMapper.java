@@ -6,7 +6,7 @@ import tk.mybatis.mapper.annotation.RegisterMapper;
 /**
  * 通过ID列表进行删除
  *
- * <p>解决原生deleteByIds不支持逻辑删除的问题。
+ * <p>解决tkMapper原生deleteByIds不支持逻辑删除的问题。
  *
  * @author Kai
  */

@@ -13,6 +13,8 @@ import java.sql.SQLException;
 /**
  * MyBatis枚举处理
  *
+ * <p>自动选择枚举处理器:字典枚举使用{@link DictEnumTypeHandler}，其他枚举使用默认的{@link EnumTypeHandler}
+ *
  * @author Kai
  */
 public class AutoEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E> {
