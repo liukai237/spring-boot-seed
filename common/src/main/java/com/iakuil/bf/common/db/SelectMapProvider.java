@@ -10,7 +10,7 @@ import tk.mybatis.mapper.mapperhelper.SqlHelper;
 import java.util.Set;
 
 /**
- * 通过Map进行查询
+ * 使用Map作为查询条件进行查询
  *
  * @author Kai
  */

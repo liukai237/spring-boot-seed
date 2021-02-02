@@ -17,9 +17,11 @@ import java.util.stream.Collectors;
 /**
  * 泛型化的通用Service基类
  *
- * <p>提供一些业务层常用的公用方法，统一处理乐观锁、逻辑删除、saveOrUpdate等，主要针对单表操作。
+ * <p>提供一些业务层常用的公用方法，统一处理乐观锁、逻辑删除、批量插入、saveOrUpdate模式等，主要针对单表操作。
  * <p>不与Entity对应的Service无需继承此类。
- * <p>默认忽略所有null值，如有需要，请自行实现。
+ * <p>默认忽略所有null值，如有需要，请另行实现。
+ *
+ * <p>PS.BaseService存在的意义是为了弥补tkMapper的不足（借鉴了MyBatis Plus的一些思路），帮你处理掉90%的CRUD场景，剩下的10%建议手写SQL，或者了解一下CQRS。
  *
  * @param <T> 实体类型
  * @author Kai

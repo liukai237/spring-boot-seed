@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 通过Map进行查询
+ * 使用Map作为查询条件进行查询
+ *
+ * <p>主要用于遗留接口，不建议大规模使用。
  *
  * @author Kai
  */
@@ -17,7 +19,8 @@ public interface SelectMapMapper<T> {
     /**
      * Map作为过滤参数进行查询
      *
-     * <p>如果存在pageSize/pageNum的key则自动分页排序
+     * <p>pagehelper.pageSizeZero=true的情况下，
+     * <p>如果keySet中存在pageSize/pageNum/orderBay，则自动实现分页排序
      */
     @SelectProvider(
             type = SelectMapProvider.class,
