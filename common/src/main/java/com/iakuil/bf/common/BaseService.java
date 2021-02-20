@@ -2,10 +2,6 @@ package com.iakuil.bf.common;
 
 import com.iakuil.bf.common.db.CrudMapper;
 import com.iakuil.bf.common.tool.ReflectUtils;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +84,35 @@ public abstract class BaseService<T extends BaseEntity> {
     @Transactional(readOnly = true)
     public PageData<T> page(T entity) {
         return new PageData<>(mapper.select(entity));
+    }
+
+    /**
+     * 范围条件分页查询（试验功能）
+     *
+     * <p>同时返回分页信息
+     *
+     * @param entity 实体类对象
+     * @param ranges 范围查询参数
+     * @return 带分页信息的实体类集合
+     */
+    @Transactional(readOnly = true)
+    public PageData<T> page(T entity, RangeQuery... ranges) {
+        return new PageData<>(this.findInRange(entity, ranges));
+    }
+
+    /**
+     * 范围条件分页查询（试验功能）
+     *
+     * <p>同时返回分页信息
+     *
+     * @param entity    实体类对象
+     * @param converter Entity/DTO转换器
+     * @param ranges    范围查询参数
+     * @return 带分页信息的DTO集合
+     */
+    @Transactional(readOnly = true)
+    public <R> PageData<R> page(T entity, Function<? super T, ? extends R> converter, RangeQuery... ranges) {
+        return new PageData<>(this.findInRange(entity, ranges), converter);
     }
 
     /**
@@ -351,7 +376,7 @@ public abstract class BaseService<T extends BaseEntity> {
     @Transactional(readOnly = true)
     public List<T> findByCreateTimeBetween(T entity, Date since, Date until) {
         String createDateField = ReflectUtils.getNameByAnnotation(entity, CreatedDate.class);
-        return this.findInRange(entity, new Range(createDateField, since, until));
+        return this.findInRange(entity, new RangeQuery(createDateField, since, until));
     }
 
     /**
@@ -389,7 +414,7 @@ public abstract class BaseService<T extends BaseEntity> {
     @Transactional(readOnly = true)
     public List<T> findByUpdateTimeBetween(T entity, Date since, Date until) {
         String createDateField = ReflectUtils.getNameByAnnotation(entity, LastModifiedDate.class);
-        return this.findInRange(entity, new Range(createDateField, since, until));
+        return this.findInRange(entity, new RangeQuery(createDateField, since, until));
     }
 
     /**
@@ -402,7 +427,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 实体类对象列表
      */
     @Transactional(readOnly = true)
-    protected List<T> findInRange(T entity, Range... ranges) {
+    protected List<T> findInRange(T entity, RangeQuery... ranges) {
         if (ranges == null) {
             log.debug("there is no range for query!");
             return Collections.emptyList();
@@ -420,7 +445,7 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return DTO列表
      */
     @Transactional(readOnly = true)
-    protected <R> List<R> findInRange(T entity, Function<? super T, ? extends R> converter, Range... ranges) {
+    protected <R> List<R> findInRange(T entity, Function<? super T, ? extends R> converter, RangeQuery... ranges) {
         if (ranges == null) {
             log.debug("there is no range for query!");
             return Collections.emptyList();
@@ -429,11 +454,11 @@ public abstract class BaseService<T extends BaseEntity> {
         return mapper.selectInRange(getCondition(entity, ranges)).stream().map(converter).collect(Collectors.toList());
     }
 
-    protected Condition getCondition(T entity, Range... ranges) {
+    protected Condition getCondition(T entity, RangeQuery... ranges) {
         // Condition仅支持等于、大于等于和小于等于，其余条件会被忽略。
         Condition condition = new Condition(this.entityClass);
         Condition.Criteria criteria = condition.createCriteria();
-        for (Range range : ranges) {
+        for (RangeQuery range : ranges) {
             String field = range.getField();
             Object lower = range.getLower();
             if (lower != null) {
@@ -447,15 +472,5 @@ public abstract class BaseService<T extends BaseEntity> {
 
         criteria.andAllEqualTo(entity);
         return condition;
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    protected static class Range {
-        private String field;
-        private Object lower;
-        private Object upper;
     }
 }
