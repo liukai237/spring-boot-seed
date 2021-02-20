@@ -57,7 +57,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public List<T> list(T entity) {
-        return mapper.select(entity);
+        return this.findByCondition(entity);
     }
 
     /**
@@ -71,7 +71,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> List<R> list(T entity, Function<? super T, ? extends R> converter) {
-        return mapper.select(entity).stream().map(converter).collect(Collectors.toList());
+        return this.findByCondition(entity, converter);
     }
 
     /**
@@ -84,7 +84,21 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public PageData<T> page(T entity) {
-        return new PageData<>(mapper.select(entity));
+        return new PageData<>(this.findByCondition(entity));
+    }
+
+    /**
+     * 将实体类作为查询条件进行分页查询
+     *
+     * <p>同时返回分页信息
+     *
+     * @param entity    实体类对象
+     * @param converter Entity/DTO转换器
+     * @return 带分页信息的DTO集合
+     */
+    @Transactional(readOnly = true)
+    public <R> PageData<R> page(T entity, Function<? super T, ? extends R> converter) {
+        return new PageData<>(this.findByCondition(entity, converter));
     }
 
     /**
@@ -98,7 +112,11 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public PageData<T> page(T entity, RangeQuery... ranges) {
-        return new PageData<>(this.findInRange(entity, ranges));
+        if (ranges != null && entity.getPageSize() != null) {
+            // workaround，范围查询不支持IPage接口，需要手动分页
+            PageHelper.startPage(entity.getPageNum(), entity.getPageSize());
+        }
+        return new PageData<>(this.findByCondition(entity, ranges));
     }
 
     /**
@@ -113,22 +131,10 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> PageData<R> page(T entity, Function<? super T, ? extends R> converter, RangeQuery... ranges) {
-        PageHelper.startPage(entity.getPageNum(), entity.getPageSize());
-        return new PageData<>(this.findInRange(entity, ranges), converter);
-    }
-
-    /**
-     * 将实体类作为查询条件进行分页查询
-     *
-     * <p>同时返回分页信息
-     *
-     * @param entity    实体类对象
-     * @param converter Entity/DTO转换器
-     * @return 带分页信息的DTO集合
-     */
-    @Transactional(readOnly = true)
-    public <R> PageData<R> page(T entity, Function<? super T, ? extends R> converter) {
-        return new PageData<>(mapper.select(entity), converter);
+        if (ranges != null && entity.getPageSize() != null) {
+            PageHelper.startPage(entity.getPageNum(), entity.getPageSize());
+        }
+        return new PageData<>(this.findByCondition(entity, ranges), converter);
     }
 
     /**
@@ -186,7 +192,6 @@ public abstract class BaseService<T extends BaseEntity> {
     public int count(T entity) {
         return mapper.selectCount(entity);
     }
-
 
     /**
      * 将实体类作为条件进行删除
@@ -378,7 +383,7 @@ public abstract class BaseService<T extends BaseEntity> {
     @Transactional(readOnly = true)
     public List<T> findByCreateTimeBetween(T entity, Date since, Date until) {
         String createDateField = ReflectUtils.getNameByAnnotation(entity, CreatedDate.class);
-        return this.findInRange(entity, new RangeQuery(createDateField, since, until, RangeQuery.Operator.GTE_AND_LTE));
+        return this.findByCondition(entity, new RangeQuery(createDateField, since, until, RangeQuery.Operator.GTE_AND_LTE));
     }
 
     /**
@@ -416,11 +421,11 @@ public abstract class BaseService<T extends BaseEntity> {
     @Transactional(readOnly = true)
     public List<T> findByUpdateTimeBetween(T entity, Date since, Date until) {
         String createDateField = ReflectUtils.getNameByAnnotation(entity, LastModifiedDate.class);
-        return this.findInRange(entity, new RangeQuery(createDateField, since, until, RangeQuery.Operator.GTE_AND_LTE));
+        return this.findByCondition(entity, new RangeQuery(createDateField, since, until, RangeQuery.Operator.GTE_AND_LTE));
     }
 
     /**
-     * 查询在指定范围之内的数据
+     * 查询在指定条件和范围之内的数据
      *
      * <p>在原有通用查询方法基础上增加范围查询，大于或等于下限且小于或等于上限。
      *
@@ -429,17 +434,12 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 实体类对象列表
      */
     @Transactional(readOnly = true)
-    protected List<T> findInRange(T entity, RangeQuery... ranges) {
-        if (ranges == null) {
-            log.debug("there is no range for query!");
-            return this.list(entity);
-        }
-
-        return mapper.selectInRange(getCondition(entity, ranges));
+    protected List<T> findByCondition(T entity, RangeQuery... ranges) {
+        return ranges == null ? mapper.select(entity) : mapper.selectInRange(getCondition(entity, ranges));
     }
 
     /**
-     * 查询在指定范围之内的数据
+     * 查询在指定条件和范围之内的数据
      *
      * @param entity    实体类对象
      * @param ranges    范围查询参数
@@ -447,16 +447,12 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return DTO列表
      */
     @Transactional(readOnly = true)
-    protected <R> List<R> findInRange(T entity, Function<? super T, ? extends R> converter, RangeQuery... ranges) {
-        if (ranges == null) {
-            log.debug("there is no range for query!");
-            return this.list(entity, converter);
-        }
-
-        return mapper.selectInRange(getCondition(entity, ranges)).stream().map(converter).collect(Collectors.toList());
+    protected <R> List<R> findByCondition(T entity, Function<? super T, ? extends R> converter, RangeQuery... ranges) {
+        List<T> results = ranges == null ? mapper.select(entity) : mapper.selectInRange(getCondition(entity, ranges));
+        return results.stream().map(converter).collect(Collectors.toList());
     }
 
-    protected Condition getCondition(T entity, RangeQuery... ranges) {
+    private Condition getCondition(T entity, RangeQuery... ranges) {
         // Condition仅支持等于、大于等于和小于等于，其余条件会被忽略。
         Condition condition = new Condition(this.entityClass);
         Condition.Criteria criteria = condition.createCriteria();

@@ -31,22 +31,22 @@ public class QueryBuilder {
 
     public static QueryBuilder init(PageRequest<?> pq) {
         QueryBuilder qb = new QueryBuilder();
+        qb.params = BeanMapUtils.beanToMap(pq.getFilter());
+
         PageRequest.Paging paging = pq.getPaging();
         PageRequest.Sorting[] sorting = pq.getSorting();
-        String orderBy = null;
+        String orderBy;
         if (sorting != null) {
             orderBy = Arrays.stream(sorting)
                     .filter(item -> StringUtils.isNoneBlank(item.getField()))
                     .map(item -> Strings.toUnderlineCase(item.getField()) + Strings.SPACE + item.getOrder().toString())
                     .collect(Collectors.joining(Strings.COMMA));
+            qb.params.put("orderBy", orderBy);
         }
-
-        qb.params = BeanMapUtils.beanToMap(pq.getFilter());
         if (paging != null) {
-            qb.params.put("pageNum", ObjectUtils.defaultIfNull(paging.getPageNum(), 1));
             Integer pageSize = ObjectUtils.defaultIfNull(paging.getPageSize(), SysConstant.DEFAULT_PAGE_SIZE);
             qb.params.put("pageSize", pageSize > SysConstant.MAX_PAGE_SIZE ? SysConstant.MAX_PAGE_SIZE : pageSize);
-            qb.params.put("orderBy", orderBy);
+            qb.params.put("pageNum", ObjectUtils.defaultIfNull(paging.getPageNum(), 1));
         }
         return qb;
     }
