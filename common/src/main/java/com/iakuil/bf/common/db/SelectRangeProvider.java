@@ -11,9 +11,9 @@ import tk.mybatis.mapper.mapperhelper.SqlHelper;
 import java.util.Map;
 
 /**
- * 范围查询
+ * 相等或者范围查询
  *
- * <p>注意：此处仅仅借用Example对象，不是完整的实现。
+ * <p>注意：此处借用Example对象和SqlHelper工具类，不是完整的实现，仅支持大于小于等于。
  *
  * @author Kai
  */
@@ -39,14 +39,14 @@ public class SelectRangeProvider extends MapperTemplate {
         return "<if test=\"_parameter != null\">" +
                 "<where>\n" +
                 " ${@com.iakuil.bf.common.db.SelectRangeProvider@andNotLogicDelete(_parameter)}" +
-                " <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
+                " <trim prefix=\"(\" prefixOverrides=\"and\" suffix=\")\">\n" +
                 "  <foreach collection=\"oredCriteria\" item=\"criteria\">\n" +
                 "    <if test=\"criteria.valid\">\n" +
-                "      ${@com.iakuil.bf.common.db.SelectRangeProvider@andOr(criteria)}" +
-                "      <trim prefix=\"(\" prefixOverrides=\"and |or \" suffix=\")\">\n" +
+                "      ${@com.iakuil.bf.common.db.SelectRangeProvider@appendAnd(criteria)}" +
+                "      <trim prefix=\"(\" prefixOverrides=\"and\" suffix=\")\">\n" +
                 "        <foreach collection=\"criteria.criteria\" item=\"criterion\">\n" +
                 "          <when test=\"criterion.singleValue\">\n" +
-                "            ${@com.iakuil.bf.common.db.SelectRangeProvider@andOr(criterion)} ${criterion.condition} #{criterion.value}\n" +
+                "            ${@com.iakuil.bf.common.db.SelectRangeProvider@appendAnd(criterion)} ${criterion.condition} #{criterion.value}\n" +
                 "          </when>\n" +
                 "        </foreach>\n" +
                 "      </trim>\n" +
@@ -55,6 +55,16 @@ public class SelectRangeProvider extends MapperTemplate {
                 " </trim>\n" +
                 "</where>" +
                 "</if>";
+    }
+
+    public static String appendAnd(Object parameter) {
+        if (parameter instanceof Example.Criteria) {
+            return ((Example.Criteria) parameter).getAndOr();
+        } else if (parameter instanceof Example.Criterion) {
+            return ((Example.Criterion) parameter).getAndOr();
+        } else {
+            return "and";
+        }
     }
 
     public static String andNotLogicDelete(Object parameter) {
@@ -78,17 +88,5 @@ public class SelectRangeProvider extends MapperTemplate {
             }
         }
         return result;
-    }
-
-    public static String andOr(Object parameter) {
-        if (parameter instanceof Example.Criteria) {
-            return ((Example.Criteria) parameter).getAndOr();
-        } else if (parameter instanceof Example.Criterion) {
-            return ((Example.Criterion) parameter).getAndOr();
-        } else if (parameter.getClass().getCanonicalName().endsWith("Criteria")) {
-            return "or";
-        } else {
-            return "and";
-        }
     }
 }
