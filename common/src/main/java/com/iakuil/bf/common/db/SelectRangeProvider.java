@@ -11,9 +11,9 @@ import tk.mybatis.mapper.mapperhelper.SqlHelper;
 import java.util.Map;
 
 /**
- * 相等或者范围查询
+ * 范围查询
  *
- * <p>注意：此处借用Example对象和SqlHelper工具类，不是完整的实现，仅支持大于小于等于。
+ * <p>注意：此处借用Example对象和SqlHelper工具类，不是完整的实现，每个属性只支持单个范围查询参数。
  *
  * @author Kai
  */
@@ -31,7 +31,7 @@ public class SelectRangeProvider extends MapperTemplate {
         sql.append(SqlHelper.exampleSelectColumns(entityClass));
         sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
         sql.append(exampleWhereClause());
-        sql.append(SqlHelper.exampleForUpdate());
+        sql.append(SqlHelper.exampleOrderBy(entityClass));
         return sql.toString();
     }
 

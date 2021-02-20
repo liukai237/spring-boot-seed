@@ -63,10 +63,6 @@ public class PageRequest<T> {
         @ApiModelProperty(name = SysConstant.DEFAULT_PAGE_SIZE_FIELD, value = "分页尺寸", example = "10")
         @JsonProperty(SysConstant.DEFAULT_PAGE_SIZE_FIELD)
         private Integer pageSize;
-
-        public Integer getPageSize() {
-            return (pageSize == null || pageSize < SysConstant.DEFAULT_PAGE_SIZE) ? SysConstant.DEFAULT_PAGE_SIZE : (pageSize > SysConstant.MAX_PAGE_SIZE ? SysConstant.MAX_PAGE_SIZE : pageSize);
-        }
     }
 
     /**

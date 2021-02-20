@@ -1,6 +1,8 @@
 package com.iakuil.bf.common;
 
+import com.github.pagehelper.PageHelper;
 import com.iakuil.bf.common.db.CrudMapper;
+import com.iakuil.bf.common.exception.BusinessException;
 import com.iakuil.bf.common.tool.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -14,7 +16,6 @@ import tk.mybatis.mapper.entity.Condition;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
@@ -112,6 +113,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> PageData<R> page(T entity, Function<? super T, ? extends R> converter, RangeQuery... ranges) {
+        PageHelper.startPage(entity.getPageNum(), entity.getPageSize());
         return new PageData<>(this.findInRange(entity, ranges), converter);
     }
 
@@ -376,7 +378,7 @@ public abstract class BaseService<T extends BaseEntity> {
     @Transactional(readOnly = true)
     public List<T> findByCreateTimeBetween(T entity, Date since, Date until) {
         String createDateField = ReflectUtils.getNameByAnnotation(entity, CreatedDate.class);
-        return this.findInRange(entity, new RangeQuery(createDateField, since, until));
+        return this.findInRange(entity, new RangeQuery(createDateField, since, until, RangeQuery.Operator.GTE_AND_LTE));
     }
 
     /**
@@ -414,7 +416,7 @@ public abstract class BaseService<T extends BaseEntity> {
     @Transactional(readOnly = true)
     public List<T> findByUpdateTimeBetween(T entity, Date since, Date until) {
         String createDateField = ReflectUtils.getNameByAnnotation(entity, LastModifiedDate.class);
-        return this.findInRange(entity, new RangeQuery(createDateField, since, until));
+        return this.findInRange(entity, new RangeQuery(createDateField, since, until, RangeQuery.Operator.GTE_AND_LTE));
     }
 
     /**
@@ -430,7 +432,7 @@ public abstract class BaseService<T extends BaseEntity> {
     protected List<T> findInRange(T entity, RangeQuery... ranges) {
         if (ranges == null) {
             log.debug("there is no range for query!");
-            return Collections.emptyList();
+            return this.list(entity);
         }
 
         return mapper.selectInRange(getCondition(entity, ranges));
@@ -448,7 +450,7 @@ public abstract class BaseService<T extends BaseEntity> {
     protected <R> List<R> findInRange(T entity, Function<? super T, ? extends R> converter, RangeQuery... ranges) {
         if (ranges == null) {
             log.debug("there is no range for query!");
-            return Collections.emptyList();
+            return this.list(entity, converter);
         }
 
         return mapper.selectInRange(getCondition(entity, ranges)).stream().map(converter).collect(Collectors.toList());
@@ -458,19 +460,36 @@ public abstract class BaseService<T extends BaseEntity> {
         // Condition仅支持等于、大于等于和小于等于，其余条件会被忽略。
         Condition condition = new Condition(this.entityClass);
         Condition.Criteria criteria = condition.createCriteria();
+        criteria.andAllEqualTo(entity);
+
         for (RangeQuery range : ranges) {
             String field = range.getField();
             Object lower = range.getLower();
-            if (lower != null) {
-                criteria.andGreaterThanOrEqualTo(field, lower);
-            }
             Object upper = range.getUpper();
-            if (upper != null) {
-                criteria.andLessThanOrEqualTo(field, upper);
+            RangeQuery.Operator operator = ObjectUtils.defaultIfNull(range.getOperator(), RangeQuery.Operator.GT_AND_LT);
+            switch (operator) {
+                case GT_AND_LT:
+                    criteria.andGreaterThan(field, lower);
+                    criteria.andLessThan(field, upper);
+                    break;
+                case GTE_AND_LTE:
+                    criteria.andGreaterThanOrEqualTo(field, lower);
+                    criteria.andLessThanOrEqualTo(field, upper);
+                    break;
+                case GT_AND_LTE:
+                    criteria.andGreaterThan(field, lower);
+                    criteria.andLessThanOrEqualTo(field, upper);
+                    break;
+                case GTE_AND_LT:
+                    criteria.andGreaterThanOrEqualTo(field, lower);
+                    criteria.andLessThan(field, upper);
+                    break;
+                default:
+                    throw new BusinessException("Invalid range operator: " + operator);
             }
-        }
 
-        criteria.andAllEqualTo(entity);
+            condition.setOrderByClause(entity.getOrderBy());
+        }
         return condition;
     }
 }

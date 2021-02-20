@@ -4,6 +4,7 @@ import com.iakuil.bf.common.PageRequest;
 import com.iakuil.bf.common.Pageable;
 import com.iakuil.bf.common.constant.SysConstant;
 import com.iakuil.toolkit.BeanMapUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -24,7 +25,12 @@ public class QueryBuilder {
         this.params = new HashMap<>();
     }
 
-    private QueryBuilder(PageRequest<?> pq) {
+    public static QueryBuilder init() {
+        return new QueryBuilder();
+    }
+
+    public static QueryBuilder init(PageRequest<?> pq) {
+        QueryBuilder qb = new QueryBuilder();
         PageRequest.Paging paging = pq.getPaging();
         PageRequest.Sorting[] sorting = pq.getSorting();
         String orderBy = null;
@@ -35,18 +41,14 @@ public class QueryBuilder {
                     .collect(Collectors.joining(Strings.COMMA));
         }
 
-        this.params = BeanMapUtils.beanToMap(pq.getFilter());
-        this.params.put("pageNum", paging == null ? 1 : paging.getPageNum());
-        this.params.put("pageSize", paging == null ? SysConstant.DEFAULT_PAGE_SIZE : paging.getPageSize());
-        this.params.put("orderBy", orderBy);
-    }
-
-    public static QueryBuilder init() {
-        return new QueryBuilder();
-    }
-
-    public static QueryBuilder init(PageRequest<?> pq) {
-        return new QueryBuilder(pq);
+        qb.params = BeanMapUtils.beanToMap(pq.getFilter());
+        if (paging != null) {
+            qb.params.put("pageNum", ObjectUtils.defaultIfNull(paging.getPageNum(), 1));
+            Integer pageSize = ObjectUtils.defaultIfNull(paging.getPageSize(), SysConstant.DEFAULT_PAGE_SIZE);
+            qb.params.put("pageSize", pageSize > SysConstant.MAX_PAGE_SIZE ? SysConstant.MAX_PAGE_SIZE : pageSize);
+            qb.params.put("orderBy", orderBy);
+        }
+        return qb;
     }
 
     public QueryBuilder pageSize(Integer pageSize) {
