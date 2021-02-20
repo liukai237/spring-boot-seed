@@ -2,6 +2,10 @@ package com.iakuil.bf.common;
 
 import com.iakuil.bf.common.db.CrudMapper;
 import com.iakuil.bf.common.tool.ReflectUtils;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +27,7 @@ import java.util.stream.Collectors;
 /**
  * 通用Service基类
  *
- * <p>提供一些业务层常用的公用方法，统一处理乐观锁、逻辑删除、批量插入、saveOrUpdate模式以及按时间范围查询等。
+ * <p>提供一些业务层常用的公用方法，统一处理乐观锁、逻辑删除、批量插入、saveOrUpdate模式以及按范围查询等。
  * <p>不与Entity对应的Service无需继承此类。
  * <p>默认忽略所有null值，如有需要，请另行实现。
  *
@@ -347,7 +351,7 @@ public abstract class BaseService<T extends BaseEntity> {
     @Transactional(readOnly = true)
     public List<T> findByCreateTimeBetween(T entity, Date since, Date until) {
         String createDateField = ReflectUtils.getNameByAnnotation(entity, CreatedDate.class);
-        return this.findInTimeRange(entity, createDateField, since, until);
+        return this.findInRange(entity, new Range(createDateField, since, until));
     }
 
     /**
@@ -385,34 +389,73 @@ public abstract class BaseService<T extends BaseEntity> {
     @Transactional(readOnly = true)
     public List<T> findByUpdateTimeBetween(T entity, Date since, Date until) {
         String createDateField = ReflectUtils.getNameByAnnotation(entity, LastModifiedDate.class);
-        return this.findInTimeRange(entity, createDateField, since, until);
+        return this.findInRange(entity, new Range(createDateField, since, until));
     }
 
     /**
-     * 查询在指定时间范围之内的数据
+     * 查询在指定范围之内的数据
      *
-     * @param entity    实体类对象
-     * @param timeField 时间属性名称
-     * @param since     开始时间
-     * @param until     结束时间
-     * @return 指定时间范围之内发生修改的对象
+     * <p>在原有通用查询方法基础上增加范围查询，大于或等于下限且小于或等于上限。
+     *
+     * @param entity 实体类对象
+     * @param ranges 范围查询参数
+     * @return 实体类对象列表
      */
     @Transactional(readOnly = true)
-    protected List<T> findInTimeRange(T entity, String timeField, Date since, Date until) {
-        if (since == null && until == null) {
+    protected List<T> findInRange(T entity, Range... ranges) {
+        if (ranges == null) {
+            log.debug("there is no range for query!");
             return Collections.emptyList();
         }
 
+        return mapper.selectInRange(getCondition(entity, ranges));
+    }
+
+    /**
+     * 查询在指定范围之内的数据
+     *
+     * @param entity    实体类对象
+     * @param ranges    范围查询参数
+     * @param converter Entity/DTO转换器
+     * @return DTO列表
+     */
+    @Transactional(readOnly = true)
+    protected <R> List<R> findInRange(T entity, Function<? super T, ? extends R> converter, Range... ranges) {
+        if (ranges == null) {
+            log.debug("there is no range for query!");
+            return Collections.emptyList();
+        }
+
+        return mapper.selectInRange(getCondition(entity, ranges)).stream().map(converter).collect(Collectors.toList());
+    }
+
+    protected Condition getCondition(T entity, Range... ranges) {
+        // Condition仅支持等于、大于等于和小于等于，其余条件会被忽略。
         Condition condition = new Condition(this.entityClass);
         Condition.Criteria criteria = condition.createCriteria();
-        if (since != null) {
-            criteria.andGreaterThanOrEqualTo(timeField, since);
-        }
-        if (until != null) {
-            criteria.andLessThanOrEqualTo(timeField, until);
+        for (Range range : ranges) {
+            String field = range.getField();
+            Object lower = range.getLower();
+            if (lower != null) {
+                criteria.andGreaterThanOrEqualTo(field, lower);
+            }
+            Object upper = range.getUpper();
+            if (upper != null) {
+                criteria.andLessThanOrEqualTo(field, upper);
+            }
         }
 
         criteria.andAllEqualTo(entity);
-        return mapper.selectInRange(condition);
+        return condition;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    protected static class Range {
+        private String field;
+        private Object lower;
+        private Object upper;
     }
 }
