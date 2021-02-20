@@ -13,5 +13,9 @@ import tk.mybatis.mapper.common.ids.SelectByIdsMapper;
  *
  * @author Kai
  */
-public interface CrudMapper<T> extends BaseMapper<T>, DeleteByIdsMapper<T>, SelectByIdsMapper<T>, InsertListMapper<T>, SelectMapMapper<T> {
+public interface CrudMapper<T> extends BaseMapper<T>,
+        DeleteByIdsMapper<T>,
+        SelectByIdsMapper<T>,
+        InsertListMapper<T>,
+        SelectRangeMapper<T> {
 }

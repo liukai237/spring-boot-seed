@@ -5,23 +5,29 @@ import com.iakuil.bf.common.tool.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.annotation.Version;
+import tk.mybatis.mapper.entity.Condition;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * 泛型化的通用Service基类
+ * 通用Service基类
  *
- * <p>提供一些业务层常用的公用方法，统一处理乐观锁、逻辑删除、批量插入、saveOrUpdate模式等，主要针对单表操作。
+ * <p>提供一些业务层常用的公用方法，统一处理乐观锁、逻辑删除、批量插入、saveOrUpdate模式以及按时间范围查询等。
  * <p>不与Entity对应的Service无需继承此类。
  * <p>默认忽略所有null值，如有需要，请另行实现。
  *
- * <p>PS.BaseService存在的意义是为了弥补tkMapper的不足（借鉴了MyBatis Plus的一些思路），帮你处理掉90%的CRUD场景，剩下的10%建议手写SQL，或者了解一下CQRS。
+ * <p>PS.BaseService主要是为了弥补tkMapper的不足（借鉴了MyBatis Plus的一些思路），解决90%的单表CRUD场景，剩下的10%建议手写SQL，或者了解一下CQRS。
  *
  * @param <T> 实体类型
  * @author Kai
@@ -30,8 +36,15 @@ import java.util.stream.Collectors;
 @Service
 public abstract class BaseService<T extends BaseEntity> {
 
+    private Class<T> entityClass;
+
     @Autowired
     private CrudMapper<T> mapper;
+
+    @PostConstruct
+    private void init() {
+        this.entityClass = ReflectUtils.getSuperClassGenericType(getClass());
+    }
 
     /**
      * 将实体类作为查询条件进行查询
@@ -297,5 +310,109 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     private boolean addOrModify(T entity, boolean hasVersion) {
         return entity.getId() == null ? add(entity) : modify(entity, hasVersion);
+    }
+
+    /**
+     * 查询在指定时间之后创建的数据
+     *
+     * @param entity    实体类对象
+     * @param startTime 开始时间
+     * @return 指定时间之后创建的对象
+     */
+    @Transactional(readOnly = true)
+    public List<T> findByCreateTimeAfter(T entity, Date startTime) {
+        return this.findByCreateTimeBetween(entity, startTime, null);
+    }
+
+    /**
+     * 查询在指定时间之前创建的数据
+     *
+     * @param entity  实体类对象
+     * @param endTime 结束时间
+     * @return 指定时间之前创建的对象
+     */
+    @Transactional(readOnly = true)
+    public List<T> findByCreateTimeBefore(T entity, Date endTime) {
+        return this.findByCreateTimeBetween(entity, null, endTime);
+    }
+
+    /**
+     * 查询在指定时间范围之内创建的数据
+     *
+     * @param entity 实体类对象
+     * @param since  开始时间
+     * @param until  结束时间
+     * @return 指定时间范围之内创建的对象
+     */
+    @Transactional(readOnly = true)
+    public List<T> findByCreateTimeBetween(T entity, Date since, Date until) {
+        String createDateField = ReflectUtils.getNameByAnnotation(entity, CreatedDate.class);
+        return this.findInTimeRange(entity, createDateField, since, until);
+    }
+
+    /**
+     * 查询在指定时间之后发生修改的数据
+     *
+     * @param entity    实体类对象
+     * @param startTime 开始时间
+     * @return 指定时间之后发生修改的对象
+     */
+    @Transactional(readOnly = true)
+    public List<T> findByUpdateTimeAfter(T entity, Date startTime) {
+        return this.findByUpdateTimeBetween(entity, startTime, null);
+    }
+
+    /**
+     * 查询在指定时间之前创建的数据
+     *
+     * @param entity  实体类对象
+     * @param endTime 结束时间
+     * @return 指定时间之前发生修改的对象
+     */
+    @Transactional(readOnly = true)
+    public List<T> findByUpdateTimeBefore(T entity, Date endTime) {
+        return this.findByUpdateTimeBetween(entity, null, endTime);
+    }
+
+    /**
+     * 查询在指定时间范围之内发生修改的数据
+     *
+     * @param entity 实体类对象
+     * @param since  开始时间
+     * @param until  结束时间
+     * @return 指定时间范围之内发生修改的对象
+     */
+    @Transactional(readOnly = true)
+    public List<T> findByUpdateTimeBetween(T entity, Date since, Date until) {
+        String createDateField = ReflectUtils.getNameByAnnotation(entity, LastModifiedDate.class);
+        return this.findInTimeRange(entity, createDateField, since, until);
+    }
+
+    /**
+     * 查询在指定时间范围之内的数据
+     *
+     * @param entity    实体类对象
+     * @param timeField 时间属性名称
+     * @param since     开始时间
+     * @param until     结束时间
+     * @return 指定时间范围之内发生修改的对象
+     */
+    @Transactional(readOnly = true)
+    protected List<T> findInTimeRange(T entity, String timeField, Date since, Date until) {
+        if (since == null && until == null) {
+            return Collections.emptyList();
+        }
+
+        Condition condition = new Condition(this.entityClass);
+        Condition.Criteria criteria = condition.createCriteria();
+        if (since != null) {
+            criteria.andGreaterThanOrEqualTo(timeField, since);
+        }
+        if (until != null) {
+            criteria.andLessThanOrEqualTo(timeField, until);
+        }
+
+        criteria.andAllEqualTo(entity);
+        return mapper.selectInRange(condition);
     }
 }

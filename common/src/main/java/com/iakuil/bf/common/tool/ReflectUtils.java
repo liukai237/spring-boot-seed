@@ -5,9 +5,48 @@ import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
+/**
+ * 反射工具类
+ *
+ * @author Kai
+ */
 @Slf4j
 public class ReflectUtils {
+    /**
+     * 通过反射,获得定义Class时声明的父类的范型参数的类型. 如public BookService extends BaseService<Book>
+     *
+     * @param clazz The class to introspect
+     * @return the first generic declaration, or <code>Object.class</code> if cannot be determined
+     */
+    public static Class getSuperClassGenericType(Class clazz) {
+        return getSuperClassGenericType(clazz, 0);
+    }
+
+    /**
+     * 通过反射,获得定义Class时声明的父类的范型参数的类型. 如public BookService extends BaseService<Book>
+     *
+     * @param clazz clazz The class to introspect
+     * @param index the Index of the generic ddeclaration,start from 0.
+     */
+    public static Class getSuperClassGenericType(Class clazz, int index)
+            throws IndexOutOfBoundsException {
+        Type genType = clazz.getGenericSuperclass();
+        if (!(genType instanceof ParameterizedType)) {
+            return Object.class;
+        }
+        Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
+        if (index >= params.length || index < 0) {
+            return Object.class;
+        }
+        if (!(params[index] instanceof Class)) {
+            return Object.class;
+        }
+        return (Class) params[index];
+    }
+
     public static boolean hasAnnotation(Object entity, Class annotation) {
         Field[] fields = entity.getClass().getDeclaredFields();
         for (Field field : fields) {
@@ -17,6 +56,17 @@ public class ReflectUtils {
         }
 
         return false;
+    }
+
+    public static String getNameByAnnotation(Object entity, Class annotation) {
+        Field[] fields = entity.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            if (AnnotationUtils.getAnnotation(field, annotation) != null) {
+                return field.getName();
+            }
+        }
+
+        return null;
     }
 
     public static Object getValueByAnnotation(Object entity, Class annotation) {

@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.Properties;
 
 /**
- * DB创建/修改时间字段自动填充
+ * 实体类创建/修改时间字段自动填充
  *
  * <p>自动填充创建/修改时间以等字段，支持批量操作，支持id回写。
  *
@@ -46,11 +46,11 @@ public class CreateAndUpdateTimeInterceptor implements Interceptor {
                 Collection dataList = (Collection) ((DefaultSqlSession.StrictMap) parameter).get("collection");
                 for (Object obj : dataList) {
                     handleCreateTime(obj);
-                    handlUpdateTime(obj);
+                    handleUpdateTime(obj);
                 }
             } else {
                 handleCreateTime(parameter);
-                handlUpdateTime(parameter);
+                handleUpdateTime(parameter);
             }
         } else {
             // do nothing
@@ -70,7 +70,7 @@ public class CreateAndUpdateTimeInterceptor implements Interceptor {
         }
     }
 
-    private void handlUpdateTime(Object obj) throws IllegalAccessException {
+    private void handleUpdateTime(Object obj) throws IllegalAccessException {
         Date currentDate = new Date();
         Field[] fields = obj.getClass().getDeclaredFields();
         for (Field field : fields) {
