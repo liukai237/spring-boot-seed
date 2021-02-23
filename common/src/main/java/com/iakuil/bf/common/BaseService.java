@@ -24,11 +24,12 @@ import java.util.stream.Collectors;
 /**
  * 通用Service基类
  *
- * <p>提供一些业务层常用的公用方法，统一处理乐观锁、逻辑删除、批量插入、saveOrUpdate模式以及按范围查询等。
+ * <p>提供一些业务层常用的公用方法，统一处理乐观锁、逻辑删除、批量插入以及saveOrUpdate等。
  * <p>不与Entity对应的Service无需继承此类。
- * <p>默认忽略所有null值，如有需要，请另行实现。
+ * <p>默认忽略所有null值。
  *
- * <p>PS.BaseService主要是为了弥补tkMapper的不足（借鉴了MyBatis Plus的一些思路），解决90%的单表CRUD场景，剩下的10%建议手写SQL，或者了解一下CQRS。
+ * <p>PS.BaseService主要是为了弥补tkMapper的不足（借鉴了MyBatis Plus的一些思路），解决80%的单表CRUD场景，剩下的20%建议手写SQL，或者尝试CQRS。
+ * <p>其中，按范围查询是试验功能，主要考虑到按时间范围查询的场景比较多。
  *
  * @param <T> 实体类型
  * @author Kai
@@ -456,7 +457,6 @@ public abstract class BaseService<T extends BaseEntity> {
         Condition condition = new Condition(this.entityClass);
         Condition.Criteria criteria = condition.createCriteria();
         criteria.andAllEqualTo(entity);
-
         for (RangeQuery range : ranges) {
             String field = range.getField();
             Object lower = range.getLower();

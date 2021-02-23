@@ -1,5 +1,6 @@
 package com.iakuil.bf.common.tool;
 
+import com.iakuil.bf.common.BaseEntity;
 import com.iakuil.bf.common.PageRequest;
 import com.iakuil.bf.common.Pageable;
 import com.iakuil.bf.common.constant.SysConstant;
@@ -18,6 +19,8 @@ import java.util.stream.Collectors;
 /**
  * 分页参数工具类
  *
+ * <p>用来新建可分页排序的查询对象，比如Entity和{@link Condition}
+ *
  * @author Kai
  */
 public class QueryBuilder {
@@ -32,6 +35,12 @@ public class QueryBuilder {
         return new QueryBuilder();
     }
 
+    public static QueryBuilder init(BaseEntity entity) {
+        QueryBuilder qb = new QueryBuilder();
+        qb.params = BeanMapUtils.beanToMap(entity);
+        return qb;
+    }
+
     public static QueryBuilder init(PageRequest<?> pq) {
         QueryBuilder qb = new QueryBuilder();
         qb.params = BeanMapUtils.beanToMap(pq.getFilter());
@@ -40,32 +49,33 @@ public class QueryBuilder {
         PageRequest.Sorting[] sorting = pq.getSorting();
         String orderBy;
         if (sorting != null) {
+            // 驼峰转下划线，逗号分隔
             orderBy = Arrays.stream(sorting)
                     .filter(item -> StringUtils.isNoneBlank(item.getField()))
                     .map(item -> Strings.toUnderlineCase(item.getField()) + Strings.SPACE + item.getOrder().toString())
                     .collect(Collectors.joining(Strings.COMMA));
-            qb.params.put("orderBy", orderBy);
+            qb.params.put(SysConstant.DEFAULT_SORT_FIELD, orderBy);
         }
         if (paging != null) {
             Integer pageSize = ObjectUtils.defaultIfNull(paging.getPageSize(), SysConstant.DEFAULT_PAGE_SIZE);
-            qb.params.put("pageSize", pageSize > SysConstant.MAX_PAGE_SIZE ? SysConstant.MAX_PAGE_SIZE : pageSize);
-            qb.params.put("pageNum", ObjectUtils.defaultIfNull(paging.getPageNum(), 1));
+            qb.params.put(SysConstant.DEFAULT_PAGE_SIZE_FIELD, pageSize > SysConstant.MAX_PAGE_SIZE ? SysConstant.MAX_PAGE_SIZE : pageSize);
+            qb.params.put(SysConstant.DEFAULT_PAGE_NUM_FIELD, ObjectUtils.defaultIfNull(paging.getPageNum(), 1));
         }
         return qb;
     }
 
     public QueryBuilder pageSize(Integer pageSize) {
-        this.params.put("pageSize", pageSize);
+        this.params.put(SysConstant.DEFAULT_PAGE_SIZE_FIELD, pageSize);
         return this;
     }
 
     public QueryBuilder pageNum(Integer pageNum) {
-        this.params.put("pageNum", pageNum);
+        this.params.put(SysConstant.DEFAULT_PAGE_NUM_FIELD, pageNum);
         return this;
     }
 
     public QueryBuilder orderBy(String orderBy) {
-        this.params.put("pageNum", orderBy);
+        this.params.put(SysConstant.DEFAULT_SORT_FIELD, orderBy);
         return this;
     }
 
@@ -77,9 +87,9 @@ public class QueryBuilder {
         Condition condition = new Condition(clazz);
         Condition.Criteria criteria = condition.createCriteria();
         criteria.andAllEqualTo(MapBuilder.init(this.params).build());
-        condition.setPageNum(MapUtils.getInteger(this.params, "pageNum"));
-        condition.setPageSize(MapUtils.getInteger(this.params, "pageSize"));
-        condition.setOrderByClause(MapUtils.getString(this.params, "orderBy"));
+        condition.setPageNum(MapUtils.getInteger(this.params, SysConstant.DEFAULT_PAGE_NUM_FIELD));
+        condition.setPageSize(MapUtils.getInteger(this.params, SysConstant.DEFAULT_PAGE_SIZE_FIELD));
+        condition.setOrderByClause(MapUtils.getString(this.params, SysConstant.DEFAULT_SORT_FIELD));
         return condition;
     }
 

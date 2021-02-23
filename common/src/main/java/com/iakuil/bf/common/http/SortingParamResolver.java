@@ -21,12 +21,12 @@ public class SortingParamResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
         String pName = methodParameter.getParameterName();
-        return SysConstant.DEFAULT_SORT_FIELD.equals(pName);
+        return SysConstant.DEFAULT_SORT_PARAM.equals(pName);
     }
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
-        Object sortObj = nativeWebRequest.getParameterMap().getOrDefault(SysConstant.DEFAULT_SORT_FIELD, ArrayUtils.EMPTY_STRING_ARRAY);
+        Object sortObj = nativeWebRequest.getParameterMap().getOrDefault(SysConstant.DEFAULT_SORT_PARAM, ArrayUtils.EMPTY_STRING_ARRAY);
         String sort = null;
         if (sortObj != null) {
             sort = Strings.parseOrderBy(Strings.toUnderlineCase(((String[]) sortObj)[0]));

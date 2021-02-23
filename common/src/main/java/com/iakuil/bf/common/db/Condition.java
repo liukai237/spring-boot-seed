@@ -39,12 +39,16 @@ public class Condition extends Example implements IPage {
         return pageSize;
     }
 
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
     @Override
     public String getOrderBy() {
         return super.orderByClause;
     }
 
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
+    public void setOrderBy(String orderBy) {
+        super.setOrderByClause(orderBy);
     }
 }
