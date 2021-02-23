@@ -1,6 +1,5 @@
 package com.iakuil.bf.common;
 
-import com.github.pagehelper.PageHelper;
 import com.iakuil.bf.common.db.Condition;
 import com.iakuil.bf.common.db.CrudMapper;
 import com.iakuil.bf.common.exception.BusinessException;
@@ -113,10 +112,6 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public PageData<T> page(T entity, RangeQuery... ranges) {
-        if (ranges != null && entity.getPageSize() != null) {
-            // workaround，范围查询不支持IPage接口，需要手动分页
-            PageHelper.startPage(entity.getPageNum(), entity.getPageSize());
-        }
         return new PageData<>(this.findByCondition(entity, ranges));
     }
 
@@ -132,9 +127,6 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> PageData<R> page(T entity, Function<? super T, ? extends R> converter, RangeQuery... ranges) {
-        if (ranges != null && entity.getPageSize() != null) {
-            PageHelper.startPage(entity.getPageNum(), entity.getPageSize());
-        }
         return new PageData<>(this.findByCondition(entity, ranges), converter);
     }
 
@@ -483,6 +475,8 @@ public abstract class BaseService<T extends BaseEntity> {
                     throw new BusinessException("Invalid range operator: " + operator);
             }
 
+            condition.setPageNum(entity.getPageNum());
+            condition.setPageSize(entity.getPageSize());
             condition.setOrderByClause(entity.getOrderBy());
         }
         return condition;

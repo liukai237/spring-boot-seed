@@ -79,6 +79,11 @@ public class QueryBuilder {
         return this;
     }
 
+    public QueryBuilder include(String fields) {
+        this.params.put(SysConstant.DEFAULT_INCLUDED_PARAM, fields);
+        return this;
+    }
+
     public Map<String, Object> asMap() {
         return this.params;
     }
@@ -90,6 +95,7 @@ public class QueryBuilder {
         condition.setPageNum(MapUtils.getInteger(this.params, SysConstant.DEFAULT_PAGE_NUM_FIELD));
         condition.setPageSize(MapUtils.getInteger(this.params, SysConstant.DEFAULT_PAGE_SIZE_FIELD));
         condition.setOrderByClause(MapUtils.getString(this.params, SysConstant.DEFAULT_SORT_FIELD));
+        condition.setFields(MapUtils.getString(this.params, SysConstant.DEFAULT_INCLUDED_PARAM));
         return condition;
     }
 

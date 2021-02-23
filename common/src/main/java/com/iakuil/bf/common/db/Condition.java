@@ -1,6 +1,7 @@
 package com.iakuil.bf.common.db;
 
 import com.github.pagehelper.IPage;
+import org.mapstruct.ap.internal.util.Collections;
 import tk.mybatis.mapper.entity.Example;
 
 /**
@@ -9,6 +10,7 @@ import tk.mybatis.mapper.entity.Example;
  * @author Kai
  */
 public class Condition extends Example implements IPage {
+
     private Integer pageNum;
 
     private Integer pageSize;
@@ -50,5 +52,13 @@ public class Condition extends Example implements IPage {
 
     public void setOrderBy(String orderBy) {
         super.setOrderByClause(orderBy);
+    }
+
+    public String getFields() {
+        return String.join(",", super.selectColumns);
+    }
+
+    public void setFields(String fields) {
+        super.selectColumns = Collections.asSet(fields.split(","));
     }
 }
