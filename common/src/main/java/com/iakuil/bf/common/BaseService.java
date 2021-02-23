@@ -1,6 +1,7 @@
 package com.iakuil.bf.common;
 
 import com.github.pagehelper.PageHelper;
+import com.iakuil.bf.common.db.Condition;
 import com.iakuil.bf.common.db.CrudMapper;
 import com.iakuil.bf.common.exception.BusinessException;
 import com.iakuil.bf.common.tool.ReflectUtils;
@@ -12,7 +13,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.annotation.Version;
-import tk.mybatis.mapper.entity.Condition;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
@@ -435,7 +435,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     protected List<T> findByCondition(T entity, RangeQuery... ranges) {
-        return ranges == null ? mapper.select(entity) : mapper.selectInRange(getCondition(entity, ranges));
+        return ranges == null ? mapper.select(entity) : mapper.selectByCondition(getCondition(entity, ranges));
     }
 
     /**
@@ -448,12 +448,11 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     protected <R> List<R> findByCondition(T entity, Function<? super T, ? extends R> converter, RangeQuery... ranges) {
-        List<T> results = ranges == null ? mapper.select(entity) : mapper.selectInRange(getCondition(entity, ranges));
+        List<T> results = ranges == null ? mapper.select(entity) : mapper.selectByCondition(getCondition(entity, ranges));
         return results.stream().map(converter).collect(Collectors.toList());
     }
 
     private Condition getCondition(T entity, RangeQuery... ranges) {
-        // Condition仅支持等于、大于等于和小于等于，其余条件会被忽略。
         Condition condition = new Condition(this.entityClass);
         Condition.Criteria criteria = condition.createCriteria();
         criteria.andAllEqualTo(entity);

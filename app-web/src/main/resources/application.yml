@@ -46,7 +46,6 @@ mapper:
   not-empty: true
   identity: mysql
   use-simple-type: false
-  supportMethodsArguments: true
 
 pagehelper:
   helperDialect: mysql

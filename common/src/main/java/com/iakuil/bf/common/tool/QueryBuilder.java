@@ -3,7 +3,10 @@ package com.iakuil.bf.common.tool;
 import com.iakuil.bf.common.PageRequest;
 import com.iakuil.bf.common.Pageable;
 import com.iakuil.bf.common.constant.SysConstant;
+import com.iakuil.bf.common.db.Condition;
 import com.iakuil.toolkit.BeanMapUtils;
+import com.iakuil.toolkit.MapBuilder;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -52,7 +55,7 @@ public class QueryBuilder {
     }
 
     public QueryBuilder pageSize(Integer pageSize) {
-        this.params.put("pageNum", pageSize);
+        this.params.put("pageSize", pageSize);
         return this;
     }
 
@@ -68,6 +71,16 @@ public class QueryBuilder {
 
     public Map<String, Object> asMap() {
         return this.params;
+    }
+
+    public Condition asCondition(Class<?> clazz) {
+        Condition condition = new Condition(clazz);
+        Condition.Criteria criteria = condition.createCriteria();
+        criteria.andAllEqualTo(MapBuilder.init(this.params).build());
+        condition.setPageNum(MapUtils.getInteger(this.params, "pageNum"));
+        condition.setPageSize(MapUtils.getInteger(this.params, "pageSize"));
+        condition.setOrderByClause(MapUtils.getString(this.params, "orderBy"));
+        return condition;
     }
 
     public <R extends Pageable> R build(Class<R> clazz) {
