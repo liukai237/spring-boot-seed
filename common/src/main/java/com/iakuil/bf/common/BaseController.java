@@ -1,6 +1,14 @@
 package com.iakuil.bf.common;
 
 import com.iakuil.bf.common.constant.RespCode;
+import com.iakuil.bf.common.constant.SysConstant;
+import com.iakuil.bf.common.tool.Strings;
+import com.iakuil.toolkit.BeanUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * 视图层基类
@@ -46,5 +54,29 @@ public abstract class BaseController {
 
     public <T> Resp<T> done(boolean result) {
         return result ? ok() : fail();
+    }
+
+    /**
+     * 转换为Entity对象，并填充分页排序属性
+     */
+    protected <R extends Pageable> R toEntity(PageRequest<?> pq, Class<R> clazz) {
+        R params = (R) BeanUtils.copy(pq.getFilter(), clazz);
+        PageRequest.Paging paging = pq.getPaging();
+        PageRequest.Sorting[] sorting = pq.getSorting();
+        String orderBy;
+        if (sorting != null) {
+            // 驼峰转下划线，逗号分隔
+            orderBy = Arrays.stream(sorting)
+                    .filter(item -> StringUtils.isNoneBlank(item.getField()))
+                    .map(item -> Strings.toUnderlineCase(item.getField()) + Strings.SPACE + item.getOrder().toString())
+                    .collect(Collectors.joining(Strings.COMMA));
+            params.setOrderBy(orderBy);
+        }
+        if (paging != null) {
+            Integer pageSize = ObjectUtils.defaultIfNull(paging.getPageSize(), SysConstant.DEFAULT_PAGE_SIZE);
+            params.setPageSize(pageSize > SysConstant.MAX_PAGE_SIZE ? SysConstant.MAX_PAGE_SIZE : pageSize);
+            params.setPageNum(ObjectUtils.defaultIfNull(paging.getPageNum(), 1));
+        }
+        return params;
     }
 }
