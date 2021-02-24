@@ -2,20 +2,16 @@ package com.iakuil.bf.common;
 
 import com.iakuil.bf.common.db.Condition;
 import com.iakuil.bf.common.db.CrudMapper;
-import com.iakuil.bf.common.exception.BusinessException;
 import com.iakuil.bf.common.tool.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.annotation.Version;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -37,7 +33,7 @@ import java.util.stream.Collectors;
 @Service
 public abstract class BaseService<T extends BaseEntity> {
 
-    private Class<T> entityClass;
+    Class<T> entityClass;
 
     @Autowired
     private CrudMapper<T> mapper;
@@ -57,7 +53,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public List<T> list(T entity) {
-        return this.findByCondition(entity);
+        return mapper.select(entity);
     }
 
     /**
@@ -71,7 +67,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> List<R> list(T entity, Function<? super T, ? extends R> converter) {
-        return this.findByCondition(entity, converter);
+        return this.list(entity).stream().map(converter).collect(Collectors.toList());
     }
 
     /**
@@ -84,7 +80,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public PageData<T> page(T entity) {
-        return new PageData<>(this.findByCondition(entity));
+        return new PageData<>(this.list(entity));
     }
 
     /**
@@ -98,36 +94,34 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> PageData<R> page(T entity, Function<? super T, ? extends R> converter) {
-        return new PageData<>(this.findByCondition(entity, converter));
+        return new PageData<>(this.list(entity, converter));
     }
 
     /**
-     * 范围条件分页查询（试验功能）
+     * Condition条件查询（试验功能）
      *
      * <p>同时返回分页信息
      *
-     * @param entity 实体类对象
-     * @param ranges 范围查询参数
+     * @param condition Condition查询条件
      * @return 带分页信息的实体类集合
      */
     @Transactional(readOnly = true)
-    public PageData<T> page(T entity, RangeQuery... ranges) {
-        return new PageData<>(this.findByCondition(entity, ranges));
+    public PageData<T> page(Condition condition) {
+        return new PageData<>(this.findByCondition(condition));
     }
 
     /**
-     * 范围条件分页查询（试验功能）
+     * Condition条件查询（试验功能）
      *
      * <p>同时返回分页信息
      *
-     * @param entity    实体类对象
+     * @param condition Condition查询条件
      * @param converter Entity/DTO转换器
-     * @param ranges    范围查询参数
      * @return 带分页信息的DTO集合
      */
     @Transactional(readOnly = true)
-    public <R> PageData<R> page(T entity, Function<? super T, ? extends R> converter, RangeQuery... ranges) {
-        return new PageData<>(this.findByCondition(entity, ranges), converter);
+    public <R> PageData<R> page(Condition condition, Function<? super T, ? extends R> converter) {
+        return new PageData<>(this.findByCondition(condition), converter);
     }
 
     /**
@@ -342,143 +336,28 @@ public abstract class BaseService<T extends BaseEntity> {
     }
 
     /**
-     * 查询在指定时间之后创建的数据
-     *
-     * @param entity    实体类对象
-     * @param startTime 开始时间
-     * @return 指定时间之后创建的对象
-     */
-    @Transactional(readOnly = true)
-    public List<T> findByCreateTimeAfter(T entity, Date startTime) {
-        return this.findByCreateTimeBetween(entity, startTime, null);
-    }
-
-    /**
-     * 查询在指定时间之前创建的数据
-     *
-     * @param entity  实体类对象
-     * @param endTime 结束时间
-     * @return 指定时间之前创建的对象
-     */
-    @Transactional(readOnly = true)
-    public List<T> findByCreateTimeBefore(T entity, Date endTime) {
-        return this.findByCreateTimeBetween(entity, null, endTime);
-    }
-
-    /**
-     * 查询在指定时间范围之内创建的数据
-     *
-     * @param entity 实体类对象
-     * @param since  开始时间
-     * @param until  结束时间
-     * @return 指定时间范围之内创建的对象
-     */
-    @Transactional(readOnly = true)
-    public List<T> findByCreateTimeBetween(T entity, Date since, Date until) {
-        String createDateField = ReflectUtils.getNameByAnnotation(entity, CreatedDate.class);
-        return this.findByCondition(entity, new RangeQuery(createDateField, since, until, RangeQuery.Operator.GTE_AND_LTE));
-    }
-
-    /**
-     * 查询在指定时间之后发生修改的数据
-     *
-     * @param entity    实体类对象
-     * @param startTime 开始时间
-     * @return 指定时间之后发生修改的对象
-     */
-    @Transactional(readOnly = true)
-    public List<T> findByUpdateTimeAfter(T entity, Date startTime) {
-        return this.findByUpdateTimeBetween(entity, startTime, null);
-    }
-
-    /**
-     * 查询在指定时间之前创建的数据
-     *
-     * @param entity  实体类对象
-     * @param endTime 结束时间
-     * @return 指定时间之前发生修改的对象
-     */
-    @Transactional(readOnly = true)
-    public List<T> findByUpdateTimeBefore(T entity, Date endTime) {
-        return this.findByUpdateTimeBetween(entity, null, endTime);
-    }
-
-    /**
-     * 查询在指定时间范围之内发生修改的数据
-     *
-     * @param entity 实体类对象
-     * @param since  开始时间
-     * @param until  结束时间
-     * @return 指定时间范围之内发生修改的对象
-     */
-    @Transactional(readOnly = true)
-    public List<T> findByUpdateTimeBetween(T entity, Date since, Date until) {
-        String createDateField = ReflectUtils.getNameByAnnotation(entity, LastModifiedDate.class);
-        return this.findByCondition(entity, new RangeQuery(createDateField, since, until, RangeQuery.Operator.GTE_AND_LTE));
-    }
-
-    /**
-     * 查询在指定条件和范围之内的数据
+     * Condition条件查询（试验功能）
      *
      * <p>在原有通用查询方法基础上增加范围查询，大于或等于下限且小于或等于上限。
      *
-     * @param entity 实体类对象
-     * @param ranges 范围查询参数
+     * @param condition Condition查询条件
      * @return 实体类对象列表
      */
     @Transactional(readOnly = true)
-    protected List<T> findByCondition(T entity, RangeQuery... ranges) {
-        return ranges == null ? mapper.select(entity) : mapper.selectByCondition(getCondition(entity, ranges));
+    public List<T> findByCondition(Condition condition) {
+        return mapper.selectByCondition(condition);
     }
 
     /**
-     * 查询在指定条件和范围之内的数据
+     * Condition条件查询（试验功能）
      *
-     * @param entity    实体类对象
-     * @param ranges    范围查询参数
+     * @param condition Condition查询条件
      * @param converter Entity/DTO转换器
      * @return DTO列表
      */
     @Transactional(readOnly = true)
-    protected <R> List<R> findByCondition(T entity, Function<? super T, ? extends R> converter, RangeQuery... ranges) {
-        List<T> results = ranges == null ? mapper.select(entity) : mapper.selectByCondition(getCondition(entity, ranges));
+    public <R> List<R> findByCondition(Condition condition, Function<? super T, ? extends R> converter) {
+        List<T> results = mapper.selectByCondition(condition);
         return results.stream().map(converter).collect(Collectors.toList());
-    }
-
-    private Condition getCondition(T entity, RangeQuery... ranges) {
-        Condition condition = new Condition(this.entityClass);
-        Condition.Criteria criteria = condition.createCriteria();
-        criteria.andAllEqualTo(entity);
-        for (RangeQuery range : ranges) {
-            String field = range.getField();
-            Object lower = range.getLower();
-            Object upper = range.getUpper();
-            RangeQuery.Operator operator = ObjectUtils.defaultIfNull(range.getOperator(), RangeQuery.Operator.GT_AND_LT);
-            switch (operator) {
-                case GT_AND_LT:
-                    criteria.andGreaterThan(field, lower);
-                    criteria.andLessThan(field, upper);
-                    break;
-                case GTE_AND_LTE:
-                    criteria.andGreaterThanOrEqualTo(field, lower);
-                    criteria.andLessThanOrEqualTo(field, upper);
-                    break;
-                case GT_AND_LTE:
-                    criteria.andGreaterThan(field, lower);
-                    criteria.andLessThanOrEqualTo(field, upper);
-                    break;
-                case GTE_AND_LT:
-                    criteria.andGreaterThanOrEqualTo(field, lower);
-                    criteria.andLessThan(field, upper);
-                    break;
-                default:
-                    throw new BusinessException("Invalid range operator: " + operator);
-            }
-
-            condition.setPageNum(entity.getPageNum());
-            condition.setPageSize(entity.getPageSize());
-            condition.setOrderByClause(entity.getOrderBy());
-        }
-        return condition;
     }
 }

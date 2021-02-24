@@ -5,8 +5,12 @@ import com.iakuil.bf.common.db.Condition;
 import com.iakuil.toolkit.BeanMapUtils;
 import com.iakuil.toolkit.MapBuilder;
 
+import java.util.Map;
+
 /**
  * Condition查询条件构造器
+ *
+ * <p>建议使用此工具类生成Condition，以保证Example复杂度可控。
  *
  * @author Kai
  */
@@ -26,10 +30,22 @@ public class ConditionBuilder {
         return init(entity, entity.getClass());
     }
 
+    public static ConditionBuilder init(Class<? extends BaseEntity> entityClass) {
+        ConditionBuilder builder = new ConditionBuilder(entityClass);
+        // workaround，没有criteria时会多出一个and
+        builder.criteria.andIsNotNull("id");
+        return builder;
+    }
+
     public static ConditionBuilder init(Object param, Class<? extends BaseEntity> entityClass) {
         ConditionBuilder qb = new ConditionBuilder(entityClass);
+        Map<String, Object> paramMap = MapBuilder.init(BeanMapUtils.beanToMap(param, true)).build();
         // 只填充非空的属性作为查询条件
-        qb.criteria.andAllEqualTo(MapBuilder.init(BeanMapUtils.beanToMap(param, true)).build());
+        if (paramMap.isEmpty()) {
+            qb.criteria.andIsNotNull("id");
+        } else {
+            qb.criteria.andAllEqualTo(paramMap);
+        }
         return qb;
     }
 

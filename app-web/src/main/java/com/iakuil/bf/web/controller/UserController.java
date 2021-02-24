@@ -4,7 +4,8 @@ import com.iakuil.bf.common.BaseController;
 import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.common.PageRequest;
 import com.iakuil.bf.common.Resp;
-import com.iakuil.bf.common.tool.QueryBuilder;
+import com.iakuil.bf.common.db.Condition;
+import com.iakuil.bf.common.tool.ConditionBuilder;
 import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.UserService;
 import com.iakuil.bf.service.converter.UserConverter;
@@ -15,7 +16,6 @@ import com.iakuil.bf.web.dto.UserQueryParam;
 import com.iakuil.toolkit.BeanUtils;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -42,18 +42,25 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1", dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "pageSize", value = "每页显示数量", defaultValue = "10", dataType = "Long", paramType = "query", example = "10"),
             @ApiImplicitParam(name = "sort", value = "排序规则", defaultValue = "createTime-", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "fields", value = "需求字段", dataType = "string", paramType = "query", example = "id,createTime"),
     })
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<PageData<UserDetailDto>> queryAllUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                                                       @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                                       @RequestParam(required = false, defaultValue = "createTime-") String sort) {
-        return ok(userService.findWithPage(pageNum, pageSize, sort));
+    public Resp<PageData<User>> queryAllUsers(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                                              @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                              @RequestParam(required = false, defaultValue = "createTime-") String sort,
+                                              @RequestParam String[] fields) {
+        return ok(userService.page(ConditionBuilder.init(User.class)
+                .pageNum(pageNum)
+                .pageSize(pageSize)
+                .orderByClause(sort)
+                .include(fields)
+                .build()));
     }
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表，演示复杂分页排序。")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resp<PageData<UserDetailDto>> queryUsersWithPage(@RequestBody PageRequest<UserQueryParam> req) {
-        return ok(userService.page(QueryBuilder.init(req).build(User.class), UserConverter.INSTANCE::toDto));
+        return ok(userService.page(toQuery(req, User.class), UserConverter.INSTANCE::toDto));
     }
 
     @ApiOperation(value = "用户注册", notes = "新增用户")
