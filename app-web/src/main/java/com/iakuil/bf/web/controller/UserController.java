@@ -5,7 +5,6 @@ import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.common.PageRequest;
 import com.iakuil.bf.common.Resp;
 import com.iakuil.bf.common.db.Condition;
-import com.iakuil.bf.common.tool.ConditionBuilder;
 import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.UserService;
 import com.iakuil.bf.service.converter.UserConverter;
@@ -49,7 +48,7 @@ public class UserController extends BaseController {
                                               @RequestParam(required = false, defaultValue = "10") Integer pageSize,
                                               @RequestParam(required = false, defaultValue = "createTime-") String sort,
                                               @RequestParam String[] fields) {
-        return ok(userService.page(ConditionBuilder.init(User.class)
+        return ok(userService.page(Condition.Builder.init(User.class)
                 .pageNum(pageNum)
                 .pageSize(pageSize)
                 .orderByClause(sort)

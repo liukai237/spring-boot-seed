@@ -3,7 +3,6 @@ package com.iakuil.bf.common;
 import com.iakuil.bf.common.constant.RespCode;
 import com.iakuil.bf.common.constant.SysConstant;
 import com.iakuil.bf.common.db.Condition;
-import com.iakuil.bf.common.tool.ConditionBuilder;
 import com.iakuil.bf.common.tool.Strings;
 import com.iakuil.toolkit.BeanUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -91,7 +90,7 @@ public abstract class BaseController {
      */
     protected <R extends BaseEntity> Condition toCondition(PageRequest<?> pq, Class<R> clazz) {
         // 将非空的查询参数复制到Entity对象。
-        ConditionBuilder cb = ConditionBuilder.init(pq.getFilter(), clazz);
+        Condition.Builder cb = Condition.Builder.init(pq.getFilter(), clazz);
         if (pq.getPaging() != null) {
             cb.pageNum(pq.getPaging().getPageNum()).pageSize(pq.getPaging().getPageSize());
         }

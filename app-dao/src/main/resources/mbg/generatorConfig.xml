@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <properties resource="generatorConfig.properties" />
+    <properties resource="mbg/generatorConfig.properties" />
 
     <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
         <property name="javaFileEncoding" value="UTF-8"/>
@@ -52,7 +52,7 @@
         </javaClientGenerator>
 
         <!-- 表配置 -->
-        <table schema="harry" tableName="t_%" enableCountByExample="false" enableUpdateByExample="false"
+        <table schema="harry" tableName="t_test" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false">
             <domainObjectRenamingRule searchString="^T" replaceString=""/>
