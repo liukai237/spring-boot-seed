@@ -59,6 +59,9 @@ public class CreateAndUpdateTimeInterceptor implements Interceptor {
     }
 
     private void handleCreateTime(Object obj) throws IllegalAccessException {
+        if (obj == null) {
+            return;
+        }
         Date currentDate = new Date();
         Field[] fields = obj.getClass().getDeclaredFields();
         for (Field field : fields) {
@@ -71,6 +74,9 @@ public class CreateAndUpdateTimeInterceptor implements Interceptor {
     }
 
     private void handleUpdateTime(Object obj) throws IllegalAccessException {
+        if (obj == null) {
+            return;
+        }
         Date currentDate = new Date();
         Field[] fields = obj.getClass().getDeclaredFields();
         for (Field field : fields) {

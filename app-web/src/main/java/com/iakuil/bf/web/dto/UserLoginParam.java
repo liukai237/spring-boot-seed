@@ -1,4 +1,4 @@
-package com.iakuil.bf.service.dto;
+package com.iakuil.bf.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "LoginParam", description = "用户登录参数")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LoginParam {
+public class UserLoginParam {
 
     @ApiModelProperty(name = "username", value = "用户名，也可以是手机、email或者微信openId。", required = true, example = "13400000000")
     private String username;

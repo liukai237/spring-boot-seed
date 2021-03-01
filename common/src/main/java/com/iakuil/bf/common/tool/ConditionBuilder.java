@@ -84,6 +84,11 @@ public class ConditionBuilder {
         return this;
     }
 
+    public ConditionBuilder like(String field, String keyword) {
+        this.criteria.andLike(field, keyword + "%");
+        return this;
+    }
+
     public ConditionBuilder orderByClause(String orderByClause) {
         // 注意：此处是a asc, b desc形式的片段
         this.condition.setOrderByClause(orderByClause);
