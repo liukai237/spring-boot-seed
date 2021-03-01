@@ -1,4 +1,4 @@
-package com.iakuil.bf.web.dto;
+package com.iakuil.bf.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iakuil.bf.common.constant.Gender;
@@ -16,8 +16,8 @@ import java.util.Date;
 
 @Getter
 @Setter
-@ApiModel(value = "UserEditParam", description = "修改用户信息参数")
-public class UserEditParam {
+@ApiModel(value = "UserEdit", description = "修改用户信息参数")
+public class UserEdit {
 
     @NotNull(message = "用户ID不能为空！")
     @ApiModelProperty(name = "id", value = "用户ID")

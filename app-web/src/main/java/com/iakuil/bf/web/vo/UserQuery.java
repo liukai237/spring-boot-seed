@@ -1,4 +1,4 @@
-package com.iakuil.bf.web.dto;
+package com.iakuil.bf.web.vo;
 
 import com.iakuil.bf.common.constant.Gender;
 import io.swagger.annotations.ApiModel;
@@ -8,8 +8,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel(value = "UserQueryParam", description = "用户查询参数")
-public class UserQueryParam {
+@ApiModel(value = "UserQuery", description = "用户查询参数")
+public class UserQuery {
 
     @ApiModelProperty(name = "userId", value = "用户ID")
     private Long id;

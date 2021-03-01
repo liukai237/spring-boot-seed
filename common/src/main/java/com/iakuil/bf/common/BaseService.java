@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.annotation.Version;
 
-import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
  * <p>默认忽略所有null值。
  *
  * <p>PS.BaseService主要是为了弥补tkMapper的不足（借鉴了MyBatis Plus的一些思路），解决80%的单表CRUD场景，剩下的20%建议手写SQL，或者尝试CQRS。
- * <p>其中，按范围查询是试验功能，主要考虑到按时间范围查询的场景比较多。
+ * <p>考虑到按时间范围查询的场景比较多，引入了{@code Example}对象查询。
  *
  * @param <T> 实体类型
  * @author Kai
@@ -33,15 +32,8 @@ import java.util.stream.Collectors;
 @Service
 public abstract class BaseService<T extends BaseEntity> {
 
-    Class<T> entityClass;
-
     @Autowired
     private CrudMapper<T> mapper;
-
-    @PostConstruct
-    private void init() {
-        this.entityClass = ReflectUtils.getSuperClassGenericType(getClass());
-    }
 
     /**
      * 将实体类作为查询条件进行查询
@@ -345,7 +337,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public List<T> findByCondition(Condition condition) {
-        return mapper.selectByCondition(condition);
+        return mapper.selectByExample(condition);
     }
 
     /**
@@ -357,7 +349,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> List<R> findByCondition(Condition condition, Function<? super T, ? extends R> converter) {
-        List<T> results = mapper.selectByCondition(condition);
+        List<T> results = mapper.selectByExample(condition);
         return results.stream().map(converter).collect(Collectors.toList());
     }
 }

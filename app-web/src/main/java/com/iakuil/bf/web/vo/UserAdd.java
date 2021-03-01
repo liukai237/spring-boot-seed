@@ -1,4 +1,4 @@
-package com.iakuil.bf.web.dto;
+package com.iakuil.bf.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,9 +14,9 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@ApiModel(value = "UserAddParam", description = "用户注册参数")
+@ApiModel(value = "UserAdd", description = "用户注册参数")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserAddParam {
+public class UserAdd {
 
     /**
      * 三大运营商号码均可验证(不含卫星通信1349)

@@ -9,9 +9,9 @@ import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.UserService;
 import com.iakuil.bf.service.converter.UserConverter;
 import com.iakuil.bf.service.dto.UserDetailDto;
-import com.iakuil.bf.web.dto.UserAddParam;
-import com.iakuil.bf.web.dto.UserEditParam;
-import com.iakuil.bf.web.dto.UserQueryParam;
+import com.iakuil.bf.web.vo.UserAdd;
+import com.iakuil.bf.web.vo.UserEdit;
+import com.iakuil.bf.web.vo.UserQuery;
 import com.iakuil.toolkit.BeanUtils;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -56,16 +56,16 @@ public class UserController extends BaseController {
                 .build()));
     }
 
-    @ApiOperation(value = "查询用户列表", notes = "查询用户列表，演示复杂分页排序。")
+    @ApiOperation(value = "查询用户列表", notes = "查询用户列表，演示分页排序及条件查询。")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<PageData<UserDetailDto>> queryUsersWithPage(@RequestBody PageRequest<UserQueryParam> req) {
+    public Resp<PageData<UserDetailDto>> queryUsersWithPage(@Valid @RequestBody PageRequest<UserQuery> req) {
         return ok(userService.page(toQuery(req, User.class), UserConverter.INSTANCE::toDto));
     }
 
     @ApiOperation(value = "用户注册", notes = "新增用户")
     @PostMapping(value = "/reg", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody UserAddParam userInfo) {
+    public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody UserAdd userInfo) {
         User user = new User();
         user.setTel(userInfo.getTel());
         user.setPasswdHash(userInfo.getPassword());
@@ -74,7 +74,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "用户信息变更", notes = "修改用户信息")
     @PostMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<?> doChange(@ApiParam(value = "用户信息", required = true) @Valid @RequestBody UserEditParam basicInfo) {
+    public Resp<?> doChange(@ApiParam(value = "用户信息", required = true) @Valid @RequestBody UserEdit basicInfo) {
         return done(userService.modifyWithVersion(BeanUtils.copy(basicInfo, User.class)));
     }
 

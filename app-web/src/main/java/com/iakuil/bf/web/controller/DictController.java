@@ -9,7 +9,7 @@ import com.iakuil.bf.dao.entity.Dict;
 import com.iakuil.bf.service.DictService;
 import com.iakuil.bf.service.converter.DictConverter;
 import com.iakuil.bf.service.dto.DictDto;
-import com.iakuil.bf.web.dto.DictQueryParam;
+import com.iakuil.bf.web.vo.DictQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class DictController extends BaseController {
 
     @ApiOperation(value = "分页查询数据字典", notes = "分页查询数据字典数据。")
     @PostMapping(value = "/listWithPage", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resp<PageData<DictDto>> listWithPage(@RequestBody PageRequest<DictQueryParam> param) {
+    public Resp<PageData<DictDto>> listWithPage(@RequestBody PageRequest<DictQuery> param) {
         return ok(dictService.page(Condition.Builder.init(param, Dict.class).build(), DictConverter.INSTANCE::toDto));
     }
 

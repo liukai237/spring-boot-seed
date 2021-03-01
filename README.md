@@ -1,4 +1,4 @@
-![xxx](https://repository-images.githubusercontent.com/168498776/44575b00-3555-11eb-8591-5f432aa8fcb2)
+![logo](https://repository-images.githubusercontent.com/168498776/44575b00-3555-11eb-8591-5f432aa8fcb2)
 
 # 基于Spring Boot 2.X的简易脚手架项目
 基于SpringBoot、通用Mapper（tkMapper）与PageHelper的深度定制版本。
@@ -33,14 +33,11 @@
 ## 应用分层
 |目录|说明|备注|
 |---|---|---|
-|app-web|Controller层+Query|MVC|
-|app-biz|Service层+DTO|主要用于处理业务逻辑。|
-|app-dao|DAO层+Entity|主要用于与数据库交互。|
-|common|通用工具|包括工具类、枚举、各种POJO等|
+|app-web|Controller层+Query|提供接口、基础数据校验以及VO封装|
+|app-biz|Service层+DTO|处理业务逻辑，DTO封装（主要是outDTO，inDTO一般直接使用Entity或者Example）|
+|app-dao|DAO层+Entity|ORM框架，Entity封装。|
+|common|通用工具|包括工具类、枚举、各种常量等|
 |midware|中间件|包括Redis（必选）、RabbitMQ等（可选）常用中间件|
 |monitor|Spring Boot Admin|监控与日志（可选）|
-
-## 致谢
-* 本框架的灵感来源：[MyBatis最佳实践](https://blog.csdn.net/zollty/article/details/86143544)
 
 <sub>Copyright (c) 2020 iakuil.com</sub>
