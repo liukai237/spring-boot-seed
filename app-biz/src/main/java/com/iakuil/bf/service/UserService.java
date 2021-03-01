@@ -1,14 +1,10 @@
 package com.iakuil.bf.service;
 
-import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.BaseService;
-import com.iakuil.bf.common.PageData;
 import com.iakuil.bf.dao.*;
 import com.iakuil.bf.dao.entity.*;
-import com.iakuil.bf.service.converter.UserConverter;
-import com.iakuil.bf.service.dto.UserDetailDto;
 import com.iakuil.toolkit.HashIdUtils;
 import com.iakuil.toolkit.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
@@ -40,18 +36,12 @@ public class UserService extends BaseService<User> {
         this.userRoleMapper = userRoleMapper;
     }
 
-    @Transactional(readOnly = true)
-    public PageData<UserDetailDto> findWithPage(Integer pageNum, Integer pageSize, String orderBy) {
-        // 经典的PageHelper分页方式仍然可以使用。
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        return new PageData<>(userMapper.selectAll(), UserConverter.INSTANCE::toDto);
-    }
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean add(User user) {
+        // 使用HashIds生成唯一username
         String username = user.getUsername();
-        user.setUsername(StringUtils.defaultString(username, HashIdUtils.encrypt(System.currentTimeMillis()))); // 使用HashIds生成唯一username
+        user.setUsername(StringUtils.defaultString(username, HashIdUtils.encrypt(System.currentTimeMillis())));
 
         String pwdHash = null;
         try {
@@ -61,7 +51,7 @@ public class UserService extends BaseService<User> {
         }
         log.debug("Encrypted passwd: {}", pwdHash);
         user.setPasswdHash(pwdHash);
-        return userMapper.insertSelective(user) > 0;
+        return super.add(user);
     }
 
     @Transactional(readOnly = true)

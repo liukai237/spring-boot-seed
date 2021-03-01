@@ -133,6 +133,11 @@ public class Condition extends Example implements IPage {
             return this;
         }
 
+        public Builder like(String field, String keyword) {
+            this.criteria.andLike(field, keyword + "%");
+            return this;
+        }
+
         public Builder orderByClause(String orderByClause) {
             // 注意：此处是a asc, b desc形式的片段
             this.condition.setOrderByClause(orderByClause);
