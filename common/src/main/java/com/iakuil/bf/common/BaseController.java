@@ -25,7 +25,7 @@ public abstract class BaseController {
     }
 
     public <T> Resp<T> ok(String msg) {
-        return new Resp<>(RespCode.SUCCESS.getCode(), RespCode.SUCCESS.getMessage());
+        return new Resp<>(RespCode.SUCCESS.getCode(), msg);
     }
 
     public <T> Resp<T> fail() {
