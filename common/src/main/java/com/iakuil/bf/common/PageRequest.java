@@ -2,10 +2,18 @@ package com.iakuil.bf.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iakuil.bf.common.constant.SysConstant;
+import com.iakuil.bf.common.db.Condition;
+import com.iakuil.bf.common.tool.Strings;
+import com.iakuil.toolkit.BeanUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * 数据库分页排序查询请求体
@@ -24,6 +32,54 @@ public class PageRequest<T> {
 
     @ApiModelProperty(value = "sorting", notes = "排序参数。")
     private Sorting[] sorting;
+
+    /**
+     * 转换为Query对象，并填充分页排序属性
+     *
+     * <p>如果是单表通用查询，一般转换为Entity对象；如果是复杂查询，Query对象应该继承{@code Pageable}。
+     */
+    public <R extends Pageable> R asQuery(Class<R> clazz) {
+        R params = BeanUtils.copy(this.getFilter(), clazz);
+        PageRequest.Paging paging = this.getPaging();
+        PageRequest.Sorting[] sorting = this.getSorting();
+        String orderBy;
+        if (sorting != null) {
+            // 驼峰转下划线，逗号分隔
+            orderBy = Arrays.stream(sorting)
+                    .filter(item -> StringUtils.isNoneBlank(item.getField()))
+                    .map(item -> Strings.toUnderlineCase(item.getField()) + Strings.SPACE + item.getOrder().toString())
+                    .collect(Collectors.joining(Strings.COMMA));
+            params.setOrderBy(orderBy);
+        }
+        if (paging != null) {
+            Integer pageSize = ObjectUtils.defaultIfNull(paging.getPageSize(), SysConstant.DEFAULT_PAGE_SIZE);
+            params.setPageSize(pageSize > SysConstant.MAX_PAGE_SIZE ? SysConstant.MAX_PAGE_SIZE : pageSize);
+            params.setPageNum(ObjectUtils.defaultIfNull(paging.getPageNum(), 1));
+        }
+        return params;
+    }
+
+    /**
+     * 转换为Condition对象，并填充分页排序属性
+     *
+     * <p>只有存在于Entity的属性才能作为查询条件。
+     */
+    public <R extends BaseEntity> Condition asCondition(Class<R> clazz) {
+        // 将非空的查询参数复制到Entity对象。
+        Condition.Builder cb = Condition.create(clazz).with(this.getFilter());
+        if (this.getPaging() != null) {
+            cb.pageNum(this.getPaging().getPageNum()).pageSize(this.getPaging().getPageSize());
+        }
+        if (this.getSorting() != null) {
+            // 驼峰转下划线，逗号分隔
+            cb.orderByClause(Arrays.stream(this.getSorting())
+                    .filter(item -> StringUtils.isNoneBlank(item.getField()))
+                    .map(item -> Strings.toUnderlineCase(item.getField()) + Strings.SPACE + item.getOrder().toString())
+                    .collect(Collectors.joining(Strings.COMMA)));
+        }
+        return cb.build();
+    }
+
 
     public T getFilter() {
         return filter;

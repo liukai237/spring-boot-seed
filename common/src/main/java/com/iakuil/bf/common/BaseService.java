@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * <p>默认忽略所有null值。
  *
  * <p>PS.BaseService主要是为了弥补tkMapper的不足（借鉴了MyBatis Plus的一些思路），解决80%的单表CRUD场景，剩下的20%建议手写SQL，或者尝试CQRS。
- * <p>考虑到按时间范围查询的场景比较多，引入了{@code Example}对象查询。
+ * <p>考虑到按时间范围查询的场景比较多，引入了{@code Example}对象查询。通用查询与Example查询都可以使用的情况下，优先使用通用查询方法。
  *
  * @param <T> 实体类型
  * @author Kai
@@ -335,7 +335,7 @@ public abstract class BaseService<T extends BaseEntity> {
     /**
      * Condition条件查询（试验功能）
      *
-     * <p>在原有通用查询方法基础上增加范围查询，大于或等于下限且小于或等于上限。
+     * <p>查询条件应该通过{@link Condition.Builder}生成。
      *
      * @param condition Condition查询条件
      * @return 实体类对象列表
@@ -347,6 +347,8 @@ public abstract class BaseService<T extends BaseEntity> {
 
     /**
      * Condition条件查询（试验功能）
+     *
+     * <p>查询条件应该通过{@link Condition.Builder}生成。
      *
      * @param condition Condition查询条件
      * @param converter Entity/DTO转换器

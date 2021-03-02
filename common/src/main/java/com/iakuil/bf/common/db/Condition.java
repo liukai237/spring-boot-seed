@@ -31,6 +31,10 @@ public class Condition extends Example implements IPage {
         super(entityClass, exists, notNull);
     }
 
+    public static <T extends BaseEntity> Builder create(Class<T> entityClass) {
+        return new Builder(entityClass);
+    }
+
     @Override
     public Integer getPageNum() {
         return pageNum;
@@ -67,35 +71,20 @@ public class Condition extends Example implements IPage {
         Condition condition;
         Condition.Criteria criteria;
 
-        private Builder() {
-        }
-
-        private Builder(Class<?> entityClass) {
+        public Builder(Class<?> entityClass) {
             this.condition = new Condition(entityClass);
             this.criteria = condition.createCriteria();
         }
 
-        public static Builder init(BaseEntity entity) {
-            return init(entity, entity.getClass());
-        }
-
-        public static Builder init(Class<? extends BaseEntity> entityClass) {
-            Builder builder = new Builder(entityClass);
-            // workaround，没有criteria时会多出一个and
-            builder.criteria.andIsNotNull("id");
-            return builder;
-        }
-
-        public static Builder init(Object param, Class<? extends BaseEntity> entityClass) {
-            Builder qb = new Builder(entityClass);
-            Map<String, Object> paramMap = MapBuilder.init(BeanMapUtils.beanToMap(param, true)).build();
+        public Builder with(Object param) {
             // 只填充非空的属性作为查询条件
+            Map<String, Object> paramMap = MapBuilder.init(BeanMapUtils.beanToMap(param, true)).build();
             if (paramMap.isEmpty()) {
-                qb.criteria.andIsNotNull("id");
+                this.criteria.andIsNotNull("id");
             } else {
-                qb.criteria.andAllEqualTo(paramMap);
+                this.criteria.andAllEqualTo(paramMap);
             }
-            return qb;
+            return this;
         }
 
         public Builder pageSize(Integer pageSize) {

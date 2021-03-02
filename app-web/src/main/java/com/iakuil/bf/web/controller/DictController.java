@@ -56,7 +56,7 @@ public class DictController extends BaseController {
     @ApiOperation(value = "分页查询数据字典", notes = "分页查询数据字典数据。")
     @PostMapping(value = "/listWithPage")
     public Resp<PageData<DictDto>> doQueryWithPage(@RequestBody PageRequest<DictQuery> param) {
-        return ok(dictService.page(Condition.Builder.init(param, Dict.class).build(), DictConverter.INSTANCE::toDto));
+        return ok(dictService.page(Condition.create(Dict.class).with(param).build(), DictConverter.INSTANCE::toDto));
     }
 
     @ApiOperation(value = "新增数据字典", notes = "新增数据字典。")

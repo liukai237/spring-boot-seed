@@ -1,15 +1,6 @@
 package com.iakuil.bf.common;
 
 import com.iakuil.bf.common.constant.RespCode;
-import com.iakuil.bf.common.constant.SysConstant;
-import com.iakuil.bf.common.db.Condition;
-import com.iakuil.bf.common.tool.Strings;
-import com.iakuil.toolkit.BeanUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * 视图层基类
@@ -55,52 +46,5 @@ public abstract class BaseController {
 
     public <T> Resp<T> done(boolean result) {
         return result ? ok() : fail();
-    }
-
-    /**
-     * 转换为Query对象，并填充分页排序属性
-     *
-     * <p>如果是单表通用查询，一般转换为Entity对象；如果是复杂查询，Query对象应该继承{@code Pageable}。
-     */
-    protected <R extends Pageable> R toQuery(PageRequest<?> pq, Class<R> clazz) {
-        R params = BeanUtils.copy(pq.getFilter(), clazz);
-        PageRequest.Paging paging = pq.getPaging();
-        PageRequest.Sorting[] sorting = pq.getSorting();
-        String orderBy;
-        if (sorting != null) {
-            // 驼峰转下划线，逗号分隔
-            orderBy = Arrays.stream(sorting)
-                    .filter(item -> StringUtils.isNoneBlank(item.getField()))
-                    .map(item -> Strings.toUnderlineCase(item.getField()) + Strings.SPACE + item.getOrder().toString())
-                    .collect(Collectors.joining(Strings.COMMA));
-            params.setOrderBy(orderBy);
-        }
-        if (paging != null) {
-            Integer pageSize = ObjectUtils.defaultIfNull(paging.getPageSize(), SysConstant.DEFAULT_PAGE_SIZE);
-            params.setPageSize(pageSize > SysConstant.MAX_PAGE_SIZE ? SysConstant.MAX_PAGE_SIZE : pageSize);
-            params.setPageNum(ObjectUtils.defaultIfNull(paging.getPageNum(), 1));
-        }
-        return params;
-    }
-
-    /**
-     * 转换为Condition对象，并填充分页排序属性
-     *
-     * <p>只有存在于Entity的属性才能作为查询条件。
-     */
-    protected <R extends BaseEntity> Condition toCondition(PageRequest<?> pq, Class<R> clazz) {
-        // 将非空的查询参数复制到Entity对象。
-        Condition.Builder cb = Condition.Builder.init(pq.getFilter(), clazz);
-        if (pq.getPaging() != null) {
-            cb.pageNum(pq.getPaging().getPageNum()).pageSize(pq.getPaging().getPageSize());
-        }
-        if (pq.getSorting() != null) {
-            // 驼峰转下划线，逗号分隔
-            cb.orderByClause(Arrays.stream(pq.getSorting())
-                    .filter(item -> StringUtils.isNoneBlank(item.getField()))
-                    .map(item -> Strings.toUnderlineCase(item.getField()) + Strings.SPACE + item.getOrder().toString())
-                    .collect(Collectors.joining(Strings.COMMA)));
-        }
-        return cb.build();
     }
 }
