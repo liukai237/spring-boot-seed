@@ -11,6 +11,8 @@ import java.util.Map;
 /**
  * 可分页排序的条件查询
  *
+ * <p>主要用于弥补通用查询方法不支持范围（模糊）查询。
+ *
  * @author Kai
  */
 public class Condition extends Example implements IPage {
@@ -80,7 +82,9 @@ public class Condition extends Example implements IPage {
             // 只填充非空的属性作为查询条件
             Map<String, Object> paramMap = MapBuilder.init(BeanMapUtils.beanToMap(param, true)).build();
             if (paramMap.isEmpty()) {
-                this.criteria.andIsNotNull("id");
+                // workaround, 如果查询条件为空，会多出一个and
+                // see: https://github.com/abel533/Mapper/issues/817
+                this.criteria.andCondition("1 = 1");
             } else {
                 this.criteria.andAllEqualTo(paramMap);
             }
@@ -128,7 +132,7 @@ public class Condition extends Example implements IPage {
         }
 
         public Builder orderByClause(String orderByClause) {
-            // 注意：此处是a asc, b desc形式的片段
+            // 注意：此处是a asc, b desc形式的SQL片段
             this.condition.setOrderByClause(orderByClause);
             return this;
         }
