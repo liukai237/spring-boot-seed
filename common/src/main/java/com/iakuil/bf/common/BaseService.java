@@ -12,6 +12,7 @@ import tk.mybatis.mapper.annotation.Version;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -203,7 +204,11 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean removeByIds(Long... ids) {
-        int count = mapper.deleteByIds(Arrays.stream(ids).map(String::valueOf).collect(Collectors.joining(",")));
+        int count = mapper.deleteByIds(Arrays.stream(ids)
+                .filter(Objects::nonNull)
+                .distinct()
+                .map(String::valueOf)
+                .collect(Collectors.joining(",")));
         log.info("{} users were deleted!", count);
         return count > 0;
     }
