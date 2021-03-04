@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -131,7 +130,8 @@ public class PageRequest<T> {
         }
 
         public Integer getPageNum() {
-            return ObjectUtils.defaultIfNull(pageNum, 1);
+            return pageNum == null ? SysConstant.DEFAULT_PAGE_NUM
+                    : (pageNum > SysConstant.MAX_PAGE_NUM ? SysConstant.MAX_PAGE_NUM : pageNum);
         }
     }
 
