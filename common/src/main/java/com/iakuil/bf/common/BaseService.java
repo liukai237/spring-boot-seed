@@ -87,7 +87,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> PageData<R> page(T entity, Function<? super T, ? extends R> converter) {
-        return new PageData<>(this.list(entity, converter));
+        return new PageData<>(this.list(entity), converter);
     }
 
     /**

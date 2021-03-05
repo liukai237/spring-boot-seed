@@ -1,6 +1,7 @@
 package com.iakuil.bf.common.db;
 
 import com.github.pagehelper.IPage;
+import com.google.common.collect.Sets;
 import com.iakuil.bf.common.BaseEntity;
 import com.iakuil.toolkit.BeanMapUtils;
 import com.iakuil.toolkit.MapBuilder;
@@ -123,6 +124,11 @@ public class Condition extends Example implements IPage {
 
         public Builder gte(String field, Object value) {
             this.criteria.andGreaterThanOrEqualTo(field, value);
+            return this;
+        }
+
+        public Builder in(String field, Object... value) {
+            this.criteria.andIn(field, Sets.newHashSet(value));
             return this;
         }
 

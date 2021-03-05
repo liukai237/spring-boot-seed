@@ -14,5 +14,7 @@ public class SysConstant {
     public static final String DEFAULT_SORT_FIELD = "orderBy";
 
     public static final Integer DEFAULT_PAGE_SIZE = 10;
-    public static final Integer MAX_PAGE_SIZE = 500;
+    public static final Integer MAX_PAGE_SIZE = 100;
+    public static final Integer DEFAULT_PAGE_NUM = 1;
+    public static final Integer MAX_PAGE_NUM = 100;
 }
