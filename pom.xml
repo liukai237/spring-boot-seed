@@ -53,6 +53,7 @@
         <mapper-spring-boot-starter.version>2.1.5</mapper-spring-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.3.0</pagehelper-spring-boot-starter.version>
         <mybatis-generator.version>1.3.7</mybatis-generator.version>
+        <mybatis-caffeine.version>1.0.0-beta1</mybatis-caffeine.version>
         <sharding-jdbc-spring-boot-starter.version>4.1.1</sharding-jdbc-spring-boot-starter.version>
         <sharding-jdbc-self-id-generator.version>1.4.2</sharding-jdbc-self-id-generator.version>
         <ez-mapper.version>0.0.2-RELEASE</ez-mapper.version>
@@ -188,6 +189,12 @@
                 <groupId>com.iakuil</groupId>
                 <artifactId>ez-mapper-processor</artifactId>
                 <version>${ez-mapper.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis.caches</groupId>
+                <artifactId>mybatis-caffeine</artifactId>
+                <version>${mybatis-caffeine.version}</version>
             </dependency>
 
             <!--********** 3rd *********** -->
