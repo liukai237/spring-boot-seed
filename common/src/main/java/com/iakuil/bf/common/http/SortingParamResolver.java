@@ -2,7 +2,6 @@ package com.iakuil.bf.common.http;
 
 import com.iakuil.bf.common.constant.SysConstant;
 import com.iakuil.bf.common.tool.Strings;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -26,11 +25,7 @@ public class SortingParamResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
-        Object sortObj = nativeWebRequest.getParameterMap().getOrDefault(SysConstant.DEFAULT_SORT_PARAM, ArrayUtils.EMPTY_STRING_ARRAY);
-        String sort = null;
-        if (sortObj != null) {
-            sort = Strings.parseOrderBy(Strings.toUnderlineCase(((String[]) sortObj)[0]));
-        }
-        return sort;
+        Object sortObj = nativeWebRequest.getParameterMap().get(SysConstant.DEFAULT_SORT_PARAM);
+        return sortObj == null ? null : Strings.parseOrderBy(Strings.toUnderlineCase(((String[]) sortObj)[0]));
     }
 }
