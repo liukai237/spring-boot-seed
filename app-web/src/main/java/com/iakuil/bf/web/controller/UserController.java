@@ -51,13 +51,13 @@ public class UserController extends BaseController {
         User user = new User();
         user.setTel(userInfo.getTel());
         user.setPasswdHash(userInfo.getPassword());
-        return done(userService.add(user));
+        return ok(userService.add(user));
     }
 
     @ApiOperation(value = "用户信息变更", notes = "修改用户信息")
     @PostMapping(value = "/edit")
     public Resp<?> doChange(@ApiParam(value = "用户信息", required = true) @Valid @RequestBody UserEdit basicInfo) {
-        return done(userService.modifyWithVersion(BeanUtils.copy(basicInfo, User.class)));
+        return ok(userService.modifyWithVersion(BeanUtils.copy(basicInfo, User.class)));
     }
 
     @ApiOperation(value = "用户删除", notes = "删除用户")
@@ -66,7 +66,7 @@ public class UserController extends BaseController {
     })
     @PostMapping(value = "/remove")
     public Resp<?> doRemove(@RequestParam Long id) {
-        return done(userService.removeById(id));
+        return ok(userService.removeById(id));
     }
 
     @ApiOperation(value = "用户批量删除", notes = "删除用户")
@@ -75,7 +75,7 @@ public class UserController extends BaseController {
     })
     @PostMapping(value = "/batchRemove")
     public Resp<?> doRemoveBatch(@RequestParam Long[] ids) {
-        return done(userService.removeByIds(ids));
+        return ok(userService.removeByIds(ids));
     }
 
     @ApiOperation(value = "用户详情", notes = "根据UID来获取用户详细信息")

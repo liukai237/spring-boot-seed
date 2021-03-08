@@ -61,18 +61,18 @@ public class DictController extends BaseController {
     @ApiOperation(value = "新增数据字典", notes = "新增数据字典。")
     @PostMapping(value = "/add")
     public Resp<?> add(@RequestBody DictDto dict) {
-        return done(dictService.add(dictConverter.toEntity(dict)));
+        return ok(dictService.add(dictConverter.toEntity(dict)));
     }
 
     @ApiOperation(value = "修改数据字典", notes = "修改数据字典。")
     @PostMapping(value = "/edit")
     public Resp<?> modify(@RequestBody DictDto dict) {
-        return done(dictService.modify(dictConverter.toEntity(dict)));
+        return ok(dictService.modify(dictConverter.toEntity(dict)));
     }
 
     @ApiOperation(value = "删除数据字典", notes = "批量删除数据字典。")
     @PostMapping(value = "/remove")
     public Resp<?> remove(@RequestParam Long[] ids) {
-        return done(dictService.removeByIds(ids));
+        return ok(dictService.removeByIds(ids));
     }
 }

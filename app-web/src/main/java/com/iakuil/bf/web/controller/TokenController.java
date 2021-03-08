@@ -63,7 +63,7 @@ public class TokenController extends BaseController {
     })
     @PostMapping(value = "/captcha")
     public Resp<?> checkCaptcha(@RequestParam String code) {
-        return done(tokenService.validCaptcha(code));
+        return ok(tokenService.validCaptcha(code));
     }
 
     @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码（需要先获取图形验证码）")

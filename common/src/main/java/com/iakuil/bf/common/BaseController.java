@@ -28,6 +28,10 @@ public abstract class BaseController {
         return new Resp<>(RespCode.SUCCESS.getCode(), msg);
     }
 
+    public <T> Resp<T> ok(boolean result) {
+        return result ? ok() : fail();
+    }
+
     public <T> Resp<T> fail() {
         return new Resp<>(RespCode.FAIL.getCode(), RespCode.INTERNAL_SERVER_ERROR.getMessage());
     }
@@ -42,9 +46,5 @@ public abstract class BaseController {
 
     public <T> Resp<T> fail(RespCode respCode) {
         return new Resp<>(respCode.getCode(), respCode.getMessage());
-    }
-
-    public <T> Resp<T> done(boolean result) {
-        return result ? ok() : fail();
     }
 }
