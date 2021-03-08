@@ -4,6 +4,7 @@ import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
 import com.google.common.collect.Sets;
+import com.iakuil.bf.common.constant.CacheConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,13 +14,15 @@ import java.util.stream.Collectors;
 /**
  * 带缓存功能的通用Service（试验功能）
  *
+ * <p>基于JetCache实现简单二级缓存，以ID为key。
+ *
  * @param <T> 实体类型
  * @author Kai
  */
 @Slf4j
 public abstract class CacheableService<T extends BaseEntity> extends BaseService<T> {
 
-    @CreateCache(name = "com.iakuil.entity:", expire = 100, cacheType = CacheType.BOTH, localLimit = 10000)
+    @CreateCache(name = CacheConstant.CACHE_KEY_PREFIX, expire = 100, cacheType = CacheType.BOTH, localLimit = 10000)
     protected Cache<Long, T> entityCache;
 
     @Transactional(readOnly = true)
@@ -71,7 +74,7 @@ public abstract class CacheableService<T extends BaseEntity> extends BaseService
         boolean success = super.addAll(entities);
         if (success) {
             entityCache.putAll(entities.stream()
-                    .filter(item -> item.getId() == null)
+                    .filter(item -> item.getId() != null)
                     .collect(Collectors.toMap(BaseEntity::getId, v -> v)));
         }
         return success;
