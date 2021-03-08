@@ -34,3 +34,22 @@ bf:
 
 knife4j:
   enable: true
+
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  local:
+    default:
+      type: caffeine
+      keyConvertor: fastjson
+      limit: 10000
+      defaultExpireInMillis: 10000
+  remote:
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson
+      valueEncoder: kryo
+      valueDecoder: kryo
+      uri:
+        - redis://I_%40_redis2019@106.12.75.75:6379/1?timeout=5s
+      expireAfterWriteInMillis: 5000

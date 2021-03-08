@@ -2,7 +2,7 @@ package com.iakuil.bf.service;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.iakuil.bf.common.BaseService;
+import com.iakuil.bf.common.CacheableService;
 import com.iakuil.bf.dao.*;
 import com.iakuil.bf.dao.entity.*;
 import com.iakuil.toolkit.HashIdUtils;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class UserService extends BaseService<User> {
+public class UserService extends CacheableService<User> {
 
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;

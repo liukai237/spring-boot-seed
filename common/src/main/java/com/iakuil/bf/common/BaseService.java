@@ -8,7 +8,6 @@ import com.iakuil.toolkit.MapBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.annotation.Version;
 
@@ -33,7 +32,6 @@ import java.util.stream.Collectors;
  * @author Kai
  */
 @Slf4j
-@Service
 public abstract class BaseService<T extends BaseEntity> {
 
     @Autowired
@@ -63,7 +61,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> List<R> list(T entity, Function<? super T, ? extends R> converter) {
-        return this.list(entity).stream().map(converter).collect(Collectors.toList());
+        return mapper.select(entity).stream().map(converter).collect(Collectors.toList());
     }
 
     /**
@@ -76,7 +74,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public PageData<T> page(T entity) {
-        return new PageData<>(this.list(entity));
+        return new PageData<>(mapper.select(entity));
     }
 
     /**
@@ -90,11 +88,11 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> PageData<R> page(T entity, Function<? super T, ? extends R> converter) {
-        return new PageData<>(this.list(entity), converter);
+        return new PageData<>(mapper.select(entity), converter);
     }
 
     /**
-     * Condition条件查询（试验功能）
+     * Condition条件查询
      *
      * <p>同时返回分页信息
      *
@@ -107,7 +105,7 @@ public abstract class BaseService<T extends BaseEntity> {
     }
 
     /**
-     * Condition条件查询（试验功能）
+     * Condition条件查询
      *
      * <p>同时返回分页信息
      *
@@ -285,7 +283,7 @@ public abstract class BaseService<T extends BaseEntity> {
         // 处理乐观锁
         if (hasVersion) {
             if (ReflectUtils.getValueByAnnotation(entity, Version.class) == null) {
-                T before = this.findById(id);
+                T before = mapper.selectByPrimaryKey(id);
                 if (before == null) {
                     throw new IllegalArgumentException("Invalid id " + id + "!");
                 }
@@ -336,7 +334,7 @@ public abstract class BaseService<T extends BaseEntity> {
     }
 
     /**
-     * Condition条件查询（试验功能）
+     * Condition条件查询
      *
      * <p>查询条件应该通过{@link Condition.Builder}生成。
      *
@@ -349,7 +347,7 @@ public abstract class BaseService<T extends BaseEntity> {
     }
 
     /**
-     * Condition条件查询（试验功能）
+     * Condition条件查询
      *
      * <p>查询条件应该通过{@link Condition.Builder}生成。
      *

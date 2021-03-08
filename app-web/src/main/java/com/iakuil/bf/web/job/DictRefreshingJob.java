@@ -1,7 +1,6 @@
 package com.iakuil.bf.web.job;
 
 import com.iakuil.bf.common.DictPool;
-import com.iakuil.bf.dao.entity.Dict;
 import com.iakuil.bf.service.DictService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -32,10 +31,7 @@ public class DictRefreshingJob implements InitializingBean {
     }
 
     private void collectDictItems() {
-        Dict dict = new Dict();
-        dict.setDelFlag("0");
-        List<Dict> dicts = dictService.list(dict);
-        List<DictPool.DictItem> items = dicts.stream()
+        List<DictPool.DictItem> items = dictService.findAll().stream()
                 .map(item -> new DictPool.DictItem(item.getType(), item.getDescription(), item.getValue(), item.getName(), item.getSort().intValue()))
                 .collect(Collectors.toList());
         log.debug("Current dict size in DB: {}", items.size());

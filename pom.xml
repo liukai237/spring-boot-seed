@@ -46,6 +46,7 @@
 
         <shiro-spring.version>1.7.0</shiro-spring.version>
         <shiro-redis.version>3.3.1</shiro-redis.version>
+        <jetcache-starter-redis-lettuce.version>2.6.0</jetcache-starter-redis-lettuce.version>
 
         <mysql-connector-java.version>8.0.22</mysql-connector-java.version>
         <HikariCP.version>3.4.5</HikariCP.version>
@@ -267,6 +268,12 @@
                 <groupId>net.javacrumbs.shedlock</groupId>
                 <artifactId>shedlock-provider-redis-spring</artifactId>
                 <version>${shedlock-spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alicp.jetcache</groupId>
+                <artifactId>jetcache-starter-redis-lettuce</artifactId>
+                <version>${jetcache-starter-redis-lettuce.version}</version>
             </dependency>
 
             <dependency>
