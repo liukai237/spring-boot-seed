@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iakuil.bf.common.constant.SysConstant;
 import com.iakuil.bf.common.db.Condition;
 import com.iakuil.bf.common.tool.Strings;
+import com.iakuil.toolkit.BeanMapUtils;
 import com.iakuil.toolkit.BeanUtils;
+import com.iakuil.toolkit.MapBuilder;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -12,6 +14,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -61,20 +64,27 @@ public class PageRequest<T> {
      * <p>优先使用使用{@link PageRequest#asQuery(Class)}方法。
      */
     public <R extends BaseEntity> Condition asCondition(Class<R> clazz) {
-        // 将非空的查询参数复制到Entity对象。
-        Condition.Builder builder = Condition.create(clazz).with(this.getFilter());
+        Condition condition = new Condition(clazz, false, false);
+        Condition.Criteria criteria = condition.createCriteria();
+        Map<String, Object> params = MapBuilder.init(BeanMapUtils.beanToMap(this.getFilter(), true)).build();
+        if (params.isEmpty()) {
+            criteria.andCondition("1 = 1");
+        } else {
+            criteria.andAllEqualTo(params);
+        }
 
         Paging paging = this.getPaging();
         if (paging != null) {
-            builder.pageNum(paging.getPageNum()).pageSize(paging.getPageSize());
+            condition.setPageNum(paging.getPageNum());
+            condition.setPageSize(paging.getPageSize());
         }
 
         PageRequest.Sorting[] sorting = this.getSorting();
         if (sorting != null) {
-            builder.orderByClause(handleOrderBy(sorting));
+            condition.setOrderByClause(handleOrderBy(sorting));
         }
 
-        return builder.build();
+        return condition;
     }
 
     private String handleOrderBy(Sorting[] sorting) {
