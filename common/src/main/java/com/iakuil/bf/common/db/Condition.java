@@ -1,6 +1,6 @@
 package com.iakuil.bf.common.db;
 
-import com.github.pagehelper.IPage;
+import com.iakuil.bf.common.Pageable;
 import tk.mybatis.mapper.entity.Example;
 
 /**
@@ -10,7 +10,7 @@ import tk.mybatis.mapper.entity.Example;
  *
  * @author Kai
  */
-public class Condition extends Example implements IPage {
+public class Condition extends Example implements Pageable {
 
     private Integer pageNum;
 
@@ -33,6 +33,7 @@ public class Condition extends Example implements IPage {
         return pageNum;
     }
 
+    @Override
     public void setPageNum(Integer pageNum) {
         this.pageNum = pageNum;
     }
@@ -42,6 +43,7 @@ public class Condition extends Example implements IPage {
         return pageSize;
     }
 
+    @Override
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
@@ -51,6 +53,7 @@ public class Condition extends Example implements IPage {
         return super.orderByClause;
     }
 
+    @Override
     public void setOrderBy(String orderBy) {
         super.setOrderByClause(orderBy);
     }

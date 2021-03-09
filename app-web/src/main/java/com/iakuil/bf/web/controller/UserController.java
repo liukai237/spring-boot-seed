@@ -41,7 +41,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表，支持分页排序及条件查询。")
     @PostMapping(value = "/list")
     public Resp<PageData<UserDetailDto>> doQueryWithPage(@Valid @RequestBody PageRequest<UserQuery> req) {
-        return ok(userService.page(req.asQuery(User.class), UserConverter.INSTANCE::toDto));
+        return ok(userService.page(req.as(User.class), UserConverter.INSTANCE::toDto));
     }
 
     @ApiOperation(value = "用户注册", notes = "新增用户")

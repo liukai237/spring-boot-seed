@@ -41,7 +41,7 @@ public class PageRequest<T> {
      * <p>如果是单表通用查询，一般转换为Entity对象；
      * <p>如果是复杂查询，Query对象应该继承{@code Pageable}，并且放在Service层dto目录下。
      */
-    public <R extends Pageable> R asQuery(Class<R> clazz) {
+    public <R extends Pageable> R as(Class<R> clazz) {
         R condition = BeanUtils.copy(this.getFilter(), clazz);
 
         PageRequest.Paging paging = this.getPaging();
@@ -59,11 +59,12 @@ public class PageRequest<T> {
     }
 
     /**
-     * 转换为Condition对象，并填充分页排序属性
+     * 包装为Condition对象，自动填充分页排序参数
      *
-     * <p>优先使用使用{@link PageRequest#asQuery(Class)}方法。
+     * <p>如果没有范围查询之类的特殊需求，优先使用使用{@link PageRequest#as(Class)}方法。
+     * <p>入参一般是Entity类。
      */
-    public <R extends BaseEntity> Condition asCondition(Class<R> clazz) {
+    public <R extends Pageable> Condition wrap(Class<R> clazz) {
         Condition condition = new Condition(clazz, false, false);
         Condition.Criteria criteria = condition.createCriteria();
         Map<String, Object> params = MapBuilder.init(BeanMapUtils.beanToMap(this.getFilter(), true)).build();

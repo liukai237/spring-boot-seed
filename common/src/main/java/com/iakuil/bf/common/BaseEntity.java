@@ -1,6 +1,8 @@
 package com.iakuil.bf.common;
 
 import javax.persistence.Id;
+import javax.persistence.Transient;
+import java.io.Serializable;
 
 /**
  * Entity基类
@@ -11,10 +13,19 @@ import javax.persistence.Id;
  *
  * @author Kai
  */
-public class BaseEntity extends Pageable {
+public class BaseEntity implements Pageable, Serializable {
 
     @Id
     private Long id;
+
+    @Transient
+    private Integer pageSize;
+
+    @Transient
+    private Integer pageNum;
+
+    @Transient
+    private String orderBy;
 
     public Long getId() {
         return id;
@@ -22,5 +33,35 @@ public class BaseEntity extends Pageable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    @Override
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    @Override
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    @Override
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    @Override
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    @Override
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
     }
 }
