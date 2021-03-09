@@ -14,9 +14,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * 数据字典池
+ * 简单的数据字典池
  *
- * <p>数据字典包括枚举类型和数据库表类型
+ * <p>系统支持两种数据字典：枚举类型和数据库表类型。
+ * <p>前者在Pool初始化时放入缓存；
+ * <p>后者通过定时任务定时刷新并放入缓存。
+ * <p>BTW. 分布式场景应该封装成单独的服务。
  *
  * @author Kai
  */
@@ -25,6 +28,9 @@ public class DictPool {
 
     private static DictPool instance;
 
+    /**
+     * 按类型缓存的数据字典
+     */
     public static Map<String, List<DictItem>> cache = new ConcurrentHashMap<>(128);
 
     private DictPool() {
@@ -39,7 +45,7 @@ public class DictPool {
     }
 
     /**
-     * 批量添加字典内容
+     * 批量添加字典内容到缓存
      */
     public void pushDictItems(List<DictItem> items) {
         Map<String, List<DictItem>> dicts = items.stream().collect(Collectors.groupingBy(DictItem::getType));
@@ -49,18 +55,18 @@ public class DictPool {
     /**
      * 通过字典类型获取字典编码
      */
-    public List<DictItem> getDict(String code) {
-        return cache.get(code);
+    public List<DictItem> getItemsByType(String type) {
+        return cache.get(type);
     }
 
     /**
      * 通过字典编码,字典值取字典翻译名称
      */
-    public String getDictName(String code, String value) {
-        if (code != null && cache.containsKey(code)) {
-            Optional<DictItem> findDict = cache.get(code).stream().filter(dictItem -> dictItem.getValue().equals(value)).findFirst();
-            if (findDict.isPresent()) {
-                return findDict.get().getName();
+    public String getDictName(String type, String value) {
+        if (type != null && cache.containsKey(type)) {
+            Optional<DictItem> item = cache.get(type).stream().filter(dictItem -> dictItem.getValue().equals(value)).findFirst();
+            if (item.isPresent()) {
+                return item.get().getName();
             }
         }
         return null;
@@ -95,7 +101,7 @@ public class DictPool {
     /**
      * 字典项
      *
-     * <p>用于统一缓存所有的数据字典。
+     * <p>用于统一所有的数据字典格式。
      *
      * @author Kai
      */

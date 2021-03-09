@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 数据字典刷新任务
+ */
 @Slf4j
 @Component
 public class DictRefreshingJob implements InitializingBean {
@@ -21,7 +24,7 @@ public class DictRefreshingJob implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         this.collectDictItems();
     }
 

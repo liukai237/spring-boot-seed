@@ -138,7 +138,7 @@ public class RequestBodyHandler implements RequestBodyAdvice {
     }
 
     private void checkDictValue(String dictType, Object dictValue) {
-        List<DictPool.DictItem> dictItems = DictPool.getInstance().getDict(dictType);
+        List<DictPool.DictItem> dictItems = DictPool.getInstance().getItemsByType(dictType);
         if (dictItems == null) {
             throw new BusinessException("Invalid dict type: " + dictType, RespCode.BAD_REQUEST.getCode());
         }
