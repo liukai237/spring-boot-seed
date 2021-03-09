@@ -1,0 +1,19 @@
+@startmindmap
+caption 系统架构图
+title Spring Boot Seed
+
+* <&flag>parent
+** <&star>common
+** <&star>app-dao
+** <&star>app-biz
+** <&star>app-web
+** midware
+*** quartz-support
+*** rabbitmq-support
+*** <&star>redis-support
+*** websocket-support
+** monitor
+** sentinel
+
+center footer Copyright (c) 2021 iakuil.com
+@endmindmap
