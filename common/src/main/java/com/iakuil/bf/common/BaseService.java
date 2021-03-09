@@ -336,7 +336,7 @@ public abstract class BaseService<T extends BaseEntity> {
     /**
      * Condition条件查询
      *
-     * <p>查询条件应该通过{@link Condition.Builder}生成。
+     * <p>查询条件使用{@link Condition}，而不是原生的{@link tk.mybatis.mapper.entity.Example}。
      *
      * @param condition Condition查询条件
      * @return 实体类对象列表
@@ -349,7 +349,7 @@ public abstract class BaseService<T extends BaseEntity> {
     /**
      * Condition条件查询
      *
-     * <p>查询条件应该通过{@link Condition.Builder}生成。
+     * <p>查询条件使用{@link Condition}，而不是原生的{@link tk.mybatis.mapper.entity.Example}。
      *
      * @param condition Condition查询条件
      * @param converter Entity/DTO转换器
@@ -367,27 +367,29 @@ public abstract class BaseService<T extends BaseEntity> {
      * <p>用于代替pageSize超过100的深分页，一般配合{@link BaseService#findByIds(Long...)}使用。
      * <p>每次最多返回一万个ID。
      *
-     * @param entity        实体类对象
-     * @param nextId        游标ID，为空则从第一个ID开始
-     * @param orderByClause 排序字段
+     * @param entity 实体类对象，包含排序参数（分页参数将被忽略）
+     * @param nextId 游标ID，为空则从第一个ID开始
      * @return 实体类对象
      */
     @Transactional(readOnly = true)
-    public Long[] findScrollIds(T entity, Long nextId, String orderByClause) {
+    public Long[] findScrollIds(T entity, Long nextId) {
         Condition condition = new Condition(ReflectUtils.getSuperClassGenericType(getClass()));
         condition.selectProperties("id");
         Condition.Criteria criteria = condition.createCriteria();
+
+        // first of all, append id > #{nextId}
         criteria.andGreaterThan("id", ObjectUtils.defaultIfNull(nextId, 0));
         Map<String, Object> paramMap = MapBuilder.init(BeanMapUtils.beanToMap(entity, true))
                 .remove("id")
-                .remove("pageNum")
-                .remove("pageSize")
-                .remove("orderBy")
                 .build();
+        // append querying, pageNum and pageSize are ignored
         criteria.andAllEqualTo(paramMap);
+        // append order by
+        condition.setOrderBy(entity.getOrderBy());
+        // append LIMIT 10000
         condition.setPageNum(1);
         condition.setPageSize(10000);
-        condition.setOrderByClause(orderByClause);
+
         return mapper.selectByExample(condition).stream().map(BaseEntity::getId).toArray(Long[]::new);
     }
 }

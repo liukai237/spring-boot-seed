@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Quartz定时任务服务实现
+ *
+ * @author Kai
+ */
 @Slf4j
 @Service
 public class QuartzJobServiceImpl implements QuartzJobService {
@@ -23,6 +28,8 @@ public class QuartzJobServiceImpl implements QuartzJobService {
 
     /**
      * 创建定时任务
+     *
+     * @param jobDto 任务参数传输对象
      */
     @Override
     public void addJob(JobDto jobDto) throws SchedulerException {
@@ -32,7 +39,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     /**
      * 创建定时任务，可传参
      *
-     * @param jobDto 任务类
+     * @param jobDto 任务参数传输对象
      * @param argMap map形式参数
      */
     @Override
@@ -97,7 +104,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     }
 
     /**
-     * 定时任务,更新频率和参数
+     * 定时任务更新,更新频率和参数
      *
      * @param argMap 参数
      */

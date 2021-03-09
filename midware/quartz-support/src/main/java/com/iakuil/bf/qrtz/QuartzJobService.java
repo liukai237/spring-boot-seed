@@ -13,22 +13,22 @@ import java.util.Map;
  */
 public interface QuartzJobService {
     /**
-     * 创建job
+     * 创建定时任务
      *
-     * @param jobDto 任务类
+     * @param jobDto 任务参数传输对象
      */
     void addJob(JobDto jobDto) throws SchedulerException;
 
     /**
-     * 创建job，可传参
+     * 创建定时任务，可传参
      *
-     * @param jobDto 任务类
+     * @param jobDto 任务参数传输对象
      * @param argMap map形式参数
      */
     void addJob(JobDto jobDto, Map<String, Object> argMap) throws SchedulerException;
 
     /**
-     * 暂停job
+     * 暂停定时任务
      *
      * @param jobName      任务名称
      * @param jobGroupName 任务所在组名称
@@ -36,7 +36,7 @@ public interface QuartzJobService {
     void pauseJob(String jobName, String jobGroupName) throws SchedulerException;
 
     /**
-     * 恢复job
+     * 恢复定时任务
      *
      * @param jobName      任务名称
      * @param jobGroupName 任务所在组名称
@@ -45,20 +45,20 @@ public interface QuartzJobService {
 
 
     /**
-     * job 更新,只更新频率
+     * 定时任务更新,只更新频率
      */
     void updateJob(JobDto jobDto) throws SchedulerException;
 
 
     /**
-     * job 更新,更新频率和参数
+     * 定时任务更新,更新频率和参数
      *
      * @param argMap 参数
      */
     void updateJob(JobDto jobDto, Map<String, Object> argMap) throws SchedulerException;
 
     /**
-     * job 更新,只更新更新参数
+     * 定时任务更新,只更新更新参数
      *
      * @param jobName      任务名称
      * @param jobGroupName 任务所在组名称
@@ -68,7 +68,7 @@ public interface QuartzJobService {
 
 
     /**
-     * job 删除
+     * 定时任务删除
      *
      * @param jobName      任务名称
      * @param jobGroupName 任务所在组名称
@@ -89,7 +89,7 @@ public interface QuartzJobService {
     /**
      * 获取所有任务列表
      *
-     * @return
+     * @return 所有定时任务列表
      */
     List<JobDto> getAllJob() throws SchedulerException;
 
@@ -97,8 +97,8 @@ public interface QuartzJobService {
     /**
      * 通过jobname查询定时任务状态
      *
-     * @param jobName
-     * @return job的状态
+     * @param jobName 定时任务名称
+     * @return 定时任务状态
      */
     Trigger.TriggerState getStateByJobName(String jobName) throws SchedulerException;
 }

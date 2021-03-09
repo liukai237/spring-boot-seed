@@ -12,9 +12,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 带缓存功能的通用Service（试验功能）
+ * 带两级缓存功能的通用Service（基于JetCache）
  *
- * <p>基于JetCache实现简单二级缓存，以ID为key。
+ * <p>避免联表查询般有两种思路：
+ * <ul>
+ *     <li>1、 冗余字段，后台保证数据的一致性，前端只需要基于ORM的单表查询即可。</li>
+ *     <li>2、 使用多个基于主键的查询来替代Join查询，利用数据库和自定义两级缓存保证效率。</li>
+ * </ul>
+ * <p>如果通用的缓存策略不适合业务需求，应该借助JetCache框架另行实现。
  *
  * @param <T> 实体类型
  * @author Kai

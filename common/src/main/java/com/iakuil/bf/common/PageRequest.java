@@ -36,9 +36,9 @@ public class PageRequest<T> {
     private Sorting[] sorting;
 
     /**
-     * 转换为Query对象，并填充分页排序属性
+     * 转换为Query对象，自动填充分页排序参数
      *
-     * <p>如果是单表通用查询，一般转换为Entity对象；
+     * <p>如果是单表通用查询，入参一般是实体类；
      * <p>如果是复杂查询，Query对象应该继承{@code Pageable}，并且放在Service层dto目录下。
      */
     public <R extends Pageable> R as(Class<R> clazz) {
@@ -62,7 +62,7 @@ public class PageRequest<T> {
      * 包装为Condition对象，自动填充分页排序参数
      *
      * <p>如果没有范围查询之类的特殊需求，优先使用使用{@link PageRequest#as(Class)}方法。
-     * <p>入参一般是Entity类。
+     * <p>入参一般是实体类。
      */
     public <R extends Pageable> Condition wrap(Class<R> clazz) {
         Condition condition = new Condition(clazz, false, false);
