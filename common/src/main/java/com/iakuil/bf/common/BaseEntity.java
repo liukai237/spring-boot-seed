@@ -1,5 +1,8 @@
 package com.iakuil.bf.common;
 
+import com.iakuil.bf.common.db.CommonSelfGenId;
+import tk.mybatis.mapper.annotation.KeySql;
+
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.io.Serializable;
@@ -8,14 +11,15 @@ import java.io.Serializable;
  * Entity基类
  *
  * <p>【强制】所有Table必须设计ID字段。
- * <p>在MyBatis框架下，所有的Entity都可以作为DTO使用（但是不应该直接传递给前端）。
- * <p>同时可以作为单表分页、排序和查询过滤条件。
+ * <p>在MyBatis框架下，所有的Entity都可以作为inDTO使用（但是不应该直接传递给前端）。
+ * <p>同时包含单表分页、排序和查询过滤条件。
  *
  * @author Kai
  */
 public class BaseEntity implements Pageable, Serializable {
 
     @Id
+    @KeySql(genId = CommonSelfGenId.class)
     private Long id;
 
     @Transient
