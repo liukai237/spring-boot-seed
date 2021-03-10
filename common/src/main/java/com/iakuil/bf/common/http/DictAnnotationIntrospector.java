@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ser.VirtualBeanPropertyWriter;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Annotations;
 import com.fasterxml.jackson.databind.util.SimpleBeanPropertyDefinition;
-import com.iakuil.bf.common.DictPool;
+import com.iakuil.bf.common.DictCache;
 import com.iakuil.bf.common.annotation.DictType;
 import com.iakuil.bf.common.tool.Strings;
 import org.apache.commons.lang3.StringUtils;
@@ -84,14 +84,14 @@ public class DictAnnotationIntrospector extends JacksonAnnotationIntrospector {
                 Class<?> clazz = type.getRawClass();
                 if (nodeValue instanceof Collection || clazz == String[].class) {
                     Collection<String> values = nodeValue instanceof Collection ? (Collection) nodeValue : Arrays.asList((String[]) nodeValue);
-                    return values.stream().map(x -> DictPool.getInstance().getDictName(dvam.dictCode, x)).collect(Collectors.joining(","));
+                    return values.stream().map(x -> DictCache.getInstance().getName(dvam.dictCode, x)).collect(Collectors.joining(","));
                 }
                 String key = String.valueOf(dvam.dictField.getValue(bean));
                 if (key.contains(Strings.COMMA)) {
                     return Arrays.stream(key.split(","))
-                            .map(x -> DictPool.getInstance().getDictName(dvam.dictCode, x)).collect(Collectors.joining(","));
+                            .map(x -> DictCache.getInstance().getName(dvam.dictCode, x)).collect(Collectors.joining(","));
                 }
-                return DictPool.getInstance().getDictName(dvam.dictCode, key);
+                return DictCache.getInstance().getName(dvam.dictCode, key);
             }
             return null;
         }

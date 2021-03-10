@@ -1,6 +1,6 @@
 package com.iakuil.bf.web.aop;
 
-import com.iakuil.bf.common.DictPool;
+import com.iakuil.bf.common.DictCache;
 import com.iakuil.bf.common.PageRequest;
 import com.iakuil.bf.common.annotation.DictType;
 import com.iakuil.bf.common.constant.RespCode;
@@ -138,17 +138,17 @@ public class RequestBodyHandler implements RequestBodyAdvice {
     }
 
     private void checkDictValue(String dictType, Object dictValue) {
-        List<DictPool.DictItem> dictItems = DictPool.getInstance().getItemsByType(dictType);
+        List<DictCache.DictItem> dictItems = DictCache.getInstance().getByType(dictType);
         if (dictItems == null) {
             throw new BusinessException("Invalid dict type: " + dictType, RespCode.BAD_REQUEST.getCode());
         }
 
         String typeDesc = dictItems.get(0).getDescription();
         String errorTemplate = "Invalid dict value: [%s] for 【" + typeDesc + "】, allowed values: " + dictItems.stream()
-                .sorted(Comparator.comparing(DictPool.DictItem::getSort))
+                .sorted(Comparator.comparing(DictCache.DictItem::getSort))
                 .map(item -> item.getValue() + ":" + item.getName())
                 .collect(Collectors.joining(","));
-        List<String> allowValues = dictItems.stream().sorted(Comparator.comparing(DictPool.DictItem::getSort)).map(DictPool.DictItem::getValue).collect(Collectors.toList());
+        List<String> allowValues = dictItems.stream().sorted(Comparator.comparing(DictCache.DictItem::getSort)).map(DictCache.DictItem::getValue).collect(Collectors.toList());
         if (dictValue instanceof String && !allowValues.contains(dictValue.toString())) {
             throw new BusinessException(String.format(errorTemplate, dictValue.toString()));
         }

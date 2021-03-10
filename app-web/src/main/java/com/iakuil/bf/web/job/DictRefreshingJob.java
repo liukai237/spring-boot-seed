@@ -1,6 +1,6 @@
 package com.iakuil.bf.web.job;
 
-import com.iakuil.bf.common.DictPool;
+import com.iakuil.bf.common.DictCache;
 import com.iakuil.bf.service.DictService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -25,19 +25,19 @@ public class DictRefreshingJob implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        this.collectDictItems();
+        this.collectDictFromDb();
     }
 
     @Scheduled(fixedRate = 1000 * 60)
     public void refreshDictItems() {
-        this.collectDictItems();
+        this.collectDictFromDb();
     }
 
-    private void collectDictItems() {
-        List<DictPool.DictItem> items = dictService.findAll().stream()
-                .map(item -> new DictPool.DictItem(item.getType(), item.getDescription(), item.getValue(), item.getName(), item.getSort().intValue()))
+    private void collectDictFromDb() {
+        List<DictCache.DictItem> items = dictService.findAll().stream()
+                .map(item -> new DictCache.DictItem(item.getType(), item.getDescription(), item.getValue(), item.getName(), item.getSort().intValue()))
                 .collect(Collectors.toList());
         log.debug("Current dict size in DB: {}", items.size());
-        DictPool.getInstance().pushDictItems(items);
+        DictCache.getInstance().pushAll(items);
     }
 }

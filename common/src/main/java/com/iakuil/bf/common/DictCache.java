@@ -14,32 +14,32 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * 简单的数据字典池
+ * 简单的数据字典缓存
  *
  * <p>系统支持两种数据字典：枚举类型和数据库表类型。
- * <p>前者在Pool初始化时放入缓存；
+ * <p>前者在缓存初始化时放入缓存；
  * <p>后者通过定时任务定时刷新并放入缓存。
  * <p>BTW. 分布式场景应该封装成单独的服务。
  *
  * @author Kai
  */
 @Slf4j
-public class DictPool {
+public class DictCache {
 
-    private static DictPool instance;
+    private static DictCache instance;
 
     /**
      * 按类型缓存的数据字典
      */
     public static Map<String, List<DictItem>> cache = new ConcurrentHashMap<>(128);
 
-    private DictPool() {
-        pushDictItems(collectDictEnums());
+    private DictCache() {
+        pushAll(collectFromEnums());
     }
 
-    public static DictPool getInstance() {
+    public static DictCache getInstance() {
         if (instance == null) {
-            instance = new DictPool();
+            instance = new DictCache();
         }
         return instance;
     }
@@ -47,7 +47,7 @@ public class DictPool {
     /**
      * 批量添加字典内容到缓存
      */
-    public void pushDictItems(List<DictItem> items) {
+    public void pushAll(List<DictItem> items) {
         Map<String, List<DictItem>> dicts = items.stream().collect(Collectors.groupingBy(DictItem::getType));
         cache.putAll(dicts);
     }
@@ -55,14 +55,16 @@ public class DictPool {
     /**
      * 通过字典类型获取字典编码
      */
-    public List<DictItem> getItemsByType(String type) {
+    public List<DictItem> getByType(String type) {
         return cache.get(type);
     }
 
     /**
-     * 通过字典编码,字典值取字典翻译名称
+     * 通过字典编码获取字典翻译名称
+     *
+     * <p>注意是name，不是value
      */
-    public String getDictName(String type, String value) {
+    public String getName(String type, String value) {
         if (type != null && cache.containsKey(type)) {
             Optional<DictItem> item = cache.get(type).stream().filter(dictItem -> dictItem.getValue().equals(value)).findFirst();
             if (item.isPresent()) {
@@ -73,9 +75,9 @@ public class DictPool {
     }
 
     /**
-     * 创建Pool时加载所有字典枚举
+     * 创建实例时加载所有字典枚举
      */
-    private List<DictItem> collectDictEnums() {
+    private List<DictItem> collectFromEnums() {
         List<DictItem> dictItems = new ArrayList<>();
         Reflections reflections = new Reflections(getClass().getPackage().getName());
         Set<Class<? extends DictEnum>> enumsClass = reflections.getSubTypesOf(DictEnum.class);
