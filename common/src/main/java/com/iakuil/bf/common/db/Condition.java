@@ -6,7 +6,7 @@ import tk.mybatis.mapper.entity.Example;
 /**
  * 可分页排序的条件查询
  *
- * <p>主要用于弥补通用查询方法不支持范围（模糊）查询，请勿滥用对象查询。
+ * <p>主要用于范围（模糊）查询，请勿滥用对象查询。
  *
  * @author Kai
  */
