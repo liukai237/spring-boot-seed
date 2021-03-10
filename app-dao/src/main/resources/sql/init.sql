@@ -7,13 +7,13 @@ drop table if exists `t_user`;
 create table t_user
 (
   id     bigint       not null,
-  username    varchar(10)  null,
+  username    varchar(20)  null,
   gender      tinyint      null,
   birthday    date         null,
   passwd_hash varchar(200) null,
   tel         varchar(20)  null,
   avatar      varchar(255) null,
-  province    smallint(6)  null,
+  province    int(6)  null,
   nickname    varchar(20)   null,
   email       varchar(20)  null,
   address     varchar(100) null,

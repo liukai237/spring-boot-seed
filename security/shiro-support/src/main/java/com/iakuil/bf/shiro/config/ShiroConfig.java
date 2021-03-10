@@ -3,7 +3,7 @@ package com.iakuil.bf.shiro.config;
 import com.iakuil.bf.shiro.CustomShiroFilter;
 import com.iakuil.bf.shiro.JdbcRealm;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
+import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
@@ -20,7 +20,6 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.crazycake.shiro.*;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,48 +50,6 @@ public class ShiroConfig {
     private String[] cluster;
 
     /**
-     * 自定义Realm
-     */
-    @Bean
-    JdbcRealm jdbcRealm() {
-        return new JdbcRealm();
-    }
-
-    /**
-     * 安全管理器
-     */
-    @Bean(name = "securityManager")
-    public SecurityManager securityManager() {
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealms(Collections.singletonList(jdbcRealm()));
-        // 配置redis缓存
-        securityManager.setCacheManager(cacheManager());
-        // 配置自定义session管理
-        securityManager.setSessionManager(sessionManager());
-        // 配置记住我session管理
-        securityManager.setRememberMeManager(rememberMeManager());
-        return securityManager;
-    }
-
-    /**
-     * 配置认证策略
-     */
-    @Bean
-    ModularRealmAuthenticator authenticator() {
-        ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator();
-        authenticator.setAuthenticationStrategy(authenticationStrategy());
-        return authenticator;
-    }
-
-    /**
-     * 认证策略：至少一个Realm认证通过
-     */
-    @Bean
-    AtLeastOneSuccessfulStrategy authenticationStrategy() {
-        return new AtLeastOneSuccessfulStrategy();
-    }
-
-    /**
      * Shiro过滤器配置
      */
     @Bean
@@ -101,7 +58,7 @@ public class ShiroConfig {
         bean.setSecurityManager(securityManager());
         Map<String, String> urlMap = new LinkedHashMap<>();
 
-        // 静态资源
+        // static resources
         urlMap.put("/*.txt", "anon");
         urlMap.put("/js/**", "anon");
         urlMap.put("/style/**", "anon");
@@ -121,37 +78,76 @@ public class ShiroConfig {
         // auth and register
         urlMap.put("/api/auth/**", "anon");
 
-        urlMap.put("/**", "authc");
-        bean.setFilterChainDefinitionMap(urlMap);
+        // other
+//        urlMap.put("/**", "authc");
+        urlMap.put("/**", "user");
 
+        bean.setFilterChainDefinitionMap(urlMap);
         Map<String, Filter> filterMap = new HashMap<>();
         filterMap.put("authc", new CustomShiroFilter());
         bean.setFilters(filterMap);
-
         return bean;
     }
 
-    @Bean
-    public RedisCacheManager cacheManager() {
-        RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager());
-        // redis中针对不同用户缓存
-        redisCacheManager.setPrincipalIdFieldName("username");
-        // 用户权限信息缓存时间（秒）
-        redisCacheManager.setExpire(200000);
-        return redisCacheManager;
-    }
-
-    //    @Bean
-    public MethodInvokingFactoryBean getMethodInvokingFactoryBean() {
-        MethodInvokingFactoryBean factoryBean = new MethodInvokingFactoryBean();
-        factoryBean.setStaticMethod("org.apache.shiro.SecurityUtils.setSecurityManager");
-        factoryBean.setArguments(securityManager());
-        return factoryBean;
+    /**
+     * 安全管理器
+     */
+    @Bean(name = "securityManager")
+    public SecurityManager securityManager() {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealms(Collections.singletonList(jdbcRealm()));
+        securityManager.setAuthenticator(authenticator());
+        // 配置Redis缓存管理器
+        securityManager.setCacheManager(cacheManager());
+        // 配置自定义Session管理器
+        securityManager.setSessionManager(sessionManager());
+        // 配置“记住我”Session管理器（注意和上面区分）
+        securityManager.setRememberMeManager(rememberMeManager());
+        return securityManager;
     }
 
     /**
-     * Redis缓存管理器，使用crazycake实现
+     * 自定义Realm
+     */
+    @Bean
+    JdbcRealm jdbcRealm() {
+        return new JdbcRealm();
+    }
+
+    /**
+     * 配置认证策略
+     */
+    @Bean
+    ModularRealmAuthenticator authenticator() {
+        ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator();
+        authenticator.setAuthenticationStrategy(authenticationStrategy());
+        return authenticator;
+    }
+
+    /**
+     * 认证策略：第一个Realm认证通过
+     */
+    @Bean
+    FirstSuccessfulStrategy authenticationStrategy() {
+        return new FirstSuccessfulStrategy();
+    }
+
+    /**
+     * 缓存管理器，使用Redis实现
+     */
+    @Bean
+    public RedisCacheManager cacheManager() {
+        RedisCacheManager cacheManager = new RedisCacheManager();
+        cacheManager.setRedisManager(redisManager());
+        // 针对不同用户缓存
+        cacheManager.setPrincipalIdFieldName("username");
+        // 用户权限信息缓存时间（秒），默认30分钟
+        cacheManager.setExpire(60 * 30);
+        return cacheManager;
+    }
+
+    /**
+     * Redis管理器，使用crazycake实现
      */
     @Bean
     public IRedisManager redisManager() {
@@ -166,59 +162,6 @@ public class ShiroConfig {
             manager.setPassword(password);
             return manager;
         }
-    }
-
-    @Bean
-    public SessionDAO sessionDAO() {
-        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-        redisSessionDAO.setRedisManager(redisManager());
-        // session在redis中的保存时间，单位：秒，最好大于session会话超时时间
-        redisSessionDAO.setExpire(60 * 60);
-        return redisSessionDAO;
-    }
-
-    /**
-     * cookie 属性设置
-     */
-    public SimpleCookie rememberMeCookie() {
-        SimpleCookie cookie = new SimpleCookie("sid");
-//        cookie.setDomain(domain);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(30 * 24 * 60 * 60);
-        return cookie;
-    }
-
-    /**
-     * 记住我
-     */
-    public CookieRememberMeManager rememberMeManager() {
-        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-        cookieRememberMeManager.setCookie(rememberMeCookie());
-        cookieRememberMeManager.setCipherKey(Base64.getDecoder().decode("zSyK5Kp6PZAAjlT+eeNMlg=="));
-        return cookieRememberMeManager;
-    }
-
-    /**
-     * 配置保存sessionId的cookie
-     * 注意：这里的cookie 不是上面的记住我 cookie 记住我需要一个cookie session管理 也需要自己的cookie
-     * 默认为: JSESSIONID 问题: 与SERVLET容器名冲突,重新定义为sid
-     *
-     * @return
-     */
-    @Bean("sessionIdCookie")
-    public SimpleCookie sessionIdCookie() {
-        // 这个参数是cookie的名称
-        SimpleCookie simpleCookie = new SimpleCookie("sid");
-        // setcookie的httponly属性如果设为true的话，会增加对xss防护的安全系数。它有以下特点：
-        // setcookie()的第七个参数
-        // 设为true后，只能通过http访问，javascript无法访问
-        // 防止xss读取cookie
-        simpleCookie.setHttpOnly(true);
-        simpleCookie.setPath("/");
-        // maxAge=-1表示浏览器关闭时失效此Cookie
-        simpleCookie.setMaxAge(-1);
-        return simpleCookie;
     }
 
     /**
@@ -240,16 +183,76 @@ public class ShiroConfig {
         // 设置session失效的扫描时间, 清理用户直接关闭浏览器造成的孤立会话，默认为 1个小时
         // 设置该属性 就不需要设置 ExecutorServiceSessionValidationScheduler 底层也是默认自动调用ExecutorServiceSessionValidationScheduler
         sessionManager.setSessionValidationInterval(1000 * 60 * 60);
-        // 取消url后面的 JSESSIONID
+        // 取消url后面的JSESSIONID
         sessionManager.setSessionIdUrlRewritingEnabled(false);
         return sessionManager;
     }
 
+    /**
+     * Session DAO，使用crazycake实现
+     */
+    @Bean
+    public SessionDAO sessionDAO() {
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        redisSessionDAO.setRedisManager(redisManager());
+        redisSessionDAO.setSessionIdGenerator(sessionIdGenerator());
+        // Session在Redis中的保存时间，单位：秒，最好大于Session会话超时时间
+        redisSessionDAO.setExpire(60 * 60);
+        return redisSessionDAO;
+    }
+
+    /**
+     * 配置Session ID生成器
+     */
     @Bean
     public SessionIdGenerator sessionIdGenerator() {
         return new JavaUuidSessionIdGenerator();
     }
 
+    /**
+     * 普通Cookie属性设置
+     */
+    @Bean("sessionIdCookie")
+    public SimpleCookie sessionIdCookie() {
+        // sessionId默认为JSESSIONID，与SERVLET容器名冲突，重新定义为sid
+        SimpleCookie simpleCookie = new SimpleCookie("sid");
+        // setcookie的httponly属性如果设为true的话，会增加对xss防护的安全系数。它有以下特点：
+        // setcookie()的第七个参数
+        // 设为true后，只能通过http访问，javascript无法访问
+        // 防止xss读取cookie
+        simpleCookie.setHttpOnly(true);
+        simpleCookie.setPath("/");
+        // maxAge=-1表示浏览器关闭时失效此Cookie
+        simpleCookie.setMaxAge(-1);
+        return simpleCookie;
+    }
+
+    /**
+     * “记住我”管理器
+     */
+    public CookieRememberMeManager rememberMeManager() {
+        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+        cookieRememberMeManager.setCookie(rememberMeCookie());
+        cookieRememberMeManager.setCipherKey(Base64.getDecoder().decode("zSyK5Kp6PZAAjlT+eeNMlg=="));
+        return cookieRememberMeManager;
+    }
+
+    /**
+     * “记住我”Cookie属性设置
+     */
+    public SimpleCookie rememberMeCookie() {
+        SimpleCookie cookie = new SimpleCookie("rememberMe");
+//        cookie.setDomain(domain);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        // Cookie生效时间30天，单位秒
+        cookie.setMaxAge(30 * 24 * 60 * 60);
+        return cookie;
+    }
+
+    /**
+     * Advistor创建器
+     */
     @Bean("defaultAdvisorAutoProxyCreator")
     @DependsOn("lifecycleBeanPostProcessor")
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
@@ -259,7 +262,9 @@ public class ShiroConfig {
         return defaultAdvisorAutoProxyCreator;
     }
 
-
+    /**
+     * 生命周期管理器
+     */
     @Bean
     public static LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();

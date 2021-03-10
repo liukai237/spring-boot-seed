@@ -12,6 +12,11 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 认证服务
+ *
+ * @author Kai
+ */
 @Slf4j
 @Service
 public class AuthService {

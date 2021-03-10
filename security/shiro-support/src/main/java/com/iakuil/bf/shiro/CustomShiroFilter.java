@@ -4,7 +4,6 @@ import com.iakuil.bf.common.Resp;
 import com.iakuil.bf.common.constant.RespCode;
 import com.iakuil.toolkit.JsonUtils;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.apache.shiro.web.servlet.ShiroHttpServletResponse;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -18,8 +17,7 @@ public class CustomShiroFilter extends FormAuthenticationFilter {
         HttpServletResponse resp = (HttpServletResponse) response;
         resp.setContentType("application/json; charset=utf-8");
         PrintWriter out = resp.getWriter();
-        StringBuffer url = ((ShiroHttpServletResponse) resp).getRequest().getRequestURL();
-        out.write(JsonUtils.bean2Json(new Resp(RespCode.UNAUTHORIZED)));
+        out.write(JsonUtils.bean2Json(new Resp<>(RespCode.UNAUTHORIZED)));
         out.flush();
         out.close();
         return false;
