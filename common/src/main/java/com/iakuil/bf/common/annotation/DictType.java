@@ -4,6 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * 数据字典注解
+ *
  * <p>将属性标注为数据字典。
  *
  * @author Kai

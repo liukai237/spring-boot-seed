@@ -13,7 +13,6 @@ import java.util.Map;
  *
  * @author Kai
  */
-
 @Getter
 @AllArgsConstructor
 public enum Province implements DictEnum {
