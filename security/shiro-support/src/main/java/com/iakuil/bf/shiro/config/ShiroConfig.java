@@ -95,8 +95,10 @@ public class ShiroConfig {
     @Bean(name = "securityManager")
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealms(Collections.singletonList(jdbcRealm()));
+        // 先配置认证策略
         securityManager.setAuthenticator(authenticator());
+        // 再配置Realm
+        securityManager.setRealms(Collections.singletonList(jdbcRealm()));
         // 配置Redis缓存管理器
         securityManager.setCacheManager(cacheManager());
         // 配置自定义Session管理器

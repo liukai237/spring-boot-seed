@@ -11,7 +11,7 @@ import java.util.List;
  *
  * <p>数据字典极少更新，所以采用表级缓存。
  */
-@CacheNamespace
+@CacheNamespace(implementation = org.mybatis.caches.caffeine.CaffeineCache.class)
 public interface DictMapper extends CrudMapper<Dict> {
     List<Dict> listType();
 }
