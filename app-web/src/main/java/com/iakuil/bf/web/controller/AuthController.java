@@ -2,7 +2,7 @@ package com.iakuil.bf.web.controller;
 
 import com.iakuil.bf.common.BaseController;
 import com.iakuil.bf.common.Resp;
-import com.iakuil.bf.service.dto.BasicInfoDto;
+import com.iakuil.bf.common.UserDetails;
 import com.iakuil.bf.shiro.LoginService;
 import com.iakuil.bf.web.vo.UserLogin;
 import io.swagger.annotations.Api;
@@ -35,7 +35,7 @@ public class AuthController extends BaseController {
 
     @ApiOperation(value = "用户登录", notes = "系统用户通过用户名密码登录。")
     @PostMapping(value = "/signIn")
-    public Resp<BasicInfoDto> doSignIn(@ApiParam(value = "加密数据") @RequestBody @Valid UserLogin params) {
+    public Resp<UserDetails> doSignIn(@ApiParam(value = "加密数据") @RequestBody @Valid UserLogin params) {
         return ok(loginService.signIn(params.getUsername(), params.getPassword(), params.getRememberMe()));
     }
 

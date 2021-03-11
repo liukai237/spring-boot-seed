@@ -1,6 +1,7 @@
 package com.iakuil.bf.common;
 
 import com.iakuil.bf.common.constant.RespCode;
+import org.apache.shiro.SecurityUtils;
 
 /**
  * 视图层基类
@@ -46,5 +47,15 @@ public abstract class BaseController {
 
     public <T> Resp<T> fail(RespCode respCode) {
         return new Resp<>(respCode.getCode(), respCode.getMessage());
+    }
+
+    public static Long getCurrentUserId() {
+        UserDetails user = getCurrentUser();
+        return user == null ? null : user.getId();
+    }
+
+    public static UserDetails getCurrentUser() {
+        Object principal = SecurityUtils.getSubject().getPrincipal();
+        return principal == null ? null : (UserDetails) principal;
     }
 }

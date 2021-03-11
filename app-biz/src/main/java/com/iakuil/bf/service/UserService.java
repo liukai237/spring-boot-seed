@@ -2,9 +2,10 @@ package com.iakuil.bf.service;
 
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.BaseService;
+import com.iakuil.bf.common.UserDetails;
 import com.iakuil.bf.dao.*;
 import com.iakuil.bf.dao.entity.*;
-import com.iakuil.bf.service.dto.UserDetails;
+import com.iakuil.toolkit.BeanUtils;
 import com.iakuil.toolkit.HashIdUtils;
 import com.iakuil.toolkit.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
@@ -103,24 +104,16 @@ public class UserService extends BaseService<User> {
     }
 
     /**
-     * 根据多种ID获取系统用户
-     */
-    public User findUserByIdentity(String identity) {
-        return userMapper.selectByIdentity(identity);
-    }
-
-    /**
      * 根据多种ID获取用户信息（认证用）
      */
     public UserDetails findUserDetails(String identity) {
         User user = userMapper.selectByIdentity(identity);
 
         if (user != null) {
-            UserDetails details = new UserDetails();
-            Long id = user.getId();
-            details.setId(id);
-            details.setUsername(user.getUsername());
+            UserDetails details = BeanUtils.copy(user, UserDetails.class);
             details.setPassword(user.getPasswdHash());
+
+            Long id = user.getId();
             details.setRoles(findRolesByUserId(id).stream().map(Role::getRoleName).collect(Collectors.toSet()));
             details.setPermissions(findPowersByUserId(id).stream().map(Power::getPowerName).collect(Collectors.toSet()));
             return details;

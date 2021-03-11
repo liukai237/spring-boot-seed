@@ -1,7 +1,7 @@
 package com.iakuil.bf.shiro;
 
 import com.iakuil.bf.service.UserService;
-import com.iakuil.bf.service.dto.UserDetails;
+import com.iakuil.bf.common.UserDetails;
 import com.iakuil.toolkit.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
