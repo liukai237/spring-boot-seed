@@ -56,7 +56,5 @@ logging:
   file: ./logs/base-framework.log
 
 bf:
-  security:
-    enabled: true
   scheduling:
     enabled: true

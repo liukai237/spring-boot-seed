@@ -1,9 +1,9 @@
 package com.iakuil.bf.shiro;
 
 import com.iakuil.bf.service.UserService;
+import com.iakuil.bf.service.dto.UserDetails;
 import com.iakuil.toolkit.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.MapUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -13,9 +13,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import javax.annotation.Resource;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 @Slf4j
 public class JdbcRealm extends AuthorizingRealm {
@@ -33,15 +30,15 @@ public class JdbcRealm extends AuthorizingRealm {
         String username = (String) token.getPrincipal();
         String password = new String((char[]) token.getCredentials());
 
-        SimpleAuthenticationInfo info = null;
-        Map<String, String> user = userService.findUserDetails(username);
+        SimpleAuthenticationInfo info;
+        UserDetails user = userService.findUserDetails(username);
         if (user == null) {
             throw new UnknownAccountException("用户名未注册");
         }
 
         boolean checkResult = false;
         try {
-            checkResult = PasswordHash.validatePassword(password, MapUtils.getString(user, "password"));
+            checkResult = PasswordHash.validatePassword(password, user.getPassword());
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }
@@ -51,7 +48,7 @@ public class JdbcRealm extends AuthorizingRealm {
         }
 
         info = new SimpleAuthenticationInfo(
-                MapUtils.getString(user, "userId"),
+                user,
                 password,
                 getName());
         return info;
@@ -59,10 +56,12 @@ public class JdbcRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        Set<String> roles = new HashSet<>();
-        roles.add("admin"); //TODO 查询数据库后授权
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.addRoles(roles);
+        UserDetails userDetails = (UserDetails) principals.getPrimaryPrincipal();
+        if (userDetails != null) {
+            info.setRoles(userDetails.getRoles());
+            info.setStringPermissions(userDetails.getPermissions());
+        }
         return info;
     }
 }

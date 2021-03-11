@@ -62,7 +62,8 @@
 
         <sentinel.version>2.2.3.RELEASE</sentinel.version>
         <spring-boot-admin-starter.version>2.2.3</spring-boot-admin-starter.version>
-        <knife4j-spring-boot-starter.version>3.0.2</knife4j-spring-boot-starter.version>
+        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <knife4j-spring-ui.version>3.0.2</knife4j-spring-ui.version>
     </properties>
 
     <dependencies>
@@ -225,9 +226,20 @@
             </dependency>
 
             <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>mapstruct</artifactId>
+                        <groupId>org.mapstruct</groupId>
+                    </exclusion>
+                </exclusions>
+                <version>${springfox-swagger2.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-boot-starter</artifactId>
-                <version>${knife4j-spring-boot-starter.version}</version>
+                <artifactId>knife4j-spring-ui</artifactId>
+                <version>3.0.2</version>
             </dependency>
 
             <dependency>

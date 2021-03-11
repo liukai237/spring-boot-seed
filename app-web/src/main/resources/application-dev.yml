@@ -27,13 +27,8 @@ spring:
       eager: false
 
 bf:
-  security:
-    enabled: false
   scheduling:
     enabled: false
-
-knife4j:
-  enable: true
 
 jetcache:
   statIntervalMinutes: 15

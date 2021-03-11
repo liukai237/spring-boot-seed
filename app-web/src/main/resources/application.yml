@@ -105,9 +105,6 @@ kaptcha:
     color: black
     thickness: 1
 
-knife4j:
-  cors: true
-
 sentry:
   dsn: http://localhost:10111/
 

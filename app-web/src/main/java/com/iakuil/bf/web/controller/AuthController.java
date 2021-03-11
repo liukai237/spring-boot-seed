@@ -2,8 +2,8 @@ package com.iakuil.bf.web.controller;
 
 import com.iakuil.bf.common.BaseController;
 import com.iakuil.bf.common.Resp;
-import com.iakuil.bf.service.dto.BasicUserInfoDto;
-import com.iakuil.bf.shiro.AuthService;
+import com.iakuil.bf.service.dto.BasicInfoDto;
+import com.iakuil.bf.shiro.LoginService;
 import com.iakuil.bf.web.vo.UserLogin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,28 +21,28 @@ import javax.validation.Valid;
  *
  * @author Kai
  */
-@Api(value = "AuthController", tags = {"用户认证及授权接口"})
+@Api(value = "AuthController", tags = {"认证授权"})
 @Slf4j
 @RestController
 @RequestMapping("/api/auth/")
 public class AuthController extends BaseController {
 
-    private final AuthService authService;
+    private final LoginService loginService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
+    public AuthController(LoginService loginService) {
+        this.loginService = loginService;
     }
 
     @ApiOperation(value = "用户登录", notes = "系统用户通过用户名密码登录。")
     @PostMapping(value = "/signIn")
-    public Resp<BasicUserInfoDto> doSignIn(@ApiParam(value = "加密数据") @RequestBody @Valid UserLogin params) {
-        return ok(authService.signIn(params.getUsername(), params.getPassword(), params.getRememberMe()));
+    public Resp<BasicInfoDto> doSignIn(@ApiParam(value = "加密数据") @RequestBody @Valid UserLogin params) {
+        return ok(loginService.signIn(params.getUsername(), params.getPassword(), params.getRememberMe()));
     }
 
     @ApiOperation(value = "用户注销", notes = "用户注销。")
     @PostMapping(value = "/singOut")
     public Resp<?> doSingOut() {
-        authService.logOut();
+        loginService.logOut();
         return ok();
     }
 }

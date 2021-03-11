@@ -6,6 +6,8 @@ import com.iakuil.bf.common.constant.RespCode;
 import com.iakuil.bf.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.ShiroException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -104,6 +106,22 @@ public class GlobalExceptionHandler {
     public Resp<?> processCannotGetJdbcConnectionException(CannotGetJdbcConnectionException e) {
         log.error("[DB ERROR]\n{}", e.getMessage());
         return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), "网络繁忙，请稍后再试！");
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Resp<?> processAuthorizationException(AuthorizationException e) {
+        log.error("[AUTH ERROR]\n{}", e.getMessage());
+        return new Resp<>(RespCode.FORBIDDEN.getCode(), RespCode.FORBIDDEN.getMessage());
+    }
+
+    @ExceptionHandler(ShiroException.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Resp<?> processShiroException(ShiroException e) {
+        log.error("[AUTH ERROR]\n{}", e.getMessage());
+        return new Resp<>(RespCode.UNAUTHORIZED.getCode(), RespCode.UNAUTHORIZED.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

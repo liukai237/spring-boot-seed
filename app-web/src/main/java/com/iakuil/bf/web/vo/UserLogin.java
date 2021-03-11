@@ -15,9 +15,9 @@ public class UserLogin {
     @ApiModelProperty(name = "username", value = "用户名，也可以是手机、email或者微信openId。", required = true, example = "13400000000")
     private String username;
 
-    @ApiModelProperty(name = "password", value = "密码。")
+    @ApiModelProperty(name = "password", value = "密码。", required = true, example = "123456")
     private String password;
 
-    @ApiModelProperty(name = "rememberMe", value = "记住我。", example = "true")
+    @ApiModelProperty(name = "rememberMe", value = "记住我。", example = "false")
     private Boolean rememberMe;
 }

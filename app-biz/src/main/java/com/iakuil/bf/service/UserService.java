@@ -1,11 +1,10 @@
 package com.iakuil.bf.service;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.BaseService;
-import com.iakuil.bf.common.CacheableService;
 import com.iakuil.bf.dao.*;
 import com.iakuil.bf.dao.entity.*;
+import com.iakuil.bf.service.dto.UserDetails;
 import com.iakuil.toolkit.HashIdUtils;
 import com.iakuil.toolkit.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,7 +44,7 @@ public class UserService extends BaseService<User> {
     public boolean add(User user) {
         // 使用HashIds生成唯一username
         String username = user.getUsername();
-        user.setUsername(StringUtils.defaultString(username, HashIdUtils.encrypt(System.currentTimeMillis())));
+        user.setUsername(StringUtils.defaultString(username, HashIdUtils.encrypt(Long.parseLong(user.getTel()))));
 
         String pwdHash = null;
         try {
@@ -110,17 +112,17 @@ public class UserService extends BaseService<User> {
     /**
      * 根据多种ID获取用户信息（认证用）
      */
-    public Map<String, String> findUserDetails(String identity) {
+    public UserDetails findUserDetails(String identity) {
         User user = userMapper.selectByIdentity(identity);
 
         if (user != null) {
-            Long uid = user.getId();
-            Map<String, String> details = Maps.newHashMap();
-            details.put("userId", uid.toString());
-            details.put("username", user.getUsername());
-            details.put("password", user.getPasswdHash());
-            details.put("roles", findRolesByUserId(uid).stream().map(Role::getRoleName).distinct().collect(Collectors.joining(",")));
-            details.put("perms", findPowersByUserId(uid).stream().map(Power::getPowerName).distinct().collect(Collectors.joining(",")));
+            UserDetails details = new UserDetails();
+            Long id = user.getId();
+            details.setId(id);
+            details.setUsername(user.getUsername());
+            details.setPassword(user.getPasswdHash());
+            details.setRoles(findRolesByUserId(id).stream().map(Role::getRoleName).collect(Collectors.toSet()));
+            details.setPermissions(findPowersByUserId(id).stream().map(Power::getPowerName).collect(Collectors.toSet()));
             return details;
         }
 

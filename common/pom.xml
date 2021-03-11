@@ -62,14 +62,14 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>com.alicp.jetcache</groupId>
             <artifactId>jetcache-starter-redis-lettuce</artifactId>
-            <version>${jetcache-starter-redis-lettuce.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

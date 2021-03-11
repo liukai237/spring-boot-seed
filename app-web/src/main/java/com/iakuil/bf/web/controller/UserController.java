@@ -7,7 +7,7 @@ import com.iakuil.bf.common.Resp;
 import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.UserService;
 import com.iakuil.bf.service.converter.UserConverter;
-import com.iakuil.bf.service.dto.UserDetailDto;
+import com.iakuil.bf.service.dto.UserDto;
 import com.iakuil.bf.web.vo.UserAdd;
 import com.iakuil.bf.web.vo.UserEdit;
 import com.iakuil.bf.web.vo.UserQuery;
@@ -40,7 +40,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表，支持分页排序及条件查询。")
     @PostMapping(value = "/list")
-    public Resp<PageData<UserDetailDto>> doQueryWithPage(@Valid @RequestBody PageRequest<UserQuery> req) {
+    public Resp<PageData<UserDto>> doQueryWithPage(@Valid @RequestBody PageRequest<UserQuery> req) {
         return ok(userService.page(req.as(User.class), UserConverter.INSTANCE::toDto));
     }
 
@@ -83,7 +83,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "String", paramType = "path")
     })
     @GetMapping(value = "/{id}")
-    public Resp<UserDetailDto> queryUserDetails(@PathVariable Long id) {
+    public Resp<UserDto> queryUserDetails(@PathVariable Long id) {
         return ok(userConverter.toDto(userService.findById(id)));
     }
 }

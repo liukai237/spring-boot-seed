@@ -12,8 +12,8 @@ import java.util.Date;
 
 @Getter
 @Setter
-@ApiModel(value = "UserDetailDto", description = "用户基本信息（脱敏）")
-public class UserDetailDto {
+@ApiModel(value = "UserDto", description = "用户基本信息（脱敏）")
+public class UserDto {
 
     @ApiModelProperty(name = "id", value = "用户ID")
     private Long id;

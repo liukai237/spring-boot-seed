@@ -8,9 +8,14 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * 用户登录后返回的基本信息
+ *
+ * @author Kai
+ */
 @Getter
 @Setter
-public class BasicUserInfoDto {
+public class BasicInfoDto {
     private Long id;
     private String username;
     private Gender gender;
@@ -21,7 +26,6 @@ public class BasicUserInfoDto {
     private Province province;
     private String nickname;
     private String email;
-    private String openId;
     private String sessionId;
     private String address;
     private Date createTime;
