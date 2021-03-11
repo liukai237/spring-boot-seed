@@ -63,43 +63,33 @@ public class UserService extends BaseService<User> {
         Set<Role> roles = this.findRolesByUserId(userId);
         Set<Power> powers = Sets.newHashSet();
         for (Role role : roles) {
-            powers.addAll(findPowersByRole(role.getId()));
+            powers.addAll(findPowersByRoleId(role.getId()));
         }
 
         return powers;
     }
 
     @Transactional(readOnly = true)
-    public Set<Power> findPowersByRole(Long roleId) {
+    public Set<Power> findPowersByRoleId(Long roleId) {
         RolePower condition = new RolePower();
         condition.setRoleId(roleId);
         List<RolePower> rolePowers = rolePowerMapper.select(condition);
 
-        Set<Power> powers = Sets.newHashSet();
-        for (RolePower rolePower : rolePowers) {
-            Power condition2 = new Power();
-            condition2.setId(rolePower.getPowerId());
-            powers.addAll(powerMapper.select(condition2));
+        if (CollectionUtils.isNotEmpty(rolePowers)) {
+            return new HashSet<>(powerMapper.selectByIds(rolePowers.stream().map(String::valueOf).collect(Collectors.joining(","))));
         }
-
-        return powers;
+        return Collections.emptySet();
     }
 
     @Transactional(readOnly = true)
     public Set<Role> findRolesByUserId(Long userId) {
-        User user = userMapper.selectByPrimaryKey(userId);
-        Set<Long> roleIds = null;
-        if (user != null) {
-            UserRole condition = new UserRole();
-            condition.setUserId(userId);
-            List<UserRole> userRoles = userRoleMapper.select(condition);
-            roleIds = userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
-        }
+        UserRole condition = new UserRole();
+        condition.setUserId(userId);
+        Set<Long> roleIds = userRoleMapper.select(condition).stream().map(UserRole::getRoleId).collect(Collectors.toSet());
 
         if (CollectionUtils.isNotEmpty(roleIds)) {
             return new HashSet<>(roleMapper.selectByIds(roleIds.stream().map(String::valueOf).collect(Collectors.joining(","))));
         }
-
         return Collections.emptySet();
     }
 
