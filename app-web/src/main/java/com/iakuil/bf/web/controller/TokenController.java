@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.TimeUnit;
@@ -24,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/api/token/")
 public class TokenController extends BaseController {
 
-    @Autowired
     private final TokenService tokenService;
 
     public TokenController(TokenService tokenService) {

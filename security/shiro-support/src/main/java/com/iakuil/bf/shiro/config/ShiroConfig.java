@@ -73,12 +73,12 @@ public class ShiroConfig {
         urlMap.put("/web/**", "anon");
         urlMap.put("/health/**", "anon");
 
-        // auth and register
+        // auth and token
         urlMap.put("/api/auth/**", "anon");
+        urlMap.put("/api/token/**", "anon");
 
         // other
-//        urlMap.put("/**", "authc");
-        urlMap.put("/**", "user");
+        urlMap.put("/**", "authc");
 
         bean.setFilterChainDefinitionMap(urlMap);
         Map<String, Filter> filterMap = new HashMap<>();

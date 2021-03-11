@@ -31,7 +31,7 @@ public @interface Password {
      *
      * @return String
      */
-    String message() default "密码格式不正确，请输入8-20位的密码，必须包含数字和字母，支持特殊符号~!@#$%^*";
+    String message() default "密码格式不正确，请输入8-20位的密码，必须包含数字和字母，支持特殊符号~!@#$%^*_";
 
     Class<?>[] groups() default {};
 

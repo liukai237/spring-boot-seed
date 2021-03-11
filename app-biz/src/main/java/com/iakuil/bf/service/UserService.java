@@ -22,6 +22,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * 用户服务
+ *
+ * @author Kai
+ */
 @Slf4j
 @Service
 public class UserService extends BaseService<User> {
@@ -40,9 +45,8 @@ public class UserService extends BaseService<User> {
         this.userRoleMapper = userRoleMapper;
     }
 
-    @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean add(User user) {
+    public boolean register(User user) {
         // 使用HashIds生成唯一username
         String username = user.getUsername();
         user.setUsername(StringUtils.defaultString(username, HashIdUtils.encrypt(Long.parseLong(user.getTel()))));

@@ -42,13 +42,12 @@ public class UserAdd {
     private String tel;
 
     @Password
-    @ApiModelProperty(name = "password", value = "用户密码。", example = "123456", required = true)
+    @ApiModelProperty(name = "password", value = "用户密码。", example = "Changeme_123", required = true)
     @JsonProperty("password")
-    @JsonAlias({"Password", "passWd", "passwd"})
     private String password;
 
-    @ApiModelProperty(name = "vcode", value = "手机验证码", example = "123456", required = true)
-    @JsonProperty("vcode")
+    @ApiModelProperty(name = "smsCode", value = "手机验证码", example = "123456", required = true)
+    @JsonProperty("smsCode")
     @Size(max = 6, min = 4, message = "验证码长度必须大于4小于6位！")
-    private String vCode;
+    private String smsCode;
 }

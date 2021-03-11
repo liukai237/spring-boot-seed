@@ -6,19 +6,19 @@ spring:
       master:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://106.12.99.31:3306/iakuil?characterEncoding=utf-8
+        jdbc-url: jdbc:mysql://106.12.99.31:3306/iakuil?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&useSSL=false
         username: root
         password: KaZ@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
       slave1:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://119.45.239.30:3306/iakuil?characterEncoding=utf-8
+        jdbc-url: jdbc:mysql://119.45.239.30:3306/iakuil?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&useSSL=false
         username: root
         password: KaZ@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
       slave2:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://81.71.3.113:3306/iakuil?characterEncoding=utf-8
+        jdbc-url: jdbc:mysql://81.71.3.113:3306/iakuil?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&useSSL=false
         username: root
         password: KaZ@[jXy3aYdJbFf8rkj4HWUG+FZ41gh6/WmN]
     masterslave:

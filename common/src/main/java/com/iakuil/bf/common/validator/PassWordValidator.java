@@ -16,7 +16,7 @@ public class PassWordValidator implements ConstraintValidator<Password, String> 
     /**
      * 默认正则
      */
-    private String regexp = "^(?![0-9]+$)(?![a-zA-Z~!@#$%^*]+$)[0-9A-Za-z~!@#$%^*]{8,20}$";
+    private String regexp = "^(?![0-9]+$)(?![a-zA-Z~!@#$%^*]+$_)[0-9A-Za-z~!@#$%^*_]{8,20}$";
 
     @Override
     public void initialize(Password constraintAnnotation) {

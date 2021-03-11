@@ -5,6 +5,7 @@ import com.iakuil.bf.common.exception.BusinessException;
 import com.iakuil.bf.service.kaptcha.Kaptcha;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -74,7 +75,7 @@ public class TokenService {
 
     public void verifySmsCode(String tel, String code) {
         String cached = stringRedisTemplate.opsForValue().get(SMS_CODE_KEY + tel);
-        if (cached == null || !cached.equalsIgnoreCase(code)) {
+        if (cached == null || !StringUtils.equalsIgnoreCase(cached, code)) {
             throw new BusinessException(RespCode.INVALID_SMS_CODE);
         }
     }
