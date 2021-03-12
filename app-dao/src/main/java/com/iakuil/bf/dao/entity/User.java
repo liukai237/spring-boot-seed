@@ -24,15 +24,18 @@ import java.util.Date;
 @Table(name = "t_user")
 public class User extends BaseEntity {
 
+    @Column(unique = true)
     private String username;
     private Gender gender;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
     private String passwdHash;
+    @Column(unique = true)
     private String tel;
     private String avatar;
     private Province province;
     private String nickname;
+    @Column(unique = true)
     private String email;
     private String address;
     @CreatedDate

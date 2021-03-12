@@ -3,10 +3,10 @@ package com.iakuil.bf.service;
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.BaseService;
 import com.iakuil.bf.common.UserDetails;
+import com.iakuil.bf.common.tool.Strings;
 import com.iakuil.bf.dao.*;
 import com.iakuil.bf.dao.entity.*;
 import com.iakuil.toolkit.BeanUtils;
-import com.iakuil.toolkit.HashIdUtils;
 import com.iakuil.toolkit.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -45,9 +45,8 @@ public class UserService extends BaseService<User> {
 
     @Transactional(rollbackFor = Exception.class)
     public boolean register(User user) {
-        // 如果username为空，则使用HashIds+手机号码作为用户名
-        user.setUsername(StringUtils.defaultString(user.getUsername(),
-                HashIdUtils.encrypt(Long.parseLong(user.getTel()))));
+        // 如果username为空，则使用UUID作为临时用户名
+        user.setUsername(StringUtils.defaultString(user.getUsername(), Strings.getUuidStr()));
         user.setPasswdHash(PasswordHash.createHash(user.getPasswdHash()));
         return super.add(user);
     }
