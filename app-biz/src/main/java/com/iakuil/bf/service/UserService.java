@@ -3,6 +3,7 @@ package com.iakuil.bf.service;
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.BaseService;
 import com.iakuil.bf.common.UserDetails;
+import com.iakuil.bf.common.exception.BusinessException;
 import com.iakuil.bf.dao.*;
 import com.iakuil.bf.dao.entity.*;
 import com.iakuil.toolkit.BeanUtils;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class UserService extends BaseService<User> {
+    private static final Hashids HASHIDS = new Hashids("Just4ShortId", 8, "abcdefghijklmnopqrstuvwxyz1234567890");
 
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
@@ -43,17 +45,18 @@ public class UserService extends BaseService<User> {
         this.userRoleMapper = userRoleMapper;
     }
 
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean register(User user) {
-        // 如果username为空，则使用临时用户名，类似wxid
-        user.setUsername(StringUtils.defaultString(user.getUsername(), getDefaultUserName(user.getTel())));
+    public boolean add(User user) {
+        // 如果username为空，则生成wxid开头的临时用户名
+        user.setUsername(StringUtils.defaultString(user.getUsername(), "wxid_" + HASHIDS.encode(Long.parseLong(user.getTel()))));
         user.setPasswdHash(PasswordHash.createHash(user.getPasswdHash()));
         return super.add(user);
     }
 
-    private String getDefaultUserName(String tel) {
-        Hashids hashids = new Hashids("Just4ShortId", 8, "abcdefghijklmnopqrstuvwxyz1234567890");
-        return "id_" + hashids.encode(Long.parseLong(tel));
+    @Override
+    public boolean addAll(List<User> entities) {
+        throw new BusinessException("不允许批量添加用户！");
     }
 
     @Transactional(readOnly = true)
