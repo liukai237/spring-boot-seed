@@ -3,7 +3,6 @@ package com.iakuil.bf.service;
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.BaseService;
 import com.iakuil.bf.common.UserDetails;
-import com.iakuil.bf.common.tool.Strings;
 import com.iakuil.bf.dao.*;
 import com.iakuil.bf.dao.entity.*;
 import com.iakuil.toolkit.BeanUtils;
@@ -11,6 +10,7 @@ import com.iakuil.toolkit.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hashids.Hashids;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,10 +45,15 @@ public class UserService extends BaseService<User> {
 
     @Transactional(rollbackFor = Exception.class)
     public boolean register(User user) {
-        // 如果username为空，则使用UUID作为临时用户名
-        user.setUsername(StringUtils.defaultString(user.getUsername(), Strings.getUuidStr()));
+        // 如果username为空，则使用临时用户名，类似wxid
+        user.setUsername(StringUtils.defaultString(user.getUsername(), getDefaultUserName(user.getTel())));
         user.setPasswdHash(PasswordHash.createHash(user.getPasswdHash()));
         return super.add(user);
+    }
+
+    private String getDefaultUserName(String tel) {
+        Hashids hashids = new Hashids("Just4ShortId", 8, "abcdefghijklmnopqrstuvwxyz1234567890");
+        return "id_" + hashids.encode(Long.parseLong(tel));
     }
 
     @Transactional(readOnly = true)
