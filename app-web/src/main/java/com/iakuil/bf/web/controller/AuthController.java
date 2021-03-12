@@ -50,8 +50,8 @@ public class AuthController extends BaseController {
     }
 
     @ApiOperation(value = "用户登出", notes = "用户登出。")
-    @PostMapping(value = "/singOut")
-    public Resp<?> doSingOut() {
+    @PostMapping(value = "/signOut")
+    public Resp<?> doSignOut() {
         SecurityUtils.getSubject().logout();
         return ok();
     }
