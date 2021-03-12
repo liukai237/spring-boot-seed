@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * 字典服务
+ *
+ * @author Kai
  */
 @Service
 public class DictService extends BaseService<Dict> {

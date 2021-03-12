@@ -14,8 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -47,18 +45,10 @@ public class UserService extends BaseService<User> {
 
     @Transactional(rollbackFor = Exception.class)
     public boolean register(User user) {
-        // 使用HashIds生成唯一username
-        String username = user.getUsername();
-        user.setUsername(StringUtils.defaultString(username, HashIdUtils.encrypt(Long.parseLong(user.getTel()))));
-
-        String pwdHash = null;
-        try {
-            pwdHash = PasswordHash.createHash(user.getPasswdHash());
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            log.error(e.getMessage()); // should not be happened
-        }
-        log.debug("Encrypted passwd: {}", pwdHash);
-        user.setPasswdHash(pwdHash);
+        // 如果username为空，则使用HashIds+手机号码作为用户名
+        user.setUsername(StringUtils.defaultString(user.getUsername(),
+                HashIdUtils.encrypt(Long.parseLong(user.getTel()))));
+        user.setPasswdHash(PasswordHash.createHash(user.getPasswdHash()));
         return super.add(user);
     }
 

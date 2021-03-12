@@ -1,7 +1,7 @@
 package com.iakuil.bf.shiro;
 
-import com.iakuil.bf.service.UserService;
 import com.iakuil.bf.common.UserDetails;
+import com.iakuil.bf.service.UserService;
 import com.iakuil.toolkit.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
@@ -11,9 +11,12 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import javax.annotation.Resource;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
+/**
+ * 数据库Realm
+ *
+ * @author Kai
+ */
 @Slf4j
 public class JdbcRealm extends AuthorizingRealm {
 
@@ -36,14 +39,7 @@ public class JdbcRealm extends AuthorizingRealm {
             throw new UnknownAccountException("用户名未注册");
         }
 
-        boolean checkResult = false;
-        try {
-            checkResult = PasswordHash.validatePassword(password, user.getPassword());
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
-
-        if (!checkResult) {
+        if (!PasswordHash.validatePassword(password, user.getPassword())) {
             throw new IncorrectCredentialsException("用户名或密码错误！");
         }
 

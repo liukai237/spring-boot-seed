@@ -12,7 +12,7 @@ import lombok.Setter;
 public class DictQuery {
     @ApiModelProperty(name = "id", value = "编号")
     private Long id;
-    @ApiModelProperty(name = "xxx", value = "标签名")
+    @ApiModelProperty(name = "name", value = "标签名")
     private String name;
     @ApiModelProperty(name = "value", value = "数据值")
     private String value;
