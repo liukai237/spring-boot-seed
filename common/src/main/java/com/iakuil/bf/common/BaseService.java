@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
  * <p>PS.BaseService主要是为了弥补tkMapper的不足（借鉴了MyBatis Plus的一些思路），解决80%的单表CRUD场景，剩下的20%建议手写SQL，或者尝试CQRS。
  * <p>考虑到按时间范围查询的场景比较多，引入了{@code Example}对象查询。通用查询与Example查询都可以使用的情况下，优先使用通用查询方法。
  *
+ * <p>BTW. 如果出现<strong>'com.iakuil.bf.common.db.CrudMapper' that could not be found.</strong>错误，说明子类忘记添加泛型了。
+ *
  * @param <T> 实体类型
  * @author Kai
  */

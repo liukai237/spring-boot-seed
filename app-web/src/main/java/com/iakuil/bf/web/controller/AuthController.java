@@ -65,7 +65,7 @@ public class AuthController extends BaseController {
         User user = new User();
         user.setTel(tel);
         user.setPasswdHash(param.getPassword());
-        return ok(userService.register(user));
+        return ok(userService.add(user));
     }
 
     @ApiOperation(value = "用户注销", notes = "注销用户")

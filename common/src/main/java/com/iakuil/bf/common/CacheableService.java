@@ -19,7 +19,18 @@ import java.util.stream.Collectors;
  *     <li>1、 冗余字段，后台保证数据的一致性，前端只需要基于ORM的单表查询即可。</li>
  *     <li>2、 使用多个基于主键的查询来替代Join查询，利用数据库和自定义两级缓存保证效率。</li>
  * </ul>
- * <p>如果通用的缓存策略不适合业务需求，应该借助JetCache框架另行实现。
+ *
+ * <p>本类就是基于第二种思路的产物。
+ * <p>其中所有的方法自带默认缓存策略，即使子类覆写了本类中的方法，缓存依然可能生效。
+ * 假设子类方法如下，依然可以缓存：
+ * <pre>{@code
+ * @Override
+ * public boolean modify(Test entity) {
+ *   // do something
+ *   return super.modify(entity);
+ * }
+ * }</pre>
+ * <p>如果通用的缓存策略不适合业务需求，请不要继承本类，应该借助JetCache框架另行实现。
  *
  * @param <T> 实体类型
  * @author Kai
