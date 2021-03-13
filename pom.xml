@@ -7,7 +7,7 @@
     <artifactId>app-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <description>Base Framework base on SpringBoot</description>
+    <description>This is a Framework base on SpringBoot and tkMapper.</description>
 
     <modules>
         <module>common</module>
@@ -148,6 +148,10 @@
                     <exclusion>
                         <groupId>tk.mybatis</groupId>
                         <artifactId>mapper-weekend</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>tk.mybatis</groupId>
+                        <artifactId>mapper-extra</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
