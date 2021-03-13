@@ -3,7 +3,6 @@ package com.iakuil.bf.service;
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.BaseService;
 import com.iakuil.bf.common.UserDetails;
-import com.iakuil.bf.common.exception.BusinessException;
 import com.iakuil.bf.dao.*;
 import com.iakuil.bf.dao.entity.*;
 import com.iakuil.toolkit.BeanUtils;
@@ -48,15 +47,22 @@ public class UserService extends BaseService<User> {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean add(User user) {
-        // 如果username为空，则生成wxid开头的临时用户名
-        user.setUsername(StringUtils.defaultString(user.getUsername(), "wxid_" + HASHIDS.encode(Long.parseLong(user.getTel()))));
-        user.setPasswdHash(PasswordHash.createHash(user.getPasswdHash()));
+        preAdd(user);
         return super.add(user);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean addAll(List<User> entities) {
-        throw new BusinessException("不允许批量添加用户！");
+        entities.forEach(this::preAdd);
+        return userMapper.insertList(entities) > entities.size();
+    }
+
+    private void preAdd(User entity) {
+        // 如果username为空，则生成wxid开头的临时用户名
+        entity.setUsername(StringUtils.defaultString(entity.getUsername(), "wxid_" + HASHIDS.encode(Long.parseLong(entity.getTel()))));
+        entity.setPasswdHash(PasswordHash.createHash(entity.getPasswdHash()));
+        entity.setVersion(1L);
     }
 
     @Transactional(readOnly = true)

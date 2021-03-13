@@ -230,10 +230,10 @@ public abstract class BaseService<T extends BaseEntity> {
     }
 
     /**
-     * 批量保存
+     * 批量保存（MySQL专用）
      *
-     * <p>null字段将会被忽略
-     * <p>注意避免长事务
+     * <p>null字段将<strong>不会</strong>被忽略，特别是乐观锁字段，请记得赋值！
+     * <p>注意避免长事务，建议每次批量插入数量不要超过100。
      *
      * @param entities 实体类对象列表
      * @return 保存结果
