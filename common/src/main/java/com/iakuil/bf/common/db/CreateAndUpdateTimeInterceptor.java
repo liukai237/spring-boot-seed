@@ -1,6 +1,7 @@
 package com.iakuil.bf.common.db;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
@@ -11,9 +12,11 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * 实体类创建/修改时间字段自动填充
@@ -32,30 +35,49 @@ public class CreateAndUpdateTimeInterceptor implements Interceptor {
         SqlCommandType sqlCommandType = mappedStatement.getSqlCommandType();
         Object parameter = invocation.getArgs()[1];
         if (SqlCommandType.UPDATE == sqlCommandType) {
-            // 如果是批量操作
-            if (parameter instanceof DefaultSqlSession.StrictMap) {
-                Collection dataList = (Collection) ((DefaultSqlSession.StrictMap) parameter).get("collection");
-                for (Object obj : dataList) {
-                    handleCreateTime(obj);
-                }
+            Iterable entities = getAsIterable(parameter);
+            if (entities == null) {
+                handleUpdateTime(parameter);
             } else {
-                handleCreateTime(parameter);
+                // 如果是批量操作
+                for (Object entity : entities) {
+                    handleUpdateTime(entity);
+                }
             }
         } else if (SqlCommandType.INSERT == sqlCommandType) {
-            if (parameter instanceof DefaultSqlSession.StrictMap) {
-                Collection dataList = (Collection) ((DefaultSqlSession.StrictMap) parameter).get("collection");
-                for (Object obj : dataList) {
-                    handleCreateTime(obj);
-                    handleUpdateTime(obj);
-                }
-            } else {
+            Iterable entities = getAsIterable(parameter);
+            if (entities == null) {
                 handleCreateTime(parameter);
                 handleUpdateTime(parameter);
+            } else {
+                // 如果是批量操作
+                for (Object entity : entities) {
+                    handleCreateTime(entity);
+                    handleUpdateTime(entity);
+                }
             }
         } else {
             // do nothing
         }
         return invocation.proceed();
+    }
+
+    private Iterable getAsIterable(Object parameter) {
+        if (parameter instanceof DefaultSqlSession.StrictMap || parameter instanceof MapperMethod.ParamMap) {
+            Iterable entities = null;
+            if (((Map) parameter).containsKey("collection")) {
+                entities = (Iterable) ((Map) parameter).get("collection");
+            } else if (((Map) parameter).containsKey("array")) {
+                entities = Arrays.stream((Object[]) ((Map) parameter).get("array")).collect(Collectors.toList());
+
+            } else {
+                // do nothing
+            }
+
+            return entities;
+        }
+
+        return null;
     }
 
     private void handleCreateTime(Object obj) throws IllegalAccessException {
