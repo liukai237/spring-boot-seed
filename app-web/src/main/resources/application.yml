@@ -25,13 +25,10 @@ spring:
       ACCEPT_CASE_INSENSITIVE_ENUMS: true
   mvc:
     date-format: yyyy-MM-dd HH:mm:ss
-  boot:
-    admin:
-      client:
-        instance:
-          name: 基础框架
-          prefer-ip: true
-        url: http://127.0.0.1:10110
+  datasource:
+    schema: classpath:sql/schema-*.sql
+    data: classpath:sql/data-*.sql
+    initialization-mode: never
   quartz:
     properties:
       org:
@@ -52,8 +49,16 @@ spring:
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
     job-store-type: jdbc
-    #jdbc:
-      #initialize-schema: never
+#    jdbc:
+#      comment-prefix: quartz
+#      initialize-schema: never
+  boot:
+    admin:
+      client:
+        instance:
+          name: 基础框架
+          prefer-ip: true
+        url: http://127.0.0.1:10110
 
 mybatis:
   type-aliases-package: com.iakuil.dao.entity
