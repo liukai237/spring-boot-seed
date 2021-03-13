@@ -49,7 +49,7 @@ public class Dict extends BaseEntity {
     /**
      * 创建者
      */
-    private Integer createBy;
+    private Long createBy;
     /**
      * 创建时间
      */
