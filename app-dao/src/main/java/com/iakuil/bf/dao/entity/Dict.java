@@ -2,21 +2,24 @@ package com.iakuil.bf.dao.entity;
 
 
 import com.iakuil.bf.common.BaseEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import tk.mybatis.mapper.annotation.LogicDelete;
 
-import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Date;
 
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Table(name = "sys_dict")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "t_dict")
 public class Dict extends BaseEntity {
 
     /**

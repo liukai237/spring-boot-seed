@@ -3,7 +3,6 @@ package com.iakuil.bf.web.job;
 import com.iakuil.bf.common.DictCache;
 import com.iakuil.bf.service.DictService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -12,20 +11,18 @@ import java.util.stream.Collectors;
 
 /**
  * 数据字典刷新任务
+ *
+ * @author Kai
  */
 @Slf4j
+@Deprecated
 @Component
-public class DictRefreshingJob implements InitializingBean {
+public class DictRefreshingJob {
 
     private final DictService dictService;
 
     public DictRefreshingJob(DictService dictService) {
         this.dictService = dictService;
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        this.collectDictFromDb();
     }
 
     @Scheduled(fixedRate = 1000 * 60)

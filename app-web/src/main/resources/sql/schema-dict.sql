@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS `sys_dict`;
-CREATE TABLE `sys_dict`  (
+DROP TABLE IF EXISTS `t_dict`;
+CREATE TABLE `t_dict`  (
   `id` bigint(64) NOT NULL COMMENT '编号',
   `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '标签名',
   `value` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '数据值',
@@ -14,7 +14,7 @@ CREATE TABLE `sys_dict`  (
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '备注信息',
   `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '0' COMMENT '删除标记',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `sys_dict_value`(`value`) USING BTREE,
-  INDEX `sys_dict_label`(`name`) USING BTREE,
-  INDEX `sys_dict_del_flag`(`del_flag`) USING BTREE
+  INDEX `t_dict_value`(`value`) USING BTREE,
+  INDEX `t_dict_label`(`name`) USING BTREE,
+  INDEX `t_dict_del_flag`(`del_flag`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '字典表' ROW_FORMAT = Dynamic;
