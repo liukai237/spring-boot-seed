@@ -42,15 +42,19 @@ public class CustomCredentialsMatcher extends SimpleCredentialsMatcher {
         char[] passwd = (char[]) token.getCredentials();
         String hash = (String) info.getCredentials();
         boolean matches = PasswordHash.validatePassword(passwd, hash);
-        if (matches && retryCount != null) {
-            // 如果密码正确，从缓存中将用户计数清除
-            pwdRetryCount.remove(username);
-        } else if (!matches && retryCount == null) {
-            // 第一次输入错误，则在缓存计数1
-            pwdRetryCount.put(username, new AtomicInteger(1));
+        if (matches) {
+            if (retryCount != null) {
+                // 如果密码正确，从缓存中将用户计数清除
+                pwdRetryCount.remove(username);
+            }
         } else {
-            // 连续输入错误，继续+1
-            pwdRetryCount.put(username, retryCount);
+            if (retryCount == null) {
+                // 第一次输入错误，则在缓存计数1
+                pwdRetryCount.put(username, new AtomicInteger(1));
+            } else {
+                // 连续输入错误，继续+1
+                pwdRetryCount.put(username, retryCount);
+            }
         }
 
         return matches;
