@@ -2,10 +2,8 @@ package com.iakuil.bf.service;
 
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.BaseService;
-import com.iakuil.bf.common.UserDetails;
 import com.iakuil.bf.dao.*;
 import com.iakuil.bf.dao.entity.*;
-import com.iakuil.toolkit.BeanUtils;
 import com.iakuil.toolkit.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -101,21 +99,10 @@ public class UserService extends BaseService<User> {
     }
 
     /**
-     * 根据多种ID获取用户信息（认证用）
+     * 根据ID、用户名、电话号码、邮箱等唯一标识获取用户信息（认证用）
      */
-    public UserDetails findUserDetails(String identity) {
-        User user = userMapper.selectByIdentity(identity);
-
-        if (user != null) {
-            UserDetails details = BeanUtils.copy(user, UserDetails.class);
-            details.setPassword(user.getPasswdHash());
-
-            Long id = user.getId();
-            details.setRoles(findRolesByUserId(id).stream().map(Role::getRoleName).collect(Collectors.toSet()));
-            details.setPermissions(findPowersByUserId(id).stream().map(Power::getPowerName).collect(Collectors.toSet()));
-            return details;
-        }
-
-        return null;
+    @Transactional(readOnly = true)
+    public User findByIdentity(String identity) {
+        return userMapper.selectByIdentity(identity);
     }
 }

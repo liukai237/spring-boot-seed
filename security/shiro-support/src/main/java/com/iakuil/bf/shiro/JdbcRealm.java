@@ -1,8 +1,11 @@
 package com.iakuil.bf.shiro;
 
 import com.iakuil.bf.common.UserDetails;
+import com.iakuil.bf.dao.entity.Power;
+import com.iakuil.bf.dao.entity.Role;
+import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.UserService;
-import com.iakuil.toolkit.PasswordHash;
+import com.iakuil.toolkit.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -11,6 +14,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import javax.annotation.Resource;
+import java.util.stream.Collectors;
 
 /**
  * 数据库Realm
@@ -31,23 +35,21 @@ public class JdbcRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String username = (String) token.getPrincipal();
-        String password = new String((char[]) token.getCredentials());
 
-        SimpleAuthenticationInfo info;
-        UserDetails user = userService.findUserDetails(username);
+        User user = userService.findByIdentity(username);
         if (user == null) {
-            throw new UnknownAccountException("用户名未注册");
+            throw new UnknownAccountException("用户未注册");
         }
 
-        if (!PasswordHash.validatePassword(password, user.getPassword())) {
-            throw new IncorrectCredentialsException("用户名或密码错误！");
-        }
-
-        info = new SimpleAuthenticationInfo(
-                user,
-                password,
+        // 封装不包含密码的用户详情对象
+        UserDetails details = BeanUtils.copy(user, UserDetails.class);
+        Long id = user.getId();
+        details.setRoles(userService.findRolesByUserId(id).stream().map(Role::getRoleName).collect(Collectors.toSet()));
+        details.setPermissions(userService.findPowersByUserId(id).stream().map(Power::getPowerName).collect(Collectors.toSet()));
+        return new SimpleAuthenticationInfo(
+                details,
+                user.getPasswdHash(),
                 getName());
-        return info;
     }
 
     @Override

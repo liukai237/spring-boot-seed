@@ -47,6 +47,5 @@ public class User extends BaseEntity {
     private Long version;
     @LogicDelete
     private Integer deleted;
-    //private Boolean locked;
     //private Boolean available;
 }

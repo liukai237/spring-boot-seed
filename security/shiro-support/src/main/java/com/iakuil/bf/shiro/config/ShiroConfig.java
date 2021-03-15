@@ -1,5 +1,6 @@
 package com.iakuil.bf.shiro.config;
 
+import com.iakuil.bf.shiro.CustomCredentialsMatcher;
 import com.iakuil.bf.shiro.CustomShiroFilter;
 import com.iakuil.bf.shiro.JdbcRealm;
 import org.apache.commons.lang3.StringUtils;
@@ -107,11 +108,21 @@ public class ShiroConfig {
     }
 
     /**
-     * 自定义Realm
+     * 自定义JDBC Realm
      */
     @Bean
     JdbcRealm jdbcRealm() {
-        return new JdbcRealm();
+        JdbcRealm jdbcRealm = new JdbcRealm();
+        jdbcRealm.setCredentialsMatcher(customCredentialsMatcher());
+        return jdbcRealm;
+    }
+
+    /**
+     * 自定义密码匹配器
+     */
+    @Bean("credentialsMatcher")
+    public CustomCredentialsMatcher customCredentialsMatcher() {
+        return new CustomCredentialsMatcher(lockedAccountManager());
     }
 
     /**
@@ -140,9 +151,21 @@ public class ShiroConfig {
         RedisCacheManager cacheManager = new RedisCacheManager();
         cacheManager.setRedisManager(redisManager());
         // 针对不同用户缓存
-        cacheManager.setPrincipalIdFieldName("username");
+        cacheManager.setPrincipalIdFieldName("id");
         // 用户权限信息缓存时间（秒），默认30分钟
         cacheManager.setExpire(60 * 30);
+        return cacheManager;
+    }
+
+    /**
+     * 用户密码输入错误计数缓存管理器
+     */
+    @Bean("lockedAccountManager")
+    public RedisCacheManager lockedAccountManager() {
+        RedisCacheManager cacheManager = new RedisCacheManager();
+        cacheManager.setRedisManager(redisManager());
+        // 用户密码输入错误计数缓存时间（秒），5分钟
+        cacheManager.setExpire(60 * 5);
         return cacheManager;
     }
 
