@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 /**
  * Session服务
  *
+ * <p>{@link SessionDAO}之上再封装一层，实现一些Session的常用操作。
+ *
  * @author Kai
  */
 @Slf4j
@@ -34,7 +36,9 @@ public class SessionService {
     }
 
     /**
-     * 获取当前在线的Session列表
+     * 查询当前在线的Session列表
+     *
+     * <p>不包括RememberMe的Session。
      */
     public Map<Long, List<Session>> getOnlineSessions() {
         Map<Long, List<Session>> results = Maps.newHashMap();
@@ -51,7 +55,18 @@ public class SessionService {
     }
 
     /**
-     * 超过三个Session踢掉最老的Session
+     * 管理员踢人
+     *
+     * <p>一般配合{@link this#getOnlineSessions()}使用。
+     */
+    public void kickOut(Session session) {
+        sessionDAO.delete(session);
+    }
+
+    /**
+     * 用户登陆后踢人
+     *
+     * <p>同一用户，超过三个Session时，踢掉最老的Session
      */
     @Async
     public void kickOutFor(Long userId) {

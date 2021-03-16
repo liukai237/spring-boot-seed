@@ -61,7 +61,7 @@ public class AuthController extends BaseController {
         return ok();
     }
 
-    @ApiOperation(value = "用户注册", notes = "用户通过手机进行注册")
+    @ApiOperation(value = "账号注册", notes = "通过手机注册账号。")
     @PostMapping(value = "/signUp")
     public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody UserAdd param) {
         String tel = param.getTel();
@@ -73,7 +73,7 @@ public class AuthController extends BaseController {
         return ok(userService.add(user));
     }
 
-    @ApiOperation(value = "用户注销", notes = "注销用户")
+    @ApiOperation(value = "账号注销", notes = "用户注销自己账号。")
     @PostMapping(value = "/signOff")
     public Resp<?> doSignOff() {
         return ok(userService.removeById(getCurrentUserId()));
