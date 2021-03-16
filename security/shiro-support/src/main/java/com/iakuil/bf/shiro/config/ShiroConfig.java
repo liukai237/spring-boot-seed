@@ -1,8 +1,6 @@
 package com.iakuil.bf.shiro.config;
 
-import com.iakuil.bf.shiro.CustomCredentialsMatcher;
-import com.iakuil.bf.shiro.CustomShiroFilter;
-import com.iakuil.bf.shiro.JdbcRealm;
+import com.iakuil.bf.shiro.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
@@ -150,7 +148,7 @@ public class ShiroConfig {
     public RedisCacheManager cacheManager() {
         RedisCacheManager cacheManager = new RedisCacheManager();
         cacheManager.setRedisManager(redisManager());
-        // 针对不同用户缓存
+        // 针对不同用户缓存，默认是id
         cacheManager.setPrincipalIdFieldName("id");
         // 用户权限信息缓存时间（秒），默认30分钟
         cacheManager.setExpire(60 * 30);
@@ -222,6 +220,14 @@ public class ShiroConfig {
         // Session在Redis中的保存时间，单位：秒，最好大于Session会话超时时间
         redisSessionDAO.setExpire(60 * 60);
         return redisSessionDAO;
+    }
+
+    /**
+     * 自定义的Session Service，将SessionDAO又封装了一遍
+     */
+    @Bean
+    public SessionService sessionService() {
+        return new SessionService(sessionDAO());
     }
 
     /**

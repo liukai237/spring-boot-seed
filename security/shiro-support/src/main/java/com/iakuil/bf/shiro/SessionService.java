@@ -5,17 +5,17 @@ import com.google.common.collect.Maps;
 import com.iakuil.bf.common.UserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
-import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Async;
 
-import javax.annotation.Resource;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Session服务
@@ -23,38 +23,51 @@ import java.util.Objects;
  * @author Kai
  */
 @Slf4j
-@Service
 public class SessionService {
 
     private static final int MAX_SESSION_SIZE = 3;
 
-    @Resource
-    private RedisSessionDAO sessionDAO;
+    private final SessionDAO sessionDAO;
 
+    public SessionService(SessionDAO sessionDAO) {
+        this.sessionDAO = sessionDAO;
+    }
+
+    /**
+     * 获取当前在线的Session列表
+     */
     public Map<Long, List<Session>> getOnlineSessions() {
         Map<Long, List<Session>> results = Maps.newHashMap();
         for (Session session : sessionDAO.getActiveSessions()) {
             Long userId = getUserIdFromSession(session);
+            if (userId == null) {
+                continue;
+            }
             List<Session> tmpList = results.getOrDefault(userId, Lists.newArrayList());
             tmpList.add(session);
-            results.put(userId, tmpList);
+            results.put(userId, tmpList.stream().sorted(Comparator.comparing(Session::getStartTimestamp)).collect(Collectors.toList()));
         }
         return results;
     }
 
-    public void kickOutFor(Session session) {
-        Long userId = getUserIdFromSession(session);
-        this.kickOutFor(userId);
-    }
-
+    /**
+     * 超过三个Session踢掉最老的Session
+     */
+    @Async
     public void kickOutFor(Long userId) {
+        if (userId == null) {
+            return;
+        }
         List<Session> sessions = getSessionsByUserId(userId);
         sessions.stream()
-                .sorted(Comparator.comparing(Session::getStartTimestamp))
+                .sorted(Comparator.comparing(Session::getStartTimestamp).reversed())
                 .skip(MAX_SESSION_SIZE)
-                .forEach(item -> sessionDAO.delete(item));
+                .forEach(sessionDAO::delete);
     }
 
+    /**
+     * 认证信息变更后刷新相关Session
+     */
     public void refresh(UserDetails userDetails) {
         List<Session> sessions = getSessionsByUserId(userDetails.getId());
         sessions.stream()
@@ -81,7 +94,10 @@ public class SessionService {
 
     private Long getUserIdFromSession(Session session) {
         SimplePrincipalCollection spc = (SimplePrincipalCollection) session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+        if (spc == null) {
+            return null;
+        }
         UserDetails userDetails = (UserDetails) spc.getPrimaryPrincipal();
-        return userDetails == null ? -1L : userDetails.getId();
+        return userDetails == null ? null : userDetails.getId();
     }
 }

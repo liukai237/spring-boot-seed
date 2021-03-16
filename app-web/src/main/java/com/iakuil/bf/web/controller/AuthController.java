@@ -6,6 +6,7 @@ import com.iakuil.bf.common.UserDetails;
 import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.TokenService;
 import com.iakuil.bf.service.UserService;
+import com.iakuil.bf.shiro.SessionService;
 import com.iakuil.bf.web.vo.UserAdd;
 import com.iakuil.bf.web.vo.UserLogin;
 import io.swagger.annotations.Api;
@@ -35,10 +36,12 @@ public class AuthController extends BaseController {
 
     private final UserService userService;
     private final TokenService tokenService;
+    private final SessionService sessionService;
 
-    public AuthController(UserService userService, TokenService tokenService) {
+    public AuthController(UserService userService, TokenService tokenService, SessionService sessionService) {
         this.userService = userService;
         this.tokenService = tokenService;
+        this.sessionService = sessionService;
     }
 
     @ApiOperation(value = "用户登录", notes = "系统用户通过用户名密码登录。")
@@ -46,7 +49,9 @@ public class AuthController extends BaseController {
     public Resp<UserDetails> doSignIn(@ApiParam(value = "加密数据") @RequestBody @Valid UserLogin params) {
         Subject subject = SecurityUtils.getSubject();
         subject.login(new UsernamePasswordToken(params.getUsername(), params.getPassword(), params.getRememberMe()));
-        return ok((UserDetails) subject.getPrincipal());
+        UserDetails details = (UserDetails) subject.getPrincipal();
+        sessionService.kickOutFor(details.getId());
+        return ok(details);
     }
 
     @ApiOperation(value = "用户登出", notes = "用户登出。")
