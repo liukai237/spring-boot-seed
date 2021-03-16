@@ -9,6 +9,7 @@
 * MySQL + Hikari数据库连接池
 * MapStruct
 * Swagger2
+* Apache Shiro
  
 |名称|版本号|项目主页|简介|
 |---|---|---|---|
@@ -17,6 +18,7 @@
 |通用Mapper|2.1.5|https://mapperhelper.github.io||
 |Page Helper|5.1.8|https://github.com/pagehelper/pagehelper-spring-boot||
 |Sharding-JDBC|4.1.1|https://shardingsphere.apache.org/||
+|Shiro|1.7.0|http://shiro.apache.org/||
 
 ## 主要功能
 除了传统SSM框架提供的特性外，还集成如下功能：
