@@ -361,22 +361,20 @@ public abstract class BaseService<T extends BaseEntity> {
     }
 
     /**
-     * 跟据游标滚动查询ID列表（试验功能）
+     * 滚动查询（试验功能）
      *
+     * <p>类似Elasticsearch Scroll查询，参考了微信next_openid的实现。
      * <p>用于代替pageSize超过100的深分页，一般配合{@link BaseService#findByIds(Long...)}使用。
      * <p>注意：每次最多返回一万个ID。
      *
-     * @param entity 实体类对象，包含排序参数（分页参数将被忽略）
-     * @param nextId 游标ID，为空则从第一个ID开始
+     * @param entity   实体类对象，pageNum会被忽略，永远为1
+     * @param scrollId 游标ID，为空则从第一个ID开始
      * @return 实体类对象
      */
     @Transactional(readOnly = true)
-    public Long[] findByCursor(T entity, Long nextId) {
-        entity.setPageNum(1); // hard code
-        Integer size = entity.getPageSize();
-        if (size == null || size <= 0 || size > 10000) {
-            entity.setPageSize(10000);
-        }
-        return mapper.selectByNextId(entity, nextId).stream().map(BaseEntity::getId).toArray(Long[]::new);
+    public Long[] findByScroll(T entity, Long scrollId) {
+        return mapper.selectByScrollId(entity, scrollId).stream()
+                .map(BaseEntity::getId)
+                .toArray(Long[]::new);
     }
 }
