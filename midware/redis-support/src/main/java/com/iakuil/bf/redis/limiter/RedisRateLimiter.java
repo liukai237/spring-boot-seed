@@ -61,7 +61,7 @@ public class RedisRateLimiter {
         if (count != null && count.intValue() <= limitCount) {
             return pjp.proceed();
         } else {
-            throw new IllegalStateException("You have been dragged into the blacklist");
+            throw new IllegalStateException("服务器繁忙，请稍后再试！");
         }
     }
 

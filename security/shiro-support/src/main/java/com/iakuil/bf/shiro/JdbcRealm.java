@@ -1,11 +1,7 @@
 package com.iakuil.bf.shiro;
 
-import com.iakuil.bf.common.UserDetails;
-import com.iakuil.bf.dao.entity.Power;
-import com.iakuil.bf.dao.entity.Role;
-import com.iakuil.bf.dao.entity.User;
-import com.iakuil.bf.service.UserService;
-import com.iakuil.toolkit.BeanUtils;
+import com.iakuil.bf.common.security.UserDetails;
+import com.iakuil.bf.common.security.UserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -14,7 +10,6 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import javax.annotation.Resource;
-import java.util.stream.Collectors;
 
 /**
  * 数据库Realm
@@ -25,7 +20,7 @@ import java.util.stream.Collectors;
 public class JdbcRealm extends AuthorizingRealm {
 
     @Resource
-    private UserService userService;
+    private UserDetailsService userDetailsService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -36,19 +31,17 @@ public class JdbcRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String username = (String) token.getPrincipal();
 
-        User user = userService.findByIdentity(username);
-        if (user == null) {
+        UserDetails details = userDetailsService.loadUserByUsername(username);
+        if (details == null) {
             throw new UnknownAccountException("用户未注册");
         }
 
-        // 封装不包含密码的用户详情对象
-        UserDetails details = BeanUtils.copy(user, UserDetails.class);
-        Long id = user.getId();
-        details.setRoles(userService.findRolesByUserId(id).stream().map(Role::getRoleName).collect(Collectors.toSet()));
-        details.setPermissions(userService.findPowersByUserId(id).stream().map(Power::getPowerName).collect(Collectors.toSet()));
+        String passwdHash = details.getPasswdHash();
+        details.setPasswdHash(null);
+        // 缓存不包含密码的用户详情对象
         return new SimpleAuthenticationInfo(
                 details,
-                user.getPasswdHash(),
+                passwdHash,
                 getName());
     }
 

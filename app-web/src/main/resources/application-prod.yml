@@ -50,7 +50,7 @@ spring:
 
 logging:
   level:
-    root: DEBUG
+    root: INFO
     org.springframework.web: INFO
     com.iakuil.bf.dao: DEBUG
   file: ./logs/base-framework.log
@@ -58,3 +58,13 @@ logging:
 bf:
   scheduling:
     enabled: true
+
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  local:
+    default:
+      type: caffeine
+      keyConvertor: fastjson
+      limit: 10000
+      defaultExpireInMillis: 10000

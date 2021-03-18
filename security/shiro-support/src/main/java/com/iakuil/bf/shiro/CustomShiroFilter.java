@@ -10,6 +10,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
+/**
+ * 定制的认证拦截器
+ *
+ * @author Kai
+ */
 public class CustomShiroFilter extends FormAuthenticationFilter {
 
     @Override

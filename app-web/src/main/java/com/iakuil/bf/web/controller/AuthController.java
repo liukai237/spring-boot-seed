@@ -2,13 +2,15 @@ package com.iakuil.bf.web.controller;
 
 import com.iakuil.bf.common.BaseController;
 import com.iakuil.bf.common.Resp;
-import com.iakuil.bf.common.UserDetails;
+import com.iakuil.bf.common.security.UserDetails;
 import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.TokenService;
 import com.iakuil.bf.service.UserService;
 import com.iakuil.bf.shiro.SessionService;
-import com.iakuil.bf.web.vo.UserAdd;
+import com.iakuil.bf.web.vo.PwdEdit;
+import com.iakuil.bf.web.vo.SmsLogin;
 import com.iakuil.bf.web.vo.UserLogin;
+import com.iakuil.toolkit.PasswordHash;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,11 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 /**
- * 注册认证接口
+ * 认证授权接口
  *
  * @author Kai
  */
-@Api(value = "AuthController", tags = {"注册认证"})
+@Api(value = "AuthController", tags = {"认证授权"})
 @Slf4j
 @RestController
 @RequestMapping("/api/auth/")
@@ -44,7 +46,7 @@ public class AuthController extends BaseController {
         this.sessionService = sessionService;
     }
 
-    @ApiOperation(value = "用户登录", notes = "系统用户通过用户名密码登录。")
+    @ApiOperation(value = "密码登录", notes = "系统用户通过用户名/手机号码/邮箱+密码登录。")
     @PostMapping(value = "/signIn")
     public Resp<UserDetails> doSignIn(@ApiParam(value = "加密数据") @RequestBody @Valid UserLogin params) {
         Subject subject = SecurityUtils.getSubject();
@@ -54,28 +56,27 @@ public class AuthController extends BaseController {
         return ok(details);
     }
 
+    @ApiOperation(value = "短信登录", notes = "系统用户通过手机验证码登录。")
+    @PostMapping(value = "/signInBySms")
+    public Resp<UserDetails> signInBySms(@ApiParam(value = "加密数据") @RequestBody @Valid SmsLogin params) {
+        //TODO SmsRealm、发送短信验证码
+        return ok();
+    }
+
+    @ApiOperation(value = "忘记密码", notes = "用户忘记密码后通过短信验证码重置密码。")
+    @PostMapping(value = "/resetPwd")
+    public Resp<UserDetails> resetPwdBySms(@ApiParam(value = "加密数据") @RequestBody @Valid PwdEdit params) {
+        String tel = params.getTel();
+        tokenService.verifySmsCode(tel, params.getSmsCode());
+        User user = new User();
+        user.setPasswdHash(PasswordHash.createHash(params.getPassword()));
+        return ok();
+    }
+
     @ApiOperation(value = "用户登出", notes = "用户登出。")
     @PostMapping(value = "/signOut")
     public Resp<?> doSignOut() {
         SecurityUtils.getSubject().logout();
         return ok();
-    }
-
-    @ApiOperation(value = "账号注册", notes = "通过手机注册账号。")
-    @PostMapping(value = "/signUp")
-    public Resp<?> doSignUp(@ApiParam(value = "注册资料", required = true) @Valid @RequestBody UserAdd param) {
-        String tel = param.getTel();
-        // 首先校验短信验证码
-        tokenService.verifySmsCode(tel, param.getSmsCode());
-        User user = new User();
-        user.setTel(tel);
-        user.setPasswdHash(param.getPassword());
-        return ok(userService.add(user));
-    }
-
-    @ApiOperation(value = "账号注销", notes = "用户注销自己账号。")
-    @PostMapping(value = "/signOff")
-    public Resp<?> doSignOff() {
-        return ok(userService.removeById(getCurrentUserId()));
     }
 }

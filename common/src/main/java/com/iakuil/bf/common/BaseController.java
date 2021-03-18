@@ -1,7 +1,10 @@
 package com.iakuil.bf.common;
 
 import com.iakuil.bf.common.constant.RespCode;
-import org.apache.shiro.SecurityUtils;
+import com.iakuil.bf.common.security.UserDetails;
+import com.iakuil.bf.common.security.UserDetailsService;
+
+import javax.annotation.Resource;
 
 /**
  * 视图层基类
@@ -16,6 +19,9 @@ import org.apache.shiro.SecurityUtils;
  * @author Kai
  */
 public abstract class BaseController {
+
+    @Resource
+    private UserDetailsService userDetailsService;
 
     public <T> Resp<T> ok() {
         return ok(null);
@@ -49,13 +55,12 @@ public abstract class BaseController {
         return new Resp<>(respCode.getCode(), respCode.getMessage());
     }
 
-    public static Long getCurrentUserId() {
+    public Long getCurrentUserId() {
         UserDetails user = getCurrentUser();
         return user == null ? null : user.getId();
     }
 
-    public static UserDetails getCurrentUser() {
-        Object principal = SecurityUtils.getSubject().getPrincipal();
-        return principal == null ? null : (UserDetails) principal;
+    public UserDetails getCurrentUser() {
+        return userDetailsService.getCurrentUser();
     }
 }

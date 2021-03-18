@@ -1,15 +1,11 @@
-package com.iakuil.bf.common;
+package com.iakuil.bf.common.security;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.iakuil.bf.common.constant.Gender;
-import com.iakuil.bf.common.constant.Province;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -26,19 +22,10 @@ import java.util.Set;
 public class UserDetails implements Serializable {
     private Long id;
     private String username;
-
-    private String nickname;
-    private String avatar;
+    private String passwdHash;
     private String tel;
     private String email;
-    private Gender gender;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date birthday;
-    private Province province;
 
     private Set<String> roles;
     private Set<String> permissions;
-
-    private Date createTime;
-    private Date updateTime;
 }

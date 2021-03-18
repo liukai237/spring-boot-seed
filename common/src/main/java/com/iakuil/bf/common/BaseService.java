@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public abstract class BaseService<T extends BaseEntity> {
 
     @Autowired
-    private CrudMapper<T> mapper;
+    protected CrudMapper<T> mapper;
 
     /**
      * 将实体类作为查询条件进行查询

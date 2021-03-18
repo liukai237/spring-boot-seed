@@ -57,7 +57,7 @@ public class UserController extends BaseController {
         return ok(userService.removeById(id));
     }
 
-    @ApiOperation(value = "用户批量注销", notes = "批量删除用户")
+    @ApiOperation(value = "用户批量删除", notes = "批量删除用户")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "ids", value = "用户ID，多个以逗号分隔", required = true, dataType = "String", paramType = "query")
     })

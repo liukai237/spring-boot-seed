@@ -74,6 +74,7 @@ public class ShiroConfig {
 
         // auth and token
         urlMap.put("/api/auth/**", "anon");
+        urlMap.put("/api/reg/**", "anon");
         urlMap.put("/api/token/**", "anon");
 
         // other

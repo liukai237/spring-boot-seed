@@ -72,12 +72,6 @@
             <artifactId>jetcache-starter-redis-lettuce</artifactId>
             <scope>compile</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring</artifactId>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>
