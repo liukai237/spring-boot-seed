@@ -18,5 +18,6 @@ public interface CrudMapper<T> extends BaseMapper<T>,
         DeleteByIdsMapper<T>,
         SelectByIdsMapper<T>,
         InsertListMapper<T>,
+        SelectScrollMapper<T>,
         ExampleMapper<T> {
 }

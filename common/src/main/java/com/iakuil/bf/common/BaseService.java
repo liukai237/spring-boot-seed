@@ -3,8 +3,6 @@ package com.iakuil.bf.common;
 import com.iakuil.bf.common.db.Condition;
 import com.iakuil.bf.common.db.CrudMapper;
 import com.iakuil.bf.common.tool.ReflectUtils;
-import com.iakuil.toolkit.BeanMapUtils;
-import com.iakuil.toolkit.MapBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import tk.mybatis.mapper.annotation.Version;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -364,34 +361,20 @@ public abstract class BaseService<T extends BaseEntity> {
     }
 
     /**
-     * 滚动查询ID列表（试验功能）
+     * 滚动查询（试验功能）
      *
+     * <p>类似Elasticsearch Scroll查询，参考了微信next_openid的实现。
      * <p>用于代替pageSize超过100的深分页，一般配合{@link BaseService#findByIds(Long...)}使用。
-     * <p>每次最多返回一万个ID。
+     * <p>注意：每次最多返回一万个ID。
      *
-     * @param entity 实体类对象，包含排序参数（分页参数将被忽略）
-     * @param nextId 游标ID，为空则从第一个ID开始
+     * @param entity   实体类对象，pageNum会被忽略，永远为1
+     * @param scrollId 游标ID，为空则从第一个ID开始
      * @return 实体类对象
      */
     @Transactional(readOnly = true)
-    public Long[] findScrollIds(T entity, Long nextId) {
-        Condition condition = new Condition(ReflectUtils.getSuperClassGenericType(getClass()));
-        condition.selectProperties("id");
-        Condition.Criteria criteria = condition.createCriteria();
-
-        // first of all, append id > #{nextId}
-        criteria.andGreaterThan("id", ObjectUtils.defaultIfNull(nextId, 0));
-        Map<String, Object> paramMap = MapBuilder.init(BeanMapUtils.beanToMap(entity, true))
-                .remove("id")
-                .build();
-        // append querying, pageNum and pageSize are ignored
-        criteria.andAllEqualTo(paramMap);
-        // append order by
-        condition.setOrderBy(entity.getOrderBy());
-        // append LIMIT 10000
-        condition.setPageNum(1);
-        condition.setPageSize(10000);
-
-        return mapper.selectByExample(condition).stream().map(BaseEntity::getId).toArray(Long[]::new);
+    public Long[] findByScroll(T entity, Long scrollId) {
+        return mapper.selectByScrollId(entity, scrollId).stream()
+                .map(BaseEntity::getId)
+                .toArray(Long[]::new);
     }
 }
