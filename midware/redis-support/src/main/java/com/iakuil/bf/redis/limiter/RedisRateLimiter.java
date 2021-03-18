@@ -29,7 +29,7 @@ public class RedisRateLimiter {
     @Autowired
     private RedisScript<Number> limitRateScript;
 
-    @Around("execution(public * *(..)) && @annotation(com.iakuil.bf.redis.limit.Limit)")
+    @Around("execution(public * *(..)) && @annotation(com.iakuil.bf.redis.limiter.Limit)")
     public Object interceptor(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
