@@ -7,4 +7,5 @@ package com.iakuil.bf.common.constant;
  */
 public class CacheConstant {
     public static final String CACHE_KEY_PREFIX = "iakuil:entity:";
+    public static final String PWD_RETRY_COUNT = "iakuil:pwdRetryCount";
 }

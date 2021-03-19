@@ -1,5 +1,6 @@
-package com.iakuil.bf.redis.config;
+package com.iakuil.bf.redis;
 
+import com.iakuil.bf.common.cache.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -7,12 +8,14 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Redis工具类实现
+ *
+ * @author Kai
+ */
 @Service
 public class RedisServiceImpl implements RedisService {
 
-    /**
-     *
-     */
     private static final String PREFIX = "com.iakuil.bf:";
 
     @Autowired

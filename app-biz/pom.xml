@@ -9,6 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>app-biz</artifactId>
+    <description>业务模块，包含Service、Mapstruct Converter和各种DTO。</description>
 
     <dependencies>
         <dependency>
@@ -20,12 +21,6 @@
         <dependency>
             <groupId>com.iakuil</groupId>
             <artifactId>redis-support</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.iakuil</groupId>
-            <artifactId>quartz-support</artifactId>
             <version>${project.version}</version>
         </dependency>
 

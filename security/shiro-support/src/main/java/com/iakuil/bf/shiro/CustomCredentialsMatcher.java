@@ -1,14 +1,15 @@
 package com.iakuil.bf.shiro;
 
+import com.iakuil.bf.common.cache.RedisService;
+import com.iakuil.bf.common.constant.CacheConstant;
 import com.iakuil.toolkit.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
-import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.CacheManager;
 
+import javax.annotation.Resource;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -20,11 +21,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 public class CustomCredentialsMatcher extends SimpleCredentialsMatcher {
-    private final Cache<String, AtomicInteger> pwdRetryCount;
+    private static final int PWD_RETRY_LIMIT = 5;
 
-    public CustomCredentialsMatcher(CacheManager cacheManager) {
-        pwdRetryCount = cacheManager.getCache("pwdRetryCount");
-    }
+    @Resource
+    private RedisService redisService;
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
@@ -33,8 +33,8 @@ public class CustomCredentialsMatcher extends SimpleCredentialsMatcher {
         }
 
         String username = (String) token.getPrincipal();
-        AtomicInteger retryCount = pwdRetryCount.get(username);
-        if (retryCount != null && retryCount.incrementAndGet() > 5) {
+        AtomicInteger retryCount = (AtomicInteger) redisService.get(CacheConstant.PWD_RETRY_COUNT + username);
+        if (retryCount != null && retryCount.incrementAndGet() > PWD_RETRY_LIMIT) {
             // 如果用户登陆失败次数大于5次 抛出锁定用户异常
             throw new LockedAccountException("密码输入错误次数过多，请稍后再试！");
         }
@@ -45,15 +45,15 @@ public class CustomCredentialsMatcher extends SimpleCredentialsMatcher {
         if (matches) {
             if (retryCount != null) {
                 // 如果密码正确，从缓存中将用户计数清除
-                pwdRetryCount.remove(username);
+                redisService.delete(CacheConstant.PWD_RETRY_COUNT + username);
             }
         } else {
             if (retryCount == null) {
                 // 第一次输入错误，则在缓存计数1
-                pwdRetryCount.put(username, new AtomicInteger(1));
+                redisService.set(CacheConstant.PWD_RETRY_COUNT + username, new AtomicInteger(1));
             } else {
                 // 连续输入错误，继续+1
-                pwdRetryCount.put(username, retryCount);
+                redisService.set(CacheConstant.PWD_RETRY_COUNT + username, retryCount);
             }
         }
 

@@ -33,13 +33,7 @@ spring:
     password: KaZ@[w1APlX+Ao7TNZCdV1/1iNILSyfoDVelr]
     timeout: 10000ms
     cluster:
-      nodes:
-        - 106.12.99.31:7001
-        - 106.12.99.31:7002
-        - 119.45.239.30:7003
-        - 119.45.239.30:7004
-        - 81.71.3.113:7005
-        - 81.71.3.113:7006
+      nodes: 106.12.99.31:7001,106.12.99.31:7002,119.45.239.30:7003,119.45.239.30:7004,81.71.3.113:7005,81.71.3.113:7006
       max-redirects: 3
     lettuce:
       pool:
@@ -68,3 +62,10 @@ jetcache:
       keyConvertor: fastjson
       limit: 10000
       defaultExpireInMillis: 10000
+  remote:
+    default:
+      type: redis.springdata
+      keyConvertor: fastjson
+      valueEncoder: kryo
+      valueDecoder: kryo
+      expireAfterWriteInMillis: 5000

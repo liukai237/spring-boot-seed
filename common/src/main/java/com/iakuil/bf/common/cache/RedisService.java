@@ -1,8 +1,13 @@
-package com.iakuil.bf.redis.config;
+package com.iakuil.bf.common.cache;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Redis工具类服务接口
+ *
+ * @author Kai
+ */
 public interface RedisService {
     // =============================common============================
 

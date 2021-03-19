@@ -18,6 +18,7 @@
         <module>midware/rabbitmq-support</module>
         <module>midware/websocket-support</module>
         <module>midware/quartz-support</module>
+        <module>midware/minio-support</module>
         <module>security/shiro-support</module>
         <module>monitor</module>
     </modules>
@@ -31,9 +32,9 @@
 
         <project.version>0.0.1-SNAPSHOT</project.version>
         <spring.boot.version>2.2.10.RELEASE</spring.boot.version>
+        <spring-boot-starter-thymeleaf.version>2.2.10.RELEASE</spring-boot-starter-thymeleaf.version>
         <lombok.version>1.18.16</lombok.version>
         <ez-toolkit.version>1.0-rc5</ez-toolkit.version>
-        <commons-lang3.version>3.7</commons-lang3.version>
         <commons-io.version>2.6</commons-io.version>
         <commons-pool2.version>2.8.1</commons-pool2.version>
         <mapstruct.version>1.4.1.Final</mapstruct.version>
@@ -47,11 +48,10 @@
 
         <shiro-spring.version>1.7.0</shiro-spring.version>
         <shiro-redis.version>3.3.1</shiro-redis.version>
-        <jetcache-starter-redis-lettuce.version>2.6.0</jetcache-starter-redis-lettuce.version>
+        <jetcache-starter-redis-springdata.version>2.6.0</jetcache-starter-redis-springdata.version>
 
         <mysql-connector-java.version>8.0.22</mysql-connector-java.version>
         <HikariCP.version>3.4.5</HikariCP.version>
-        <druid.version>1.2.4</druid.version>
         <mapper-spring-boot-starter.version>2.1.5</mapper-spring-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.3.0</pagehelper-spring-boot-starter.version>
         <mybatis-generator.version>1.3.7</mybatis-generator.version>
@@ -127,6 +127,12 @@
                 <version>${spring-boot-admin-starter.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-thymeleaf</artifactId>
+                <version>${spring-boot-starter-thymeleaf.version}</version>
+            </dependency>
+
             <!--********** security ********** -->
             <dependency>
                 <groupId>org.apache.shiro</groupId>
@@ -169,12 +175,6 @@
             </dependency>
 
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>${druid.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
@@ -209,12 +209,6 @@
                 <groupId>com.iakuil</groupId>
                 <artifactId>ez-toolkit</artifactId>
                 <version>${ez-toolkit.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
             </dependency>
 
             <dependency>
@@ -289,8 +283,8 @@
 
             <dependency>
                 <groupId>com.alicp.jetcache</groupId>
-                <artifactId>jetcache-starter-redis-lettuce</artifactId>
-                <version>${jetcache-starter-redis-lettuce.version}</version>
+                <artifactId>jetcache-starter-redis-springdata</artifactId>
+                <version>${jetcache-starter-redis-springdata.version}</version>
             </dependency>
 
             <dependency>
