@@ -7,8 +7,10 @@ import com.iakuil.bf.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.ShiroException;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataAccessException;
@@ -106,31 +108,31 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Resp<?> processCannotGetJdbcConnectionException(CannotGetJdbcConnectionException e) {
-        log.error("[DB ERROR]\n{}", e.getMessage());
+        log.error("[DB ERROR]{}", e.getMessage());
         return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), "网络繁忙，请稍后再试！");
-    }
-
-    @ExceptionHandler({CredentialsException.class})
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Resp<?> processCredentialsException(CredentialsException e) {
-        log.error("[Credential ERROR]\n{}", e.getMessage());
-        return new Resp<>(RespCode.UNAUTHORIZED.getCode(), "用户名或者密码错误！");
     }
 
     @ExceptionHandler({LockedAccountException.class})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Resp<?> processLockedAccountException(LockedAccountException e) {
-        log.error("[Account ERROR]\n{}", e.getMessage());
+        log.error("[ACCOUNT LOCKED]{}", e.getMessage());
         return new Resp<>(RespCode.UNAUTHORIZED.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(value = {CredentialsException.class, UnknownAccountException.class,})
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Resp<?> processCredentialsException(AuthenticationException e) {
+        log.error("[PWD ERROR]{}", e.getMessage());
+        return new Resp<>(RespCode.UNAUTHORIZED.getCode(), "用户名或密码错误！");
     }
 
     @ExceptionHandler(AuthorizationException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Resp<?> processAuthorizationException(AuthorizationException e) {
-        log.error("[AUTH ERROR]\n{}", e.getMessage());
+        log.error("[AUTH ERROR]{}", e.getMessage());
         return new Resp<>(RespCode.FORBIDDEN.getCode(), "无权限！");
     }
 
@@ -138,8 +140,8 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Resp<?> processShiroException(ShiroException e) {
-        log.error("[AUTH ERROR]\n{}", e.getMessage());
-        return new Resp<>(RespCode.UNAUTHORIZED.getCode(), "请先登录！");
+        log.error("[AUTH ERROR]{}", e.getMessage());
+        return new Resp<>(RespCode.UNAUTHORIZED.getCode(), "未登录！");
     }
 
     @ExceptionHandler(Exception.class)
