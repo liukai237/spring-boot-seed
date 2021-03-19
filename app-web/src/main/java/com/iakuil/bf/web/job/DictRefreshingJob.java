@@ -3,6 +3,7 @@ package com.iakuil.bf.web.job;
 import com.iakuil.bf.common.DictCache;
 import com.iakuil.bf.service.DictService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.util.CollectionUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,6 @@ import java.util.stream.Collectors;
  * @author Kai
  */
 @Slf4j
-@Deprecated
 @Component
 public class DictRefreshingJob {
 
@@ -34,7 +34,8 @@ public class DictRefreshingJob {
         List<DictCache.DictItem> items = dictService.findAll().stream()
                 .map(item -> new DictCache.DictItem(item.getType(), item.getDescription(), item.getValue(), item.getName(), item.getSort().intValue()))
                 .collect(Collectors.toList());
-        log.debug("Current dict size in DB: {}", items.size());
-        DictCache.getInstance().pushAll(items);
+        if (!CollectionUtils.isEmpty(items)) {
+            DictCache.getInstance().pushAll(items);
+        }
     }
 }

@@ -17,7 +17,7 @@ public class JobAdd implements Serializable {
     private String className;
     @ApiModelProperty(name = "jobName", value = "任务名称。", example = "refreshCacheDaily", required = true)
     private String jobName;
-    @ApiModelProperty(name = "groupName", value = "任务分组。", example = "wechatService", required = true)
+    @ApiModelProperty(name = "groupName", value = "任务分组。", example = "WechatService", required = true)
     private String groupName;
     @ApiModelProperty(name = "cronExpression", value = "CRON表达式。", example = "0/5 * * * * ?", required = true)
     private String cronExpression;

@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 /**
  * 字典注解拦截器
+ *
  * <p>自动为{@link DictType}注解修饰的属性增加额外的名称属性。
  *
  * @author Kai

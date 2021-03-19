@@ -1,6 +1,7 @@
 package com.iakuil.bf.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.iakuil.bf.common.annotation.Phone;
 import com.iakuil.bf.common.constant.Gender;
 import com.iakuil.bf.common.constant.Province;
 import io.swagger.annotations.ApiModel;
@@ -24,7 +25,7 @@ public class UserEdit {
     private Long id;
 
     @ApiModelProperty(name = "tel", value = "手机号码。", example = "13400000000")
-    @Pattern(regexp = "^[1](([3][0-9])|([4][5,7,9])|([5][^4,6,9])|([6][6])|([7][3,5,6,7,8])|([8][0-9])|([9][8,9]))[0-9]{8}$", message = "无效的手机格式！")
+    @Phone
     private String tel;
 
     @ApiModelProperty(name = "gender", value = "性别", example = "male")
