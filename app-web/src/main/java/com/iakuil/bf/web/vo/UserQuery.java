@@ -1,5 +1,6 @@
 package com.iakuil.bf.web.vo;
 
+import com.iakuil.bf.common.annotation.Phone;
 import com.iakuil.bf.common.constant.Gender;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,6 +16,7 @@ public class UserQuery {
     private Long id;
 
     @ApiModelProperty(name = "tel", value = "手机号码。", example = "13400000000")
+    @Phone
     private String tel;
 
     @ApiModelProperty(name = "gender", value = "性别", example = "1")

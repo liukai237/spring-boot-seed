@@ -69,7 +69,7 @@ public class WebAppConfig implements WebMvcConfigurer {
      */
     @Bean
     public ResolverBeanPostProcessor resolverBeanPostProcessor() {
-        return new ResolverBeanPostProcessor(sortingParamResolver(), dateParamResolver());
+        return new ResolverBeanPostProcessor(sortingParamResolver(), dateParamResolver(), currentUserParamResolver());
     }
 
     @Bean
@@ -80,5 +80,10 @@ public class WebAppConfig implements WebMvcConfigurer {
     @Bean
     public DateParamResolver dateParamResolver() {
         return new DateParamResolver();
+    }
+
+    @Bean
+    public CurrentUserParamResolver currentUserParamResolver() {
+        return new CurrentUserParamResolver();
     }
 }
