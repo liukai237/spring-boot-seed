@@ -1,9 +1,9 @@
 package com.iakuil.bf.web.aop;
 
-import com.iakuil.bf.common.DictCache;
-import com.iakuil.bf.common.PageRequest;
+import com.iakuil.bf.common.dict.DictCache;
+import com.iakuil.bf.common.domain.PageRequest;
 import com.iakuil.bf.common.annotation.DictType;
-import com.iakuil.bf.common.constant.RespCode;
+import com.iakuil.bf.common.enums.RespCode;
 import com.iakuil.bf.common.exception.BusinessException;
 import com.iakuil.bf.common.tool.Strings;
 import org.apache.commons.lang3.StringUtils;

@@ -1,7 +1,7 @@
 package com.iakuil.bf.dao.entity;
 
 
-import com.iakuil.bf.common.BaseEntity;
+import com.iakuil.bf.common.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

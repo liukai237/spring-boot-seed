@@ -1,6 +1,6 @@
-package com.iakuil.bf.common;
+package com.iakuil.bf.common.domain;
 
-import com.iakuil.bf.common.constant.RespCode;
+import com.iakuil.bf.common.enums.RespCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

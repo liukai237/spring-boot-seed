@@ -1,7 +1,7 @@
 package com.iakuil.bf.web.controller;
 
 import com.iakuil.bf.common.BaseController;
-import com.iakuil.bf.common.Resp;
+import com.iakuil.bf.common.domain.Resp;
 import com.iakuil.bf.qrtz.JobDto;
 import com.iakuil.bf.qrtz.QuartzJobService;
 import com.iakuil.bf.web.vo.JobAdd;

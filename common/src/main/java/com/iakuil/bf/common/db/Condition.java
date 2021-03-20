@@ -1,6 +1,6 @@
 package com.iakuil.bf.common.db;
 
-import com.iakuil.bf.common.Pageable;
+import com.iakuil.bf.common.domain.Pageable;
 import tk.mybatis.mapper.entity.Example;
 
 /**

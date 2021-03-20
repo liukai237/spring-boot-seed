@@ -1,9 +1,9 @@
 package com.iakuil.bf.web.controller;
 
 import com.iakuil.bf.common.BaseController;
-import com.iakuil.bf.common.PageData;
-import com.iakuil.bf.common.PageRequest;
-import com.iakuil.bf.common.Resp;
+import com.iakuil.bf.common.domain.PageData;
+import com.iakuil.bf.common.domain.PageRequest;
+import com.iakuil.bf.common.domain.Resp;
 import com.iakuil.bf.dao.entity.Dict;
 import com.iakuil.bf.service.DictService;
 import com.iakuil.bf.service.converter.DictConverter;

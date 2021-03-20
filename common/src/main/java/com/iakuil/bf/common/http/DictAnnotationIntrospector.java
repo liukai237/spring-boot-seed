@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ser.VirtualBeanPropertyWriter;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Annotations;
 import com.fasterxml.jackson.databind.util.SimpleBeanPropertyDefinition;
-import com.iakuil.bf.common.DictCache;
+import com.iakuil.bf.common.dict.DictCache;
 import com.iakuil.bf.common.annotation.DictType;
 import com.iakuil.bf.common.tool.Strings;
 import org.apache.commons.lang3.StringUtils;

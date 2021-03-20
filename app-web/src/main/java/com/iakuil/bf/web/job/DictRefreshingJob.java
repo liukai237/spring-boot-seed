@@ -1,6 +1,6 @@
 package com.iakuil.bf.web.job;
 
-import com.iakuil.bf.common.DictCache;
+import com.iakuil.bf.common.dict.DictCache;
 import com.iakuil.bf.service.DictService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.util.CollectionUtils;

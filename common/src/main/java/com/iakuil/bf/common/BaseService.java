@@ -2,6 +2,8 @@ package com.iakuil.bf.common;
 
 import com.iakuil.bf.common.db.Condition;
 import com.iakuil.bf.common.db.CrudMapper;
+import com.iakuil.bf.common.domain.BaseEntity;
+import com.iakuil.bf.common.domain.PageData;
 import com.iakuil.bf.common.tool.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;

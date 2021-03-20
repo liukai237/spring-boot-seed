@@ -1,4 +1,4 @@
-package com.iakuil.bf.common.constant;
+package com.iakuil.bf.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,8 +1,8 @@
 package com.iakuil.bf.dao.entity;
 
-import com.iakuil.bf.common.BaseEntity;
-import com.iakuil.bf.common.constant.Gender;
-import com.iakuil.bf.common.constant.Province;
+import com.iakuil.bf.common.domain.BaseEntity;
+import com.iakuil.bf.common.enums.Gender;
+import com.iakuil.bf.common.enums.Province;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package com.iakuil.bf.shiro;
 
-import com.iakuil.bf.common.Resp;
-import com.iakuil.bf.common.constant.RespCode;
+import com.iakuil.bf.common.domain.Resp;
+import com.iakuil.bf.common.enums.RespCode;
 import com.iakuil.toolkit.JsonUtils;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 

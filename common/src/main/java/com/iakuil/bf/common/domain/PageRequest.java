@@ -1,4 +1,4 @@
-package com.iakuil.bf.common;
+package com.iakuil.bf.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iakuil.bf.common.constant.SysConstant;

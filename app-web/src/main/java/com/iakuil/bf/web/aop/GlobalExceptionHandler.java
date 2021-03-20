@@ -1,8 +1,8 @@
 package com.iakuil.bf.web.aop;
 
-import com.iakuil.bf.common.Resp;
+import com.iakuil.bf.common.domain.Resp;
 import com.iakuil.bf.common.annotation.ErrorCode;
-import com.iakuil.bf.common.constant.RespCode;
+import com.iakuil.bf.common.enums.RespCode;
 import com.iakuil.bf.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

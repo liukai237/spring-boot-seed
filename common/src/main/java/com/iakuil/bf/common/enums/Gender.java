@@ -1,6 +1,6 @@
-package com.iakuil.bf.common.constant;
+package com.iakuil.bf.common.enums;
 
-import com.iakuil.bf.common.DictEnum;
+import com.iakuil.bf.common.dict.DictEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

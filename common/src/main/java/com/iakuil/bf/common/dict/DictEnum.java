@@ -1,4 +1,4 @@
-package com.iakuil.bf.common;
+package com.iakuil.bf.common.dict;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

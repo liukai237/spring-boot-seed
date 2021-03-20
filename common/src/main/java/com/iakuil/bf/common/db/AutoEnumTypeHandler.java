@@ -1,6 +1,6 @@
 package com.iakuil.bf.common.db;
 
-import com.iakuil.bf.common.DictEnum;
+import com.iakuil.bf.common.dict.DictEnum;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.EnumTypeHandler;
 import org.apache.ibatis.type.JdbcType;

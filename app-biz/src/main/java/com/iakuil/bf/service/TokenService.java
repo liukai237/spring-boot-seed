@@ -1,6 +1,6 @@
 package com.iakuil.bf.service;
 
-import com.iakuil.bf.common.constant.RespCode;
+import com.iakuil.bf.common.enums.RespCode;
 import com.iakuil.bf.common.exception.BusinessException;
 import com.iakuil.bf.service.kaptcha.Kaptcha;
 import lombok.extern.slf4j.Slf4j;

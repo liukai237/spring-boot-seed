@@ -1,6 +1,6 @@
 package com.iakuil.bf.common.exception;
 
-import com.iakuil.bf.common.constant.RespCode;
+import com.iakuil.bf.common.enums.RespCode;
 import org.springframework.core.NestedExceptionUtils;
 
 /**

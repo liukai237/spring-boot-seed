@@ -1,6 +1,7 @@
 package com.iakuil.bf.common;
 
-import com.iakuil.bf.common.constant.RespCode;
+import com.iakuil.bf.common.enums.RespCode;
+import com.iakuil.bf.common.domain.Resp;
 import com.iakuil.bf.common.security.UserDetails;
 import com.iakuil.bf.common.security.UserDetailsService;
 import org.springframework.validation.annotation.Validated;

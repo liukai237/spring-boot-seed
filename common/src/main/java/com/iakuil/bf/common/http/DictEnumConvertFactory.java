@@ -1,6 +1,6 @@
 package com.iakuil.bf.common.http;
 
-import com.iakuil.bf.common.DictEnum;
+import com.iakuil.bf.common.dict.DictEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;

@@ -4,7 +4,7 @@ import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
 import com.google.common.collect.Sets;
-import com.iakuil.bf.common.BaseEntity;
+import com.iakuil.bf.common.domain.BaseEntity;
 import com.iakuil.bf.common.BaseService;
 import com.iakuil.bf.common.constant.CacheConstant;
 import lombok.extern.slf4j.Slf4j;

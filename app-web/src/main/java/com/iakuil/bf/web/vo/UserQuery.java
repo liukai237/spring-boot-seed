@@ -1,7 +1,7 @@
 package com.iakuil.bf.web.vo;
 
 import com.iakuil.bf.common.annotation.Phone;
-import com.iakuil.bf.common.constant.Gender;
+import com.iakuil.bf.common.enums.Gender;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
