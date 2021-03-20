@@ -41,10 +41,8 @@ jetcache:
       defaultExpireInMillis: 10000
   remote:
     default:
-      type: redis.lettuce
+      type: redis.springdata
       keyConvertor: fastjson
       valueEncoder: kryo
       valueDecoder: kryo
-      uri:
-        - redis://I_%40_redis2019@106.12.75.75:6379/1?timeout=5s
       expireAfterWriteInMillis: 5000

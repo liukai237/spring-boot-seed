@@ -19,6 +19,7 @@ import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -56,6 +57,15 @@ public class GlobalExceptionHandler {
         log.error("[PARAM ERROR]", e);
         String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
         return new Resp<>(RespCode.BAD_REQUEST.getCode(), message);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Resp<?> processMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+        log.error("[PARAM ERROR]", e);
+        // e.g. Required String parameter 'xxx' is not present
+        return new Resp<>(RespCode.BAD_REQUEST.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

@@ -3,8 +3,10 @@ package com.iakuil.bf.common;
 import com.iakuil.bf.common.constant.RespCode;
 import com.iakuil.bf.common.security.UserDetails;
 import com.iakuil.bf.common.security.UserDetailsService;
+import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
+import javax.validation.groups.Default;
 
 /**
  * 视图层基类
@@ -18,6 +20,7 @@ import javax.annotation.Resource;
  *
  * @author Kai
  */
+@Validated(Default.class)
 public abstract class BaseController {
 
     @Resource

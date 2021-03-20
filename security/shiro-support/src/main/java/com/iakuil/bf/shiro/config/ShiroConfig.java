@@ -1,6 +1,9 @@
 package com.iakuil.bf.shiro.config;
 
-import com.iakuil.bf.shiro.*;
+import com.iakuil.bf.shiro.CustomCredentialsMatcher;
+import com.iakuil.bf.shiro.CustomShiroFilter;
+import com.iakuil.bf.shiro.JdbcRealm;
+import com.iakuil.bf.shiro.SessionService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
@@ -121,7 +124,7 @@ public class ShiroConfig {
      */
     @Bean("credentialsMatcher")
     public CustomCredentialsMatcher customCredentialsMatcher() {
-        return new CustomCredentialsMatcher(lockedAccountManager());
+        return new CustomCredentialsMatcher();
     }
 
     /**
