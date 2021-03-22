@@ -1,4 +1,4 @@
-package com.iakuil.bf.shiro;
+package com.iakuil.bf.web.security;
 
 import com.iakuil.bf.common.security.UserDetails;
 import com.iakuil.bf.common.security.UserDetailsService;

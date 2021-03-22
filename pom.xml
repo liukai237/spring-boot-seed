@@ -18,7 +18,6 @@
         <module>midware/rabbitmq-support</module>
         <module>midware/websocket-support</module>
         <module>midware/quartz-support</module>
-        <module>security/shiro-support</module>
         <module>monitor</module>
     </modules>
 

@@ -6,7 +6,7 @@ import com.iakuil.bf.common.annotation.Password;
 import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.TokenService;
 import com.iakuil.bf.service.UserService;
-import com.iakuil.bf.shiro.SessionService;
+import com.iakuil.bf.web.security.SessionService;
 import com.iakuil.bf.web.vo.ProfileEdit;
 import com.iakuil.toolkit.BeanUtils;
 import com.iakuil.toolkit.PasswordHash;

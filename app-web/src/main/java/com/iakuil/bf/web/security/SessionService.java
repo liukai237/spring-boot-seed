@@ -1,4 +1,4 @@
-package com.iakuil.bf.shiro;
+package com.iakuil.bf.web.security;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

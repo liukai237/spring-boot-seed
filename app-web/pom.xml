@@ -19,12 +19,6 @@
 
         <dependency>
             <groupId>com.iakuil</groupId>
-            <artifactId>shiro-support</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.iakuil</groupId>
             <artifactId>quartz-support</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -53,6 +47,14 @@
             <artifactId>knife4j-spring-ui</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.crazycake</groupId>
+            <artifactId>shiro-redis</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

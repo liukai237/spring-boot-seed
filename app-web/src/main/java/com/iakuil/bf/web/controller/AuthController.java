@@ -6,7 +6,7 @@ import com.iakuil.bf.common.security.UserDetails;
 import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.TokenService;
 import com.iakuil.bf.service.UserService;
-import com.iakuil.bf.shiro.SessionService;
+import com.iakuil.bf.web.security.SessionService;
 import com.iakuil.bf.web.vo.PwdEdit;
 import com.iakuil.bf.web.vo.SmsLogin;
 import com.iakuil.bf.web.vo.UserLogin;

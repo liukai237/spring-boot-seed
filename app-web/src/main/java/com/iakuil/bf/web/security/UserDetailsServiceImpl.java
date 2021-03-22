@@ -1,4 +1,4 @@
-package com.iakuil.bf.web;
+package com.iakuil.bf.web.security;
 
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.security.UserDetails;

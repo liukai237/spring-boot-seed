@@ -1,9 +1,9 @@
-package com.iakuil.bf.shiro.config;
+package com.iakuil.bf.web.config;
 
-import com.iakuil.bf.shiro.CustomCredentialsMatcher;
-import com.iakuil.bf.shiro.CustomShiroFilter;
-import com.iakuil.bf.shiro.JdbcRealm;
-import com.iakuil.bf.shiro.SessionService;
+import com.iakuil.bf.web.security.CustomCredentialsMatcher;
+import com.iakuil.bf.web.security.CustomShiroFilter;
+import com.iakuil.bf.web.security.JdbcRealm;
+import com.iakuil.bf.web.security.SessionService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
