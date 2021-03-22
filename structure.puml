@@ -12,7 +12,6 @@ title Spring Boot Seed
 *** rabbitmq-support
 *** <&star>redis-support
 *** websocket-support
-** security
 *** shiro-support
 ** monitor
 ** sentinel
