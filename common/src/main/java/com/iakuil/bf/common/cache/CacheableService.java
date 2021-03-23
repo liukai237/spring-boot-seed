@@ -1,12 +1,14 @@
 package com.iakuil.bf.common.cache;
 
 import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CachePenetrationProtect;
+import com.alicp.jetcache.anno.CacheRefresh;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
 import com.google.common.collect.Sets;
-import com.iakuil.bf.common.domain.BaseEntity;
 import com.iakuil.bf.common.BaseService;
 import com.iakuil.bf.common.constant.CacheConstant;
+import com.iakuil.bf.common.domain.BaseEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +42,9 @@ import java.util.stream.Collectors;
 @Slf4j
 public abstract class CacheableService<T extends BaseEntity> extends BaseService<T> {
 
+    @CacheRefresh(refresh = 100, stopRefreshAfterLastAccess = 300)
     @CreateCache(name = CacheConstant.CACHE_KEY_PREFIX, expire = 100, cacheType = CacheType.BOTH, localLimit = 10000)
+    @CachePenetrationProtect
     protected Cache<Long, T> entityCache;
 
     @Transactional(readOnly = true)
