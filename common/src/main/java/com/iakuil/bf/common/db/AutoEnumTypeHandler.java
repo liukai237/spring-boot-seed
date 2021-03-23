@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * MyBatis枚举处理
+ * MyBatis枚举类型处理器
  *
  * <p>自动选择枚举处理器:字典枚举使用{@link DictEnumTypeHandler}，其他枚举使用默认的{@link EnumTypeHandler}
  *

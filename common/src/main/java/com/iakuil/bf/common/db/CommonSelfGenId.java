@@ -5,7 +5,7 @@ import com.iakuil.bf.common.tool.ApplicationContextHolder;
 import tk.mybatis.mapper.genid.GenId;
 
 /**
- * 自定义的ID发号器
+ * 自定义的ID发号器（基于当当开源的发号器）
  *
  * @author Kai
  */

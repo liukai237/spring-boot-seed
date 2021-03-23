@@ -1,6 +1,8 @@
 package com.iakuil.bf.common.db;
 
 import com.iakuil.bf.common.security.UserDetails;
+import com.iakuil.bf.common.security.UserDetailsService;
+import com.iakuil.bf.common.tool.ApplicationContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.executor.Executor;
@@ -8,7 +10,6 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.defaults.DefaultSqlSession;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -23,9 +24,9 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
- * 实体类创建时间/创建人与修改时间/修改人字段自动填充
+ * MyBatis实体类审计插件
  *
- * <p>自动填创建时间/创建人与修改时间/修改人等字段，支持批量操作，支持id回写。
+ * <p>自动填创建时间、创建人、修改时间和修改人等字段，支持批量操作，支持id回写。
  *
  * @author Kai
  */
@@ -89,7 +90,8 @@ public class EntityAuditingInterceptor implements Interceptor {
             return;
         }
         Date currentDate = new Date();
-        UserDetails currentUser = (UserDetails) SecurityUtils.getSubject().getPrincipal();
+        UserDetailsService userDetailsService = ApplicationContextHolder.getBean(UserDetailsService.class);
+        UserDetails currentUser = userDetailsService.getCurrentUser();
         Field[] fields = obj.getClass().getDeclaredFields();
         for (Field field : fields) {
             if (AnnotationUtils.getAnnotation(field, LastModifiedDate.class) != null) {
@@ -110,7 +112,8 @@ public class EntityAuditingInterceptor implements Interceptor {
             return;
         }
         Date currentDate = new Date();
-        UserDetails currentUser = (UserDetails) SecurityUtils.getSubject().getPrincipal();
+        UserDetailsService userDetailsService = ApplicationContextHolder.getBean(UserDetailsService.class);
+        UserDetails currentUser = userDetailsService.getCurrentUser();
         Field[] fields = obj.getClass().getDeclaredFields();
         for (Field field : fields) {
             if (AnnotationUtils.getAnnotation(field, CreatedDate.class) != null) {

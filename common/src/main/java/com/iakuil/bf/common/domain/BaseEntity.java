@@ -1,6 +1,7 @@
 package com.iakuil.bf.common.domain;
 
 import com.iakuil.bf.common.db.CommonSelfGenId;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Id;
@@ -67,5 +68,10 @@ public class BaseEntity implements Pageable, Serializable {
     @Override
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }
