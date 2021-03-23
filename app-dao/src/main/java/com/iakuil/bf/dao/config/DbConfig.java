@@ -2,7 +2,7 @@ package com.iakuil.bf.dao.config;
 
 import com.dangdang.ddframe.rdb.sharding.id.generator.IdGenerator;
 import com.dangdang.ddframe.rdb.sharding.id.generator.self.CommonSelfIdGenerator;
-import com.iakuil.bf.common.db.CreateAndUpdateTimeInterceptor;
+import com.iakuil.bf.common.db.EntityAuditingInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,11 +32,11 @@ public class DbConfig {
     @PostConstruct
     public void addPageInterceptor() {
         // 自动填充字段
-        CreateAndUpdateTimeInterceptor autoFill = new CreateAndUpdateTimeInterceptor();
+        EntityAuditingInterceptor auditor = new EntityAuditingInterceptor();
 
         for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
             org.apache.ibatis.session.Configuration configuration = sqlSessionFactory.getConfiguration();
-            configuration.addInterceptor(autoFill);
+            configuration.addInterceptor(auditor);
         }
     }
 

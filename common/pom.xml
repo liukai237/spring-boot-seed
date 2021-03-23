@@ -68,6 +68,13 @@
             <artifactId>jetcache-starter-redis-springdata</artifactId>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.7.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
