@@ -1,1 +1,1 @@
-java -jar monitor-server.jar
+java -jar target/monitor-server.jar

@@ -49,16 +49,14 @@ spring:
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
     job-store-type: jdbc
-#    jdbc:
-#      comment-prefix: quartz
-#      initialize-schema: never
   boot:
     admin:
       client:
+        url: http://localhost:10110
         instance:
           name: 基础框架
           prefer-ip: true
-        url: http://127.0.0.1:10110
+        register-once: false
 
 mybatis:
   type-aliases-package: com.iakuil.dao.entity
@@ -90,6 +88,8 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
+    logfile:
+      enabled: true
 
 kaptcha:
   height: 50
@@ -109,9 +109,6 @@ kaptcha:
     enabled: true
     color: black
     thickness: 1
-
-sentry:
-  dsn: http://localhost:10111/
 
 logging:
   level:

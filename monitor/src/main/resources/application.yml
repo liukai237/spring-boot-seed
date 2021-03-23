@@ -7,4 +7,16 @@ spring:
   boot:
     admin:
       ui:
-        title: 监控中心
+        title: 服务监控中心
+        brand: <span>Service Monitoring Center</span>
+      notify:
+        mail:
+          from: test@126.com
+          ignore-changes:
+          to: 123456@qq.com
+          template: classpath:/templates/status-changed.html
+  mail:
+    host: smtp.126.com
+    password: 123456
+    test-connection: true
+    username: test@126.com

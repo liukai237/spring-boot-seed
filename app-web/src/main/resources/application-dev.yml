@@ -20,11 +20,11 @@ spring:
         max-idle: 8
         min-idle: 0
     timeout: 10000ms
-  cloud:
-    sentinel:
-      transport:
-        dashboard: localhost:10111
-      eager: false
+#  cloud:
+#    sentinel:
+#      transport:
+#        dashboard: localhost:10111
+#      eager: false
 
 bf:
   scheduling:
