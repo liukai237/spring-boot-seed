@@ -12,9 +12,7 @@ title Spring Boot Seed
 *** rabbitmq-support
 *** <&star>redis-support
 *** websocket-support
-*** shiro-support
 ** monitor
-** sentinel
 
 center footer Copyright (c) 2021 iakuil.com
 @endmindmap

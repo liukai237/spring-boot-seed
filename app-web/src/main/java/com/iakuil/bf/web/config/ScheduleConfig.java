@@ -11,8 +11,8 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 /**
  * 定时任务开关及线程池配置
+ *
  * <p>bf.scheduling.enable=true开启定时任务
- * <p>注意：与Quartz定时任务无关
  */
 @Slf4j
 @Configuration

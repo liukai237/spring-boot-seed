@@ -11,6 +11,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
  * 线程池及异步配置
+ *
  * <p>可直接注入xxxExecutor，或者通过@Async("xxxExecutor")引用
  */
 @Slf4j

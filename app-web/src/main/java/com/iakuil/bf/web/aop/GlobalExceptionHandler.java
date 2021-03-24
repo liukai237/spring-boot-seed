@@ -1,7 +1,7 @@
 package com.iakuil.bf.web.aop;
 
-import com.iakuil.bf.common.domain.Resp;
 import com.iakuil.bf.common.annotation.ErrorCode;
+import com.iakuil.bf.common.domain.Resp;
 import com.iakuil.bf.common.enums.RespCode;
 import com.iakuil.bf.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +14,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.validation.BindException;
@@ -104,8 +105,16 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Resp<?> processSqlException(SQLException e) {
-        log.error("[DB ERROR]", e);
+        log.error("[SQL ERROR]", e);
         return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), DEFAULT_ERROR_MESSAGE);
+    }
+
+    @ExceptionHandler(DuplicateKeyException.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Resp<?> processDuplicateKeyException(DuplicateKeyException e) {
+        log.error("[DB ERROR]", e);
+        return new Resp<>(RespCode.INTERNAL_SERVER_ERROR.getCode(), "数据库中已存在该记录！");
     }
 
     @ExceptionHandler(DataAccessException.class)
