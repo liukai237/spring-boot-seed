@@ -10,21 +10,26 @@ import javax.persistence.Column;
 import javax.persistence.Table;
 import java.util.Date;
 
+/**
+ * 消息记录
+ *
+ * @author Kai
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "t_notify_record")
-public class NotifyRecord extends BaseEntity {
+@Table(name = "t_msg_record")
+public class MessageRecord extends BaseEntity {
     /**
-     * 通知通告ID
+     * 消息ID，可以是公告通知ID，也可以是私信ID
      */
-    @Column(name = "notify_id")
-    private Long notifyId;
+    @Column(name = "msg_id")
+    private Long msgId;
 
     /**
-     * 接收人
+     * 接收人ID
      */
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "receiver_id")
+    private Long receiver;
 
     /**
      * 阅读标记

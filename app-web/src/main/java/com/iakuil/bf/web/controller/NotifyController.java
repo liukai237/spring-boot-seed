@@ -70,6 +70,7 @@ public class NotifyController extends BaseController {
     @PostMapping("/push")
     @RequiresPermissions("oa:notify:push")
     public Resp<?> edit(@RequestParam Long notifyId, @RequestParam Long[] userIds) {
+        // 此处
         notifyService.pushBatch(notifyService.findById(notifyId), userIds);
         return ok();
     }

@@ -1,16 +1,13 @@
 package com.iakuil.bf.service;
 
-import com.google.common.collect.Lists;
 import com.iakuil.bf.common.BaseService;
+import com.iakuil.bf.dao.entity.MessageRecord;
 import com.iakuil.bf.dao.entity.Notify;
-import com.iakuil.bf.dao.entity.NotifyRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
- * 公告及站内信服务
+ * 公告服务
  *
  * @author Kai
  * @date 2021/3/25 9:37
@@ -19,10 +16,10 @@ import java.util.List;
 @Service
 public class NotifyService extends BaseService<Notify> {
 
-    private final NotifyRecordService notifyRecordService;
+    private final MessageRecordService messageRecordService;
 
-    public NotifyService(NotifyRecordService notifyRecordService) {
-        this.notifyRecordService = notifyRecordService;
+    public NotifyService(MessageRecordService messageRecordService) {
+        this.messageRecordService = messageRecordService;
     }
 
     /**
@@ -31,18 +28,18 @@ public class NotifyService extends BaseService<Notify> {
      * <p>目前只支持按ID群发，后续可以按部门或者按活跃用户等分组群发
      */
     public void pushBatch(Notify notify, Long... userIds) {
-        this.add(notify);
         Long notifyId = notify.getId();
 
-        List<NotifyRecord> records = Lists.newArrayList();
         for (Long userId : userIds) {
-            NotifyRecord entity = new NotifyRecord();
-            entity.setNotifyId(notifyId);
-            entity.setUserId(userId);
+            MessageRecord entity = new MessageRecord();
+            entity.setMsgId(notifyId);
+            entity.setReceiver(userId);
             entity.setRead(false);
+            messageRecordService.add(entity);
+            //TODO sending messages by websockets
         }
 
-        notifyRecordService.addAll(records);
-        //TODO sending messages by websockets
+        notify.setStatus("1");
+        this.modify(notify);
     }
 }
