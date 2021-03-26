@@ -1,6 +1,7 @@
 package com.iakuil.bf.common.db;
 
 import com.iakuil.bf.common.dict.DictEnum;
+import com.iakuil.bf.common.tool.Validate;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -8,7 +9,6 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
 
 /**
  * MyBatis字典枚举处理器
@@ -20,7 +20,7 @@ public class DictEnumTypeHandler<E extends Enum<?> & DictEnum> extends BaseTypeH
     private Class<E> type;
 
     public DictEnumTypeHandler(Class<E> type) {
-        Objects.requireNonNull(type, "Type argument cannot be null");
+        Validate.notNull(type, "Type argument cannot be null");
         this.type = type;
     }
 

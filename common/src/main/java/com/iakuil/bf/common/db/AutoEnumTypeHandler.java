@@ -1,6 +1,7 @@
 package com.iakuil.bf.common.db;
 
 import com.iakuil.bf.common.dict.DictEnum;
+import com.iakuil.bf.common.tool.Validate;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.EnumTypeHandler;
 import org.apache.ibatis.type.JdbcType;
@@ -22,9 +23,7 @@ public class AutoEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E> {
     private BaseTypeHandler typeHandler;
 
     public AutoEnumTypeHandler(Class<E> type) {
-        if (type == null) {
-            throw new IllegalArgumentException("Type argument cannot be null");
-        }
+        Validate.notNull(type, "Type argument cannot be null");
         if (DictEnum.class.isAssignableFrom(type)) {
             typeHandler = new DictEnumTypeHandler(type);
         } else {

@@ -5,6 +5,7 @@ import com.iakuil.bf.common.db.CrudMapper;
 import com.iakuil.bf.common.domain.BaseEntity;
 import com.iakuil.bf.common.domain.PageData;
 import com.iakuil.bf.common.tool.ReflectUtils;
+import com.iakuil.bf.common.tool.Validate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public List<T> list(T entity) {
+        Validate.notNull(entity, "Entity should not be empty!");
         return mapper.select(entity);
     }
 
@@ -62,7 +64,8 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> List<R> list(T entity, Function<? super T, ? extends R> converter) {
-        return mapper.select(entity).stream().map(converter).collect(Collectors.toList());
+        Validate.notNull(converter, "Converter should not be empty!");
+        return this.list(entity).stream().map(converter).collect(Collectors.toList());
     }
 
     /**
@@ -75,6 +78,9 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public PageData<T> page(T entity) {
+        Validate.notNull(entity, "Entity should not be empty!");
+        Validate.notNull(entity.getPageNum(), "PageNum should not be empty!");
+        Validate.notNull(entity.getPageSize(), "PageSize should not be empty!");
         return new PageData<>(mapper.select(entity));
     }
 
@@ -89,6 +95,9 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> PageData<R> page(T entity, Function<? super T, ? extends R> converter) {
+        Validate.notNull(entity, "Entity should not be empty!");
+        Validate.notNull(entity.getPageNum(), "PageNum should not be empty!");
+        Validate.notNull(entity.getPageSize(), "PageSize should not be empty!");
         return new PageData<>(mapper.select(entity), converter);
     }
 
@@ -102,6 +111,8 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public PageData<T> page(Condition condition) {
+        Validate.notNull(condition.getPageNum(), "PageNum should not be empty!");
+        Validate.notNull(condition.getPageSize(), "PageSize should not be empty!");
         return new PageData<>(this.findByCondition(condition));
     }
 
@@ -116,6 +127,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> PageData<R> page(Condition condition, Function<? super T, ? extends R> converter) {
+        Validate.notNull(converter, "Converter should not be empty!");
         return new PageData<>(this.findByCondition(condition), converter);
     }
 
@@ -127,6 +139,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public T findById(Long id) {
+        Validate.notNull(id, "PageNum should not be empty!");
         return mapper.selectByPrimaryKey(id);
     }
 
@@ -138,7 +151,12 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public List<T> findByIds(Long... ids) {
-        return mapper.selectByIds(Arrays.stream(ids).map(String::valueOf).collect(Collectors.joining(",")));
+        Validate.notEmpty(ids, "The params should not be empty!");
+        return mapper.selectByIds(Arrays.stream(ids)
+                .filter(Objects::nonNull)
+                .distinct()
+                .map(String::valueOf)
+                .collect(Collectors.joining(",")));
     }
 
     /**
@@ -149,6 +167,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public T findOne(T entity) {
+        Validate.notNull(entity, "PageNum should not be empty!");
         return mapper.selectOne(entity);
     }
 
@@ -194,7 +213,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean removeById(Long id) {
-        log.info("users {} were deleted!", id);
+        Validate.notNull(id, "Id should not be empty!");
         return mapper.deleteByPrimaryKey(id) > 0;
     }
 
@@ -206,12 +225,13 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean removeByIds(Long... ids) {
+        Validate.notEmpty(ids, "Id should not be empty!");
         int count = mapper.deleteByIds(Arrays.stream(ids)
                 .filter(Objects::nonNull)
                 .distinct()
                 .map(String::valueOf)
                 .collect(Collectors.joining(",")));
-        log.info("{} users were deleted!", count);
+        log.info("{} records were deleted!", count);
         return count > 0;
     }
 
@@ -225,6 +245,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean add(T entity) {
+        Validate.notNull(entity, "Entity should not be empty!");
         return mapper.insertSelective(entity) > 0;
     }
 
@@ -239,6 +260,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean addAll(List<T> entities) {
+        Validate.containsNoNulls(entities, "Entity should not be empty!");
         return mapper.insertList(entities) == entities.size();
     }
 
@@ -276,19 +298,15 @@ public abstract class BaseService<T extends BaseEntity> {
      * @return 修改结果
      */
     private boolean modify(T entity, boolean hasVersion) {
+        Validate.notNull(entity, "Entity should not be empty!");
         Long id = entity.getId();
-        if (id == null) {
-            throw new IllegalArgumentException("Id should not be empty!");
-        }
+        Validate.notNull(id, "Id should not be empty!");
 
         // 处理乐观锁
         if (hasVersion) {
             if (ReflectUtils.getValueByAnnotation(entity, Version.class) == null) {
                 T before = mapper.selectByPrimaryKey(id);
-                if (before == null) {
-                    throw new IllegalArgumentException("Invalid id " + id + "!");
-                }
-
+                Validate.notNull(before, "Invalid id " + id + "!");
                 Object version = ObjectUtils.defaultIfNull(ReflectUtils.getValueByAnnotation(before, Version.class), 1);
                 ReflectUtils.setValueByAnnotation(entity, version, Version.class);
             }
@@ -344,6 +362,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public List<T> findByCondition(Condition condition) {
+        Validate.notNull(condition, "Condition should not be empty!");
         return mapper.selectByExample(condition);
     }
 
@@ -358,6 +377,8 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public <R> List<R> findByCondition(Condition condition, Function<? super T, ? extends R> converter) {
+        Validate.notNull(condition, "Condition should not be empty!");
+        Validate.notNull(converter, "Condition should not be empty!");
         List<T> results = mapper.selectByExample(condition);
         return results.stream().map(converter).collect(Collectors.toList());
     }
@@ -375,6 +396,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public Long[] findByScroll(T entity, Long scrollId) {
+        Validate.notNull(entity, "Entity should not be empty!");
         return mapper.selectByScrollId(entity, scrollId).stream()
                 .map(BaseEntity::getId)
                 .toArray(Long[]::new);

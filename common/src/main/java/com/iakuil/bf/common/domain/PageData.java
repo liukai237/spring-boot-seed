@@ -2,6 +2,7 @@ package com.iakuil.bf.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.github.pagehelper.Page;
+import com.iakuil.bf.common.tool.Validate;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -11,7 +12,6 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
  * <p>一般与{@link Pageable}结对出现。
  *
  * @param <T> Entity
- *
  * @author Kai
  */
 @Getter
@@ -50,7 +49,7 @@ public class PageData<T> implements Serializable {
     private Map<String, Object> extra;
 
     public PageData(List<T> list) {
-        Objects.requireNonNull(list, "data list should not be empty!");
+        Validate.notEmpty(list, "data list should not be empty!");
 
         if (list instanceof Page) {
             Page<T> page = (Page<T>) list;
@@ -65,7 +64,8 @@ public class PageData<T> implements Serializable {
     }
 
     public <R> PageData(List<R> data, Function<? super R, ? extends T> mapper) {
-        Objects.requireNonNull(data, "data list should not be empty!");
+        Validate.notEmpty(data, "data list should not be empty!");
+        Validate.notNull(mapper, "mapper should not be empty!");
 
         if (data instanceof Page) {
             Page<T> page = (Page<T>) data;
