@@ -60,8 +60,11 @@ public class ShiroConfig {
 
         // static resources
         urlMap.put("/*.txt", "anon");
+        urlMap.put("/favicon.ico", "anon");
         urlMap.put("/js/**", "anon");
-        urlMap.put("/style/**", "anon");
+        urlMap.put("/css/**", "anon");
+        urlMap.put("/fonts/**", "anon");
+        urlMap.put("/lib/**", "anon");
         urlMap.put("/images/**", "anon");
 
         // swagger
@@ -79,6 +82,10 @@ public class ShiroConfig {
         urlMap.put("/api/auth/**", "anon");
         urlMap.put("/api/reg/**", "anon");
         urlMap.put("/api/token/**", "anon");
+
+        // demo
+        urlMap.put("/demo/login", "anon");
+        urlMap.put("/demo/index", "anon");
 
         // other
         urlMap.put("/**", "authc");
