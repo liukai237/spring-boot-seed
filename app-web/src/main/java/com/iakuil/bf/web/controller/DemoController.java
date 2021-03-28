@@ -12,7 +12,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @ApiIgnore
 @Slf4j
 @Controller
-@RequestMapping("/demo/")
+@RequestMapping("/demo")
 public class DemoController extends BaseController {
 
     @GetMapping(value = "/login")
@@ -38,6 +38,21 @@ public class DemoController extends BaseController {
     @GetMapping(value = "/statistics")
     public String toStatistics() {
         return "statistics";
+    }
+
+    @GetMapping(value = "/admin-role")
+    public String toRoleList() {
+        return "admin-role";
+    }
+
+    @GetMapping(value = "/role-add")
+    public String toRoleAdd() {
+        return "role-add";
+    }
+
+    @GetMapping(value = "/admin-rule")
+    public String toRuleList() {
+        return "admin-rule";
     }
 
     @PostMapping(value = "/login")
