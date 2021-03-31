@@ -3,10 +3,10 @@ package com.iakuil.bf.web.security;
 import com.google.common.collect.Sets;
 import com.iakuil.bf.common.security.UserDetails;
 import com.iakuil.bf.common.security.UserDetailsService;
-import com.iakuil.bf.dao.entity.Power;
+import com.iakuil.bf.dao.entity.MenuDO;
 import com.iakuil.bf.dao.entity.Role;
 import com.iakuil.bf.dao.entity.User;
-import com.iakuil.bf.service.PowerService;
+import com.iakuil.bf.service.MenuService;
 import com.iakuil.bf.service.RoleService;
 import com.iakuil.bf.service.UserService;
 import com.iakuil.toolkit.BeanUtils;
@@ -27,12 +27,12 @@ import java.util.stream.Collectors;
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserService userService;
     private final RoleService roleService;
-    private final PowerService powerService;
+    private final MenuService menuService;
 
-    public UserDetailsServiceImpl(UserService userService, RoleService roleService, PowerService powerService) {
+    public UserDetailsServiceImpl(UserService userService, RoleService roleService, MenuService menuService) {
         this.userService = userService;
         this.roleService = roleService;
-        this.powerService = powerService;
+        this.menuService = menuService;
     }
 
     /**
@@ -54,19 +54,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user != null) {
             UserDetails details = BeanUtils.copy(user, UserDetails.class);
             Long id = user.getId();
-            details.setRoles(roleService.findRolesByUserId(id).stream().map(Role::getRoleName).collect(Collectors.toSet()));
-            details.setPermissions(findPowersByUserId(id).stream().map(Power::getPowerName).collect(Collectors.toSet()));
+            details.setRoles(roleService.findRolesByUserId(id).stream().map(Role::getName).collect(Collectors.toSet()));
+            details.setPermissions(findPowersByUserId(id).stream().map(MenuDO::getPerms).collect(Collectors.toSet()));
             return details;
         }
 
         return null;
     }
 
-    private Set<Power> findPowersByUserId(Long userId) {
+    private Set<MenuDO> findPowersByUserId(Long userId) {
         Set<Role> roles = roleService.findRolesByUserId(userId);
-        Set<Power> powers = Sets.newHashSet();
+        Set<MenuDO> powers = Sets.newHashSet();
         for (Role role : roles) {
-            powers.addAll(powerService.findPowersByRoleId(role.getId()));
+            powers.addAll(menuService.findByRoleId(role.getId()));
         }
 
         return powers;

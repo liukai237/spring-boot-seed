@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
+@Deprecated
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "t_power")

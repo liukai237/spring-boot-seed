@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
  *
  * @author Kai
  */
+@Deprecated
 @Slf4j
 @Service
 public class PowerService extends BaseService<Power> {

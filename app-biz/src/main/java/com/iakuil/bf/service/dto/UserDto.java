@@ -8,12 +8,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
 @Setter
 @ApiModel(value = "UserDto", description = "用户基本信息（脱敏）")
-public class UserDto {
+public class UserDto implements Serializable {
 
     @ApiModelProperty(name = "id", value = "用户ID")
     private Long id;

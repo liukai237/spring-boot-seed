@@ -1,19 +1,17 @@
 package com.iakuil.bf.dao.entity;
 
 import com.iakuil.bf.common.domain.BaseEntity;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Table;
 import java.util.Date;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "t_user_role")
-public class UserRole extends BaseEntity {
-    private Long userId;
+@Table(name = "t_role_menu")
+public class RoleMenu extends BaseEntity {
     private Long roleId;
+    private Long menuId;
     private Date createTime;
 }

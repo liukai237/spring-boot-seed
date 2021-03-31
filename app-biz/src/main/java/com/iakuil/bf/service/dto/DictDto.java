@@ -5,13 +5,14 @@ import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 
 @Getter
 @Setter
 @ApiModel(value = "DictDto", description = "数据字典")
-public class DictDto {
+public class DictDto implements Serializable {
 
     /**
      * 编号

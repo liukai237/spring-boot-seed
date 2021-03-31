@@ -1,16 +1,21 @@
 package com.iakuil.bf.service;
 
 import com.iakuil.bf.common.BaseService;
+import com.iakuil.bf.common.dict.DictCache;
+import com.iakuil.bf.common.dict.DictEnum;
 import com.iakuil.bf.dao.UserMapper;
 import com.iakuil.bf.dao.entity.User;
 import com.iakuil.toolkit.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hashids.Hashids;
+import org.reflections.Reflections;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 用户服务
@@ -56,4 +61,5 @@ public class UserService extends BaseService<User> {
     public User findByIdentity(String identity) {
         return userMapper.selectByIdentity(identity);
     }
+
 }

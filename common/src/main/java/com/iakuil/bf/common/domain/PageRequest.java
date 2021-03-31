@@ -76,7 +76,9 @@ public class PageRequest<T> {
         }
 
         PageRequest.Sorting[] sorting = this.getSorting();
-        if (sorting != null) {
+        if (sorting == null) {
+            condition.setOrderBy(Strings.parseOrderBy((String) this.other.get(SysConstant.DEFAULT_SORT_PARAM)));
+        } else {
             condition.setOrderBy(handleOrderBy(sorting));
         }
 

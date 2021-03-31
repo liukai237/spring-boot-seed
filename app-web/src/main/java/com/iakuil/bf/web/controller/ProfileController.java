@@ -1,8 +1,8 @@
 package com.iakuil.bf.web.controller;
 
 import com.iakuil.bf.common.BaseController;
-import com.iakuil.bf.common.domain.Resp;
 import com.iakuil.bf.common.annotation.Password;
+import com.iakuil.bf.common.domain.Resp;
 import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.TokenService;
 import com.iakuil.bf.service.UserService;
@@ -12,9 +12,12 @@ import com.iakuil.toolkit.BeanUtils;
 import com.iakuil.toolkit.PasswordHash;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 
 /**
  * 用户设置
@@ -25,6 +28,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping("/api/profile/")
+@RequiresAuthentication
 public class ProfileController extends BaseController {
 
     private final TokenService tokenService;
@@ -44,7 +48,7 @@ public class ProfileController extends BaseController {
             @ApiImplicitParam(name = "pwd", value = "新密码", dataType = "String", paramType = "query")
     })
     @PostMapping(value = "/changePwd")
-    public Resp<?> changePwd(@RequestParam String pwd) {
+    public Resp<?> changePwd(@Password @RequestParam String pwd) {
         User user = new User();
         user.setId(getCurrentUserId());
         user.setPasswdHash(PasswordHash.createHash(pwd));
@@ -56,12 +60,15 @@ public class ProfileController extends BaseController {
             @ApiImplicitParam(name = "username", value = "用户名", dataType = "String", paramType = "query")
     })
     @PostMapping(value = "/changeUsername")
-    public Resp<?> changeUsername(@Password @RequestParam String username) {
-        //TODO... 用户名校验
-        User user = new User();
-        user.setId(getCurrentUserId());
-        user.setUsername(username);
-        return ok(userService.modifyWithVersion(user));
+    public Resp<?> changeUsername(@Size(min = 4, message = "用户名必须大于4位！") @RequestParam String username) {
+        User user = userService.findByIdentity(username);
+        if (user != null) {
+            return fail("用户名已注册！");
+        }
+        User entity = new User();
+        entity.setId(getCurrentUserId());
+        entity.setUsername(username);
+        return ok(userService.modifyWithVersion(entity));
     }
 
     @ApiOperation(value = "修改手机", notes = "修改用户手机。")
@@ -83,11 +90,11 @@ public class ProfileController extends BaseController {
             @ApiImplicitParam(name = "email", value = "电子邮箱", dataType = "String", paramType = "query")
     })
     @PostMapping(value = "/changeMail")
-    public Resp<?> changeMail(@RequestParam String email) {
+    public Resp<?> changeMail(@Email(message = "电子邮件格式错误！") @RequestParam String email) {
         User user = new User();
         user.setId(getCurrentUserId());
         user.setEmail(email);
-        //TODO 校验邮件格式，发送确认邮件，刷新权限
+        //TODO 发送确认邮件，刷新权限
         return ok(userService.modifyWithVersion(user));
     }
 

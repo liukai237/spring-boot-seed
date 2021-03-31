@@ -1,5 +1,6 @@
 package com.iakuil.bf.web.security;
 
+import com.google.common.collect.Sets;
 import com.iakuil.bf.common.security.UserDetails;
 import com.iakuil.bf.common.security.UserDetailsService;
 import lombok.extern.slf4j.Slf4j;
@@ -51,8 +52,15 @@ public class JdbcRealm extends AuthorizingRealm {
         UserDetails userDetails = (UserDetails) principals.getPrimaryPrincipal();
         if (userDetails != null) {
             info.setRoles(userDetails.getRoles());
-            info.setStringPermissions(userDetails.getPermissions());
+
+            // 如果是admin，通过PermissionUtils授予所有权限
+            if ("admin".equals(userDetails.getUsername())) {
+                info.setStringPermissions(Sets.newHashSet(PermissionUtils.getAllPerms()));
+            } else {
+                info.setStringPermissions(userDetails.getPermissions());
+            }
         }
+
         return info;
     }
 }
