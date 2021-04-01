@@ -25,6 +25,10 @@ spring:
       ACCEPT_CASE_INSENSITIVE_ENUMS: true
   mvc:
     date-format: yyyy-MM-dd HH:mm:ss
+    favicon:
+      enabled: false
+  thymeleaf:
+    cache: false
   datasource:
     schema: classpath:sql/schema-*.sql
     data: classpath:sql/data-*.sql

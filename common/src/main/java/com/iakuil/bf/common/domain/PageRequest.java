@@ -1,5 +1,6 @@
 package com.iakuil.bf.common.domain;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iakuil.bf.common.constant.SysConstant;
 import com.iakuil.bf.common.db.Condition;
@@ -14,6 +15,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,14 @@ public class PageRequest<T> {
     @ApiModelProperty(value = "sorting", notes = "排序参数。")
     private Sorting[] sorting;
 
+    @ApiModelProperty(hidden = true)
+    private Map<String, Object> other = new HashMap<>();
+
+    @JsonAnySetter
+    public void setOther(String key, Object value) {
+        this.other.put(key, value);
+    }
+
     /**
      * 转换为Query对象，自动填充分页排序参数
      *
@@ -56,13 +66,19 @@ public class PageRequest<T> {
         R condition = BeanUtils.copy(this.getFilter(), clazz);
 
         PageRequest.Paging paging = this.getPaging();
-        if (paging != null) {
+        if (paging == null) {
+            // workaroud，有些前端分页组件分页参数放在第一层
+            condition.setPageNum((int) this.other.get(SysConstant.DEFAULT_PAGE_NUM_FIELD));
+            condition.setPageSize((int) this.other.get(SysConstant.DEFAULT_PAGE_SIZE_FIELD));
+        } else {
             condition.setPageNum(paging.getPageNum());
             condition.setPageSize(paging.getPageSize());
         }
 
         PageRequest.Sorting[] sorting = this.getSorting();
-        if (sorting != null) {
+        if (sorting == null) {
+            condition.setOrderBy(Strings.parseOrderBy((String) this.other.get(SysConstant.DEFAULT_SORT_PARAM)));
+        } else {
             condition.setOrderBy(handleOrderBy(sorting));
         }
 

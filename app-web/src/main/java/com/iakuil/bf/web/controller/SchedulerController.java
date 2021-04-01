@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.quartz.SchedulerException;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Slf4j
 @Api(value = "SchedulerController", tags = {"任务调度"})
+@RequiresRoles("admin")
 @RestController
 @RequestMapping("/api/scheduler/")
 public class SchedulerController extends BaseController {

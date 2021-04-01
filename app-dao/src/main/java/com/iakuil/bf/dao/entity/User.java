@@ -38,6 +38,7 @@ public class User extends BaseEntity {
     @Column(unique = true)
     private String email;
     private String address;
+    private Boolean available;
     @CreatedDate
     @Column(updatable = false)
     private Date createTime;
@@ -47,5 +48,4 @@ public class User extends BaseEntity {
     private Long version;
     @LogicDelete
     private Integer deleted;
-    //private Boolean available;
 }

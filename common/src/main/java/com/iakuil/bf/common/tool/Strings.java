@@ -19,6 +19,11 @@ public class Strings {
     private static final Pattern PATTERN_NONE_COMMA = Pattern.compile("^([\\w_]+[\\+\\-]{1})+$");
     private static final Pattern PATTERN_WITH_COMMA = Pattern.compile("^([\\+\\-]+[\\w_]*,)+[\\+\\-][\\w_]*$");
 
+    /**
+     * 仅支持字母、数字、下划线、空格、逗号、小数点（支持多个字段排序）
+     */
+    public static String SQL_PATTERN = "[a-zA-Z0-9_\\ \\,\\.]+";
+
     public static final int INDEX_NOT_FOUND = -1;
     public static final char C_SPACE = ' ';
     public static final char C_TAB = '\t';
@@ -71,6 +76,10 @@ public class Strings {
             return null;
         }
         String str = StringUtils.deleteWhitespace(sort);
+        if (!str.matches(SQL_PATTERN)) {
+            throw new IllegalArgumentException("Invalid sql: " + str + ", expected format: letter, number, underline, space, comma and decimal point!");
+        }
+
         if (!StringUtils.containsAny(sort, "+", "-", ",")) {
             return sort;
         } else if (PATTERN_NONE_COMMA.matcher(str).matches()) { // e.g. a+b-c+

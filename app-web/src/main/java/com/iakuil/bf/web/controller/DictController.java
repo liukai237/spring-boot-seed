@@ -11,6 +11,7 @@ import com.iakuil.bf.service.dto.DictDto;
 import com.iakuil.bf.web.vo.DictQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ import java.util.List;
  * @author Kai
  */
 @Api(value = "DictController", tags = {"数据字典"})
+@RequiresRoles("admin")
 @RestController
 @RequestMapping("/api/dict")
 public class DictController extends BaseController {
