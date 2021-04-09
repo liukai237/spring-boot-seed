@@ -57,23 +57,6 @@ public class PageData<T> implements Serializable {
         this.size = size;
     }
 
-    @Deprecated
-    public <R> PageData(List<R> data, Function<? super R, ? extends T> mapper) {
-        Validate.notEmpty(data, "data list should not be empty!");
-        Validate.notNull(mapper, "mapper should not be empty!");
-
-        if (data instanceof Page) {
-            Page<T> page = (Page<T>) data;
-            this.pageNum = page.getPageNum();
-            this.pageSize = page.getPageSize();
-            this.total = page.getTotal();
-            this.pages = page.getPages();
-            this.size = page.size();
-        }
-
-        this.list = data.stream().map(mapper).collect(Collectors.toList());
-    }
-
     public PageData(List<T> list) {
         Validate.notEmpty(list, "Data list should not be empty!");
 
@@ -91,7 +74,6 @@ public class PageData<T> implements Serializable {
 
     public <U> PageData<U> map(Function<? super T, ? extends U> converter) {
         Validate.notNull(converter, "Converter should not be empty!");
-
         return new PageData<>(this.total,
                 this.list.stream().map(converter).collect(Collectors.toList()),
                 this.pageNum,

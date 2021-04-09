@@ -98,7 +98,7 @@ public abstract class BaseService<T extends BaseEntity> {
         Validate.notNull(entity, "Entity should not be empty!");
         Validate.notNull(entity.getPageNum(), "PageNum should not be empty!");
         Validate.notNull(entity.getPageSize(), "PageSize should not be empty!");
-        return new PageData<>(mapper.select(entity), converter);
+        return new PageData<>(mapper.select(entity)).map(converter);
     }
 
     /**
@@ -128,7 +128,7 @@ public abstract class BaseService<T extends BaseEntity> {
     @Transactional(readOnly = true)
     public <R> PageData<R> page(Condition condition, Function<? super T, ? extends R> converter) {
         Validate.notNull(converter, "Converter should not be empty!");
-        return new PageData<>(this.findByCondition(condition), converter);
+        return new PageData<>(this.findByCondition(condition)).map(converter);
     }
 
     /**

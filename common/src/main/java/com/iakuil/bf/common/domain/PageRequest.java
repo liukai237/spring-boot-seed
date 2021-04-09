@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
  * @author Kai
  */
 @ApiModel(value = "PageRequest", description = "统一封装的分页排序请求体")
-public class PageRequest<T> {
+public class PageRequest<T> implements Serializable {
 
     @ApiModelProperty(name = "filtering", value = "过滤参数。")
     private T filter;
@@ -67,7 +68,7 @@ public class PageRequest<T> {
 
         PageRequest.Paging paging = this.getPaging();
         if (paging == null) {
-            // workaroud，有些前端分页组件分页参数放在第一层
+            // workaround，有些前端分页组件分页参数放在第一层
             condition.setPageNum((int) this.other.get(SysConstant.DEFAULT_PAGE_NUM_FIELD));
             condition.setPageSize((int) this.other.get(SysConstant.DEFAULT_PAGE_SIZE_FIELD));
         } else {

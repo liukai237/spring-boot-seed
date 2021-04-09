@@ -11,6 +11,7 @@ import com.iakuil.bf.service.dto.DictDto;
 import com.iakuil.bf.web.vo.DictQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -61,18 +62,21 @@ public class DictController extends BaseController {
     }
 
     @ApiOperation(value = "新增数据字典", notes = "新增数据字典。")
+    @RequiresPermissions("sys:dict:add")
     @PostMapping(value = "/add")
     public Resp<?> add(@RequestBody DictDto dict) {
         return ok(dictService.add(dictConverter.toEntity(dict)));
     }
 
     @ApiOperation(value = "修改数据字典", notes = "修改数据字典。")
+    @RequiresPermissions("sys:dict:edit")
     @PostMapping(value = "/edit")
     public Resp<?> modify(@RequestBody DictDto dict) {
         return ok(dictService.modify(dictConverter.toEntity(dict)));
     }
 
     @ApiOperation(value = "删除数据字典", notes = "批量删除数据字典。")
+    @RequiresPermissions("sys:dict:remove")
     @PostMapping(value = "/remove")
     public Resp<?> remove(@RequestParam Long[] ids) {
         return ok(dictService.removeByIds(ids));

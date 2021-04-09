@@ -67,9 +67,8 @@ public class DeptController extends BaseController {
     Resp<?> remove(@RequestParam Long id) {
         DeptDO query = new DeptDO();
         query.setParentId(id);
-        int count = deptService.count(query);
-        if (count > 0) {
-            return fail("包含下级部门,不允许修改");
+        if (deptService.count(query) > 0) {
+            return fail("包含下级部门,不允许删除！");
         }
 
         //TODO 部门包含用户,不允许修改

@@ -64,7 +64,7 @@ public class AuthController extends BaseController {
     }
 
     @ApiOperation(value = "忘记密码", notes = "用户忘记密码后通过短信验证码重置密码。")
-    @PostMapping(value = "/fortgetPwd")
+    @PostMapping(value = "/forgetPwd")
     public Resp<UserDetails> resetPwdBySms(@ApiParam(value = "加密数据") @RequestBody @Valid PwdEdit params) {
         String tel = params.getTel();
         tokenService.verifySmsCode(tel, params.getSmsCode());

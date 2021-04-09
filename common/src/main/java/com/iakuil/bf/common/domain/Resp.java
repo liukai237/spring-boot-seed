@@ -4,6 +4,8 @@ import com.iakuil.bf.common.enums.RespCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * 通用API响应体
  *
@@ -13,31 +15,31 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Kai
  */
 @ApiModel(value = "Resp", description = "统一API响应结果")
-public class Resp<T> {
+public class Resp<T> implements Serializable {
     public Resp() {
     }
 
     @ApiModelProperty(value = "状态码")
     private int code;
     @ApiModelProperty(value = "描述信息")
-    private String message;
+    private String msg;
     @ApiModelProperty(value = "响应数据")
     private T data;
 
     public Resp(int code, String message) {
         this.code = code;
-        this.message = message;
+        this.msg = message;
     }
 
     public Resp(int code, String message, T data) {
         this.code = code;
-        this.message = message;
+        this.msg = message;
         this.data = data;
     }
 
     public Resp(RespCode rc) {
         this.code = rc.getCode();
-        this.message = rc.getMessage();
+        this.msg = rc.getMessage();
     }
 
     public boolean isSuccess() {
@@ -52,12 +54,12 @@ public class Resp<T> {
         this.code = code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public T getData() {
