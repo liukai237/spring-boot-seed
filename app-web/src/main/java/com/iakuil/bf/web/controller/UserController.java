@@ -1,11 +1,9 @@
 package com.iakuil.bf.web.controller;
 
 import com.iakuil.bf.common.BaseController;
-import com.iakuil.bf.common.annotation.Log;
 import com.iakuil.bf.common.domain.PageData;
 import com.iakuil.bf.common.domain.PageRequest;
 import com.iakuil.bf.common.domain.Resp;
-import com.iakuil.bf.common.enums.BusinessType;
 import com.iakuil.bf.dao.entity.User;
 import com.iakuil.bf.service.UserService;
 import com.iakuil.bf.service.converter.UserConverter;
@@ -48,7 +46,6 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "用户信息变更", notes = "修改用户信息")
     @RequiresPermissions("sys:user:edit")
-    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PostMapping(value = "/edit")
     public Resp<?> doChange(@ApiParam(value = "用户信息", required = true) @Valid @RequestBody UserEdit param) {
         return ok(userService.modifyWithVersion(BeanUtils.copy(param, User.class)));

@@ -2,6 +2,9 @@
 
 # 基于Spring Boot 2.X的简易脚手架项目
 基于SpringBoot、通用Mapper（tkMapper）与PageHelper的深度定制版本。
+宗旨：
+* 简单而不简陋；
+* 易用，符合国人思维习惯；
 
 ## 技术选型
 * String Boot 2.x

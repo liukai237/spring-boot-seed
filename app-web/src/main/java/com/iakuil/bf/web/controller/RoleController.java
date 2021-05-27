@@ -41,7 +41,7 @@ public class RoleController extends BaseController {
     }
 
     @RequiresPermissions("sys:role:add")
-    @PostMapping("/save")
+    @PostMapping("/add")
     Resp<?> add(@RequestBody RoleDto role) {
         return ok(roleService.add(RoleConverter.INSTANCE.toEntity(role)));
     }

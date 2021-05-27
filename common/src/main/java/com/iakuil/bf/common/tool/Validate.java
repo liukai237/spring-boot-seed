@@ -25,8 +25,8 @@ import java.util.Collection;
  * 方法入参校验
  *
  * <p>弥补{@link java.util.Objects#requireNonNull(Object, String)}无法校验数组和集合；
- * 此外，抛出{@code NullPointerException}容易使人惊讶，对心脏不好。
- *
+ * <p>此外，抛出{@code NullPointerException}容易使人惊讶，对心脏不好。
+ * <p>BTW. 一般用于业务层方法数据校验，请不要用于接口层数据校验。
  * @author Daniel Fern&aacute;ndez
  * @since 1.0
  */
