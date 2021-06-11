@@ -44,7 +44,7 @@ public class MessageController extends BaseController {
         this.messageRecordService = messageRecordService;
     }
 
-    @ApiOperation(value = "查询我的消息", notes = "分页查询我的消息。")
+    @ApiOperation(value = "消息列表", notes = "分页查询我的消息。")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", dataType = "Integer", paramType = "query"),
             @ApiImplicitParam(name = "pageSize", value = "每页数量", dataType = "Integer", paramType = "query"),
@@ -52,8 +52,8 @@ public class MessageController extends BaseController {
     })
     @GetMapping("/list")
     @RequiresPermissions("me:msg:list")
-    public Resp<List<MyMessage>> list(@RequestParam Integer pageNum, @RequestParam Integer pageSize,
-                                      @RequestParam(required = false) Boolean read) {
+    public Resp<List<MyMessage>> doQuery(@RequestParam Integer pageNum, @RequestParam Integer pageSize,
+                                         @RequestParam(required = false) Boolean read) {
         Long uid = Optional.ofNullable(getCurrentUserId()).orElseThrow(BusinessException::new);
         MessageRecord condition = new MessageRecord();
         condition.setReceiver(uid);
@@ -64,6 +64,7 @@ public class MessageController extends BaseController {
             condition.setRead(read);
         }
         List<MessageRecord> myMsgList = messageRecordService.list(condition);
+        //TODO 目前只实现了公告通知查询，后续增加私信查询
         List<Notify> notifyList = notifyService.findByIds(myMsgList.stream().map(MessageRecord::getMsgId).distinct().toArray(Long[]::new));
         return ok(myMsgList.stream()
                 .map(item -> {
@@ -98,7 +99,7 @@ public class MessageController extends BaseController {
     @ApiOperation(value = "删除我的消息", notes = "删除我的消息。")
     @RequiresPermissions("me:msg:remove")
     @PostMapping("/remove")
-    public Resp<?> remove(@RequestParam Long[] ids) {
+    public Resp<?> doRemove(@RequestParam Long[] ids) {
         final Long uid = getCurrentUserId();
         return ok(messageRecordService.removeByIds(messageRecordService.findByIds(ids).stream()
                 .filter(item -> Objects.equals(item.getReceiver(), uid))

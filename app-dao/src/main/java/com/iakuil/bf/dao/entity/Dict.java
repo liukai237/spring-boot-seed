@@ -15,6 +15,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 
+/**
+ * 用户字典
+ *
+ * @author Kai
+ */
 @Getter
 @Setter
 @NoArgsConstructor

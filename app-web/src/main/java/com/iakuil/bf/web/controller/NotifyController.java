@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 /**
- * NotifyController
+ * 公告通知接口
  *
  * @author Kai
  * @date 2021/3/25 11:09
@@ -37,14 +37,14 @@ public class NotifyController extends BaseController {
         this.notifyService = notifyService;
     }
 
-    @ApiOperation(value = "查询公告通知", notes = "分页查询公告通知。")
+    @ApiOperation(value = "通知查询", notes = "分页查询公告通知。")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", dataType = "Integer", paramType = "query"),
             @ApiImplicitParam(name = "pageSize", value = "每页数量", dataType = "Integer", paramType = "query")
     })
     @GetMapping("/list")
     @RequiresPermissions("oa:notify:list")
-    public Resp<PageData<NotifyDto>> list(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+    public Resp<PageData<NotifyDto>> doQuery(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
         Notify query = new Notify();
         query.setPageNum(pageNum);
         query.setPageSize(pageSize);
@@ -52,33 +52,33 @@ public class NotifyController extends BaseController {
         return ok(notifyService.page(query, NotifyConverter.INSTANCE::toDto));
     }
 
-    @ApiOperation(value = "新增公告通知", notes = "新增公告通知。")
+    @ApiOperation(value = "通知新增", notes = "新增公告通知。")
     @PostMapping("/add")
     @RequiresPermissions("oa:notify:add")
-    public Resp<?> add(@Valid @RequestBody NotifyAdd notify) {
+    public Resp<?> doAdd(@Valid @RequestBody NotifyAdd notify) {
         return ok(notifyService.add(BeanUtils.copy(notify, Notify.class)));
     }
 
-    @ApiOperation(value = "编辑公告通知", notes = "编辑公告通知。")
+    @ApiOperation(value = "通知编辑", notes = "编辑公告通知。")
     @PostMapping("/edit")
     @RequiresPermissions("oa:notify:edit")
-    public Resp<?> edit(@Valid @RequestBody NotifyEdit notify) {
+    public Resp<?> doEdit(@Valid @RequestBody NotifyEdit notify) {
         return ok(notifyService.modify(BeanUtils.copy(notify, Notify.class)));
     }
 
-    @ApiOperation(value = "推送公告通知", notes = "推送公告通知。")
+    @ApiOperation(value = "推送通知", notes = "推送公告通知。")
     @PostMapping("/push")
     @RequiresPermissions("oa:notify:push")
-    public Resp<?> edit(@RequestParam Long notifyId, @RequestParam Long[] userIds) {
+    public Resp<?> doPush(@RequestParam Long notifyId, @RequestParam Long[] userIds) {
         // 此处
         notifyService.pushBatch(notifyService.findById(notifyId), userIds);
         return ok();
     }
 
-    @ApiOperation(value = "删除公告通知", notes = "删除公告通知。")
+    @ApiOperation(value = "删除通知", notes = "删除公告通知。")
     @RequiresPermissions("oa:notify:remove")
     @PostMapping("/remove")
-    public Resp<?> remove(@RequestParam Long[] ids) {
+    public Resp<?> doRemove(@RequestParam Long[] ids) {
         return ok(notifyService.removeByIds(ids));
     }
 }

@@ -43,42 +43,42 @@ public class DictController extends BaseController {
         return ok(dictConverter.toDtoList(dictService.listType()));
     }
 
-    @ApiOperation(value = "查询单个数据字典", notes = "根据ID查询数据字典。")
+    @ApiOperation(value = "字典详情", notes = "根据ID查询数据字典。")
     @GetMapping(value = "/query")
-    public Resp<DictDto> queryOne(@RequestParam Long id) {
+    public Resp<DictDto> queryDetails(@RequestParam Long id) {
         return ok(dictConverter.toDto(dictService.findById(id)));
     }
 
-    @ApiOperation(value = "查询数据字典（不分页）", notes = "查询所有数据字典数据（不分页）。")
+    @ApiOperation(value = "字典列表（不分页）", notes = "查询所有数据字典数据（不分页）。")
     @PostMapping(value = "/list")
     public Resp<List<DictDto>> queryAll(@RequestBody DictDto dict) {
         return ok(dictConverter.toDtoList(dictService.list(dictConverter.toEntity(dict))));
     }
 
-    @ApiOperation(value = "分页查询数据字典", notes = "分页查询数据字典数据。")
+    @ApiOperation(value = "字典列表", notes = "分页查询数据字典数据。")
     @PostMapping(value = "/listWithPage")
-    public Resp<PageData<DictDto>> doQueryWithPage(@RequestBody PageRequest<DictQuery> param) {
+    public Resp<PageData<DictDto>> doQuery(@RequestBody PageRequest<DictQuery> param) {
         return ok(dictService.page(param.as(Dict.class), DictConverter.INSTANCE::toDto));
     }
 
-    @ApiOperation(value = "新增数据字典", notes = "新增数据字典。")
+    @ApiOperation(value = "字典新增", notes = "新增数据字典。")
     @RequiresPermissions("sys:dict:add")
     @PostMapping(value = "/add")
-    public Resp<?> add(@RequestBody DictDto dict) {
+    public Resp<?> doAdd(@RequestBody DictDto dict) {
         return ok(dictService.add(dictConverter.toEntity(dict)));
     }
 
-    @ApiOperation(value = "修改数据字典", notes = "修改数据字典。")
+    @ApiOperation(value = "字典修改", notes = "修改数据字典。")
     @RequiresPermissions("sys:dict:edit")
     @PostMapping(value = "/edit")
-    public Resp<?> modify(@RequestBody DictDto dict) {
+    public Resp<?> doChange(@RequestBody DictDto dict) {
         return ok(dictService.modify(dictConverter.toEntity(dict)));
     }
 
-    @ApiOperation(value = "删除数据字典", notes = "批量删除数据字典。")
+    @ApiOperation(value = "字典删除", notes = "批量删除数据字典。")
     @RequiresPermissions("sys:dict:remove")
     @PostMapping(value = "/remove")
-    public Resp<?> remove(@RequestParam Long[] ids) {
+    public Resp<?> doRemove(@RequestParam Long[] ids) {
         return ok(dictService.removeByIds(ids));
     }
 }

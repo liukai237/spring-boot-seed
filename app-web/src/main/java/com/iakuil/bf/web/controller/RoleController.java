@@ -32,29 +32,32 @@ public class RoleController extends BaseController {
         this.roleService = roleService;
     }
 
-    @ApiOperation(value = "获取角色列表", notes = "")
+    @ApiOperation(value = "角色列表", notes = "获取所有角色。")
     @RequiresPermissions("sys:role:list")
     @GetMapping("/list")
     @ResponseBody()
-    Resp<List<RoleDto>> list() {
+    Resp<List<RoleDto>> doQuery() {
         return ok(roleService.list(new Role(), RoleConverter.INSTANCE::toDto));
     }
 
+    @ApiOperation(value = "角色新增", notes = "增加角色。")
     @RequiresPermissions("sys:role:add")
     @PostMapping("/add")
-    Resp<?> add(@RequestBody RoleDto role) {
+    Resp<?> doAdd(@RequestBody RoleDto role) {
         return ok(roleService.add(RoleConverter.INSTANCE.toEntity(role)));
     }
 
+    @ApiOperation(value = "角色修改", notes = "修改角色。")
     @RequiresPermissions("sys:role:edit")
     @PostMapping("/edit")
-    Resp<?> edit(@RequestBody RoleDto role) {
+    Resp<?> doChange(@RequestBody RoleDto role) {
         return ok(roleService.modifyWithVersion(RoleConverter.INSTANCE.toEntity(role)));
     }
 
+    @ApiOperation(value = "角色删除", notes = "删除角色。")
     @RequiresPermissions("sys:role:remove")
     @PostMapping("/remove")
-    Resp<?> remove(@RequestParam Long id) {
+    Resp<?> doRemove(@RequestParam Long id) {
         return ok(roleService.removeById(id));
     }
 }
