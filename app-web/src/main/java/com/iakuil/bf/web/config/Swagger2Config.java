@@ -1,6 +1,6 @@
 package com.iakuil.bf.web.config;
 
-import com.iakuil.bf.common.security.UserDetails;
+import com.iakuil.bf.common.annotation.CurrentUser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -25,7 +25,7 @@ public class Swagger2Config {
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
-                .ignoredParameterTypes(UserDetails.class)
+                .ignoredParameterTypes(CurrentUser.class)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.iakuil.bf.web.controller"))
                 .paths(PathSelectors.any())

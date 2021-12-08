@@ -2,6 +2,7 @@ package com.iakuil.bf.common.http;
 
 import com.iakuil.bf.common.security.UserDetails;
 import com.iakuil.bf.common.security.UserDetailsService;
+import com.iakuil.toolkit.BeanUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -9,6 +10,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * 当前登录用户参数解析（试验功能）
@@ -28,6 +31,7 @@ public class CurrentUserParamResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        return userDetailsService.getCurrentUser();
+        UserDetails currentUser = userDetailsService.getCurrentUser();
+        return currentUser == null ? null : BeanUtils.copy(currentUser, parameter.getParameterType());
     }
 }
