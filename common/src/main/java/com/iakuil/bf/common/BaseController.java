@@ -28,7 +28,7 @@ public abstract class BaseController {
     private UserDetailsService userDetailsService;
 
     public <T> Resp<T> ok() {
-        return ok(null);
+        return ok(RespCode.SUCCESS.getMessage());
     }
 
     public <T> Resp<T> ok(T data) {

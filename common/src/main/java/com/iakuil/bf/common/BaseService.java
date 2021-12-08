@@ -167,7 +167,7 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public T findOne(T entity) {
-        Validate.notNull(entity, "PageNum should not be empty!");
+        Validate.notNull(entity, "Entity should not be empty!");
         return mapper.selectOne(entity);
     }
 

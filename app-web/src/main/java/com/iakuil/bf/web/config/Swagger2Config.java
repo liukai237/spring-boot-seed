@@ -1,5 +1,6 @@
 package com.iakuil.bf.web.config;
 
+import com.iakuil.bf.common.security.UserDetails;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -18,12 +19,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @EnableSwagger2
 @Configuration
-//@Profile("!prod")
+@Profile("!prod")
 public class Swagger2Config {
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
+                .ignoredParameterTypes(UserDetails.class)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.iakuil.bf.web.controller"))
                 .paths(PathSelectors.any())
