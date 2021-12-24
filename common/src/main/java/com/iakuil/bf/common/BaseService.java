@@ -49,7 +49,6 @@ public abstract class BaseService<T extends BaseEntity> {
      */
     @Transactional(readOnly = true)
     public List<T> list(T entity) {
-        Validate.notNull(entity, "Entity should not be empty!");
         return mapper.select(entity);
     }
 
