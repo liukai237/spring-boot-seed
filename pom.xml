@@ -44,7 +44,7 @@
         <shedlock-spring.version>4.17.0</shedlock-spring.version>
         <protostuff.version>1.7.2</protostuff.version>
 
-        <shiro-spring.version>1.7.0</shiro-spring.version>
+        <shiro-spring.version>1.7.1</shiro-spring.version>
         <shiro-redis.version>3.3.1</shiro-redis.version>
         <jetcache-starter-redis-springdata.version>2.6.0</jetcache-starter-redis-springdata.version>
 
