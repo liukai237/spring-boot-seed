@@ -48,7 +48,7 @@
         <shiro-redis.version>3.3.1</shiro-redis.version>
         <jetcache-starter-redis-springdata.version>2.6.0</jetcache-starter-redis-springdata.version>
 
-        <mysql-connector-java.version>8.0.22</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
         <HikariCP.version>3.4.5</HikariCP.version>
         <mapper-spring-boot-starter.version>2.1.5</mapper-spring-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.3.0</pagehelper-spring-boot-starter.version>
