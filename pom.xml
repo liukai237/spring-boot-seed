@@ -35,7 +35,7 @@
         <commons-io.version>2.9.0</commons-io.version>
         <commons-pool2.version>2.8.1</commons-pool2.version>
         <mapstruct.version>1.4.1.Final</mapstruct.version>
-        <guava.version>30.0-jre</guava.version>
+        <guava.version>32.0.0-jre</guava.version>
         <jasypt-spring-boot-starter.version>2.1.2</jasypt-spring-boot-starter.version>
         <spring-boot-starter-thymeleaf.version>2.4.4</spring-boot-starter-thymeleaf.version>
         <aspectjweaver.version>1.9.6</aspectjweaver.version>
